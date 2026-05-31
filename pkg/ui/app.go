@@ -8,6 +8,7 @@ import (
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
+	"fyne.io/fyne/v2/layout"
 	"github.com/AlexEngleDSU/Fuzzer/pkg/engine"
 )
 
@@ -54,10 +55,17 @@ func StartGUI() {
 		}()
 	})
 
+	// Replace your existing container logic with this:
+// Using FormLayout makes labels and inputs align perfectly
+	inputRow := container.New(layout.NewFormLayout(), 
+	    widget.NewLabel("Target URL:"), 
+	    urlEntry,
+	)
+
 	w.SetContent(container.NewBorder(
-		container.NewVBox(widget.NewLabel("Target URL:"), urlEntry, startButton),
-		nil, nil, nil,
-		list,
+	    container.NewVBox(inputRow, startButton),
+	    nil, nil, nil,
+	    list,
 	))
 
 	w.ShowAndRun()
