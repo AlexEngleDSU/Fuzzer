@@ -59,23 +59,29 @@ func ConcurrentScan(baseURL string, paths []string, workerCount int, rps int, qu
                                 	continue
                                 }
 
-                                loc := resp.Header.Get("Location")
                                 resp.Body.Close()
+
+				length := resp.ContentLength
+				sizeStr := fmt.Sprintf("%d", length) // Convert int64 to string
+				if length == -1 {
+    					sizeStr = "unknown"
+				}
 
                                 switch resp.StatusCode {
 				case 200:
-				    results <- fmt.Sprintf("[+] Found: %s (Status: 200)", url)
+				    results <- fmt.Sprintf("[+] Found: %s (Status: 200) [Size: %s]", url, sizeStr)
 				case 301, 302:
-				    results <- fmt.Sprintf("[>] Redirect: %s -> %s (Status: %d)", url, loc, resp.StatusCode)
+				    loc := resp.Header.Get("Location")
+				    results <- fmt.Sprintf("[>] Redirect: %s -> %s (Status: %d) [Size: %s]", url, loc, resp.StatusCode, sizeStr)
 				case 401, 403:
-				    results <- fmt.Sprintf("[X] Unauthorized: %s (Status: %d)", url, resp.StatusCode)
+				    results <- fmt.Sprintf("[X] Unauthorized: %s (Status: %d) [Size: %s]", url, resp.StatusCode, sizeStr)
 				case 404:
 					if !quiet {
-				    		results <- fmt.Sprintf("[-] Not Found: %s (Status: 404)", url)
+				    		results <- fmt.Sprintf("[-] Not Found: %s (Status: 404) [Size: %s]", url, sizeStr)
 				    	}
 				default:
 				    // This catches other codes like 500 (Internal Server Error)
-				    results <- fmt.Sprintf("[?] Unknown: %s (Status: %d)", url, resp.StatusCode)
+				    results <- fmt.Sprintf("[?] Unknown: %s (Status: %d) [Size: %s]", url, resp.StatusCode, sizeStr)
 				}
                         }
                 }()
