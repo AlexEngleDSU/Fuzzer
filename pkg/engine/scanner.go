@@ -28,6 +28,15 @@ func ReadLines(path string) ([]string, error) {
 // ConcurrentScan: manage workers to scan paths in parallel
 func ConcurrentScan(baseURL string, paths []string, workerCount int, rps int, quiet bool, outputFile string) {
 
+	var f *os.File
+    	var err error
+    	if outputFile != "" {
+        	f, err = os.OpenFile(outputFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	        if err == nil {
+        		defer f.Close()
+        	}
+    	}
+
 	delay := time.Second / time.Duration(rps)
 	ticker := time.NewTicker(delay)
 	defer ticker.Stop()
@@ -103,14 +112,9 @@ func ConcurrentScan(baseURL string, paths []string, workerCount int, rps int, qu
 
         // 4. Print results in real time
         for res := range results {
-                fmt.Println(res)
-
-                if outputFile != "" {
-                	f, err := os.OpenFile(outputFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-                	if err == nil {
-                		defer f.Close()
-                		f.WriteString(res + "\n")
-                	}
-                }
-        }
+        	fmt.Println(res)
+	        if f != nil {
+        		f.WriteString(res + "\n")
+        	}
+    	}
 }

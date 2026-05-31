@@ -1,6 +1,6 @@
+[X] Unauthorized: https://www.kali.org/.bash_history (Status: 403) [Size: unknown]
 [X] Unauthorized: https://www.kali.org/.bashrc (Status: 403) [Size: unknown]
 [X] Unauthorized: https://www.kali.org/.cvs (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.bash_history (Status: 403) [Size: unknown]
 [X] Unauthorized: https://www.kali.org/.env (Status: 403) [Size: unknown]
 [X] Unauthorized: https://www.kali.org/.git (Status: 403) [Size: unknown]
 [X] Unauthorized: https://www.kali.org/.git/HEAD (Status: 403) [Size: unknown]
@@ -16,5 +16,3 @@
 [X] Unauthorized: https://www.kali.org/.ssh (Status: 403) [Size: unknown]
 [X] Unauthorized: https://www.kali.org/.svn (Status: 403) [Size: unknown]
 [X] Unauthorized: https://www.kali.org/.svn/entries (Status: 403) [Size: unknown]
-[+] Found: https://www.kali.org/.well-known/http-opportunistic (Status: 200) [Size: unknown]
-[+] Found: https://www.kali.org/.well-known/security.txt (Status: 200) [Size: unknown]
