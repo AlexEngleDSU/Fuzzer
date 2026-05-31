@@ -15,7 +15,7 @@ var (
         quiet bool
         outputFile string
         filterCodes string
-        filterAlias string
+        maxDepth int = 1
 )
 
 var rootCmd = &cobra.Command{
@@ -40,6 +40,7 @@ var rootCmd = &cobra.Command{
                 fmt.Printf("[+] Rate count: %d\n", rate)
                 fmt.Printf("[+] Output file: %s\n", outputFile)
                 fmt.Printf("[-] Filtering codes: %s\n", filterCodes)
+                fmt.Printf("[+] Recursion depth: %d\n", maxDepth)
                 fmt.Println("-------------------------------------------")
                 engine.ConcurrentScan(targetURL, paths, threadCount, rate, quiet, outputFile, filterCodes)
         },
@@ -58,6 +59,7 @@ func init() {
 	// 2. Add the alias exactly as before
 	rootCmd.Flags().StringVar(&filterCodes, "fc", "", "Alias for --filter")
 	rootCmd.Flags().MarkHidden("fc")
+	rootCmd.Flags().IntVar(&maxDepth, "depth", 1, "Recursive depth")
 }
 
 func main() {

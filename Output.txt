@@ -1,158 +1,1837 @@
-[X] Unauthorized: https://www.kali.org/.bash_history (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.bashrc (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.cvs (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.env (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/HEAD (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/config (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/index (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/logs/ (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.history (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.htaccess (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.htpasswd (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.mysql_history (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.passwd (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.profile (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.ssh (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.svn (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.svn/entries (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.bash_history (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.bashrc (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.cvs (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.env (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/HEAD (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/config (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/index (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/logs/ (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.history (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.htaccess (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.htpasswd (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.mysql_history (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.passwd (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.profile (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.ssh (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.svn (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.svn/entries (Status: 403) [Size: unknown]
-[+] Found: https://www.kali.org/.well-known/http-opportunistic (Status: 200) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.bashrc (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.bash_history (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.cvs (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.env (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/HEAD (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/config (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/index (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/logs/ (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.cvs (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.bash_history (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.bashrc (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.env (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/HEAD (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/config (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/index (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/logs/ (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.history (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.htaccess (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.htpasswd (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.mysql_history (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.passwd (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.profile (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.ssh (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.svn (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.svn/entries (Status: 403) [Size: unknown]
-[+] Found: https://www.kali.org/.well-known/http-opportunistic (Status: 200) [Size: unknown]
-[+] Found: https://www.kali.org/.well-known/security.txt (Status: 200) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.cvs (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.bash_history (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.bashrc (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.env (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/HEAD (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/config (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/index (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/logs/ (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.cvs (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.bash_history (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.env (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.bashrc (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/HEAD (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/config (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/index (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/logs/ (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.history (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.htaccess (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.htpasswd (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.mysql_history (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.passwd (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.profile (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.ssh (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.svn (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.svn/entries (Status: 403) [Size: unknown]
-[+] Found: https://www.kali.org/.well-known/http-opportunistic (Status: 200) [Size: unknown]
-[+] Found: https://www.kali.org/.well-known/security.txt (Status: 200) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.bash_history (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.cvs (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.bashrc (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.env (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/HEAD (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/config (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/index (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/logs/ (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.cvs (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.bash_history (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.bashrc (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.env (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/HEAD (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/config (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/index (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/logs/ (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.bash_history (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.cvs (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.bashrc (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.env (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/HEAD (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/config (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/index (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/logs/ (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.cvs (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.bash_history (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.bashrc (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.env (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/HEAD (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/config (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/index (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/logs/ (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.cvs (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.bash_history (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.env (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.bashrc (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/HEAD (Status: 403) [Size: unknown]
-[+] Found: https://www.kali.org/.well-known/http-opportunistic (Status: 200) [Size: unknown]
-[+] Found: https://www.kali.org/.well-known/security.txt (Status: 200) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.cvs (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.bash_history (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.bashrc (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.env (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/HEAD (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/config (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/index (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.git/logs/ (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.history (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.htaccess (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.htpasswd (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.mysql_history (Status: 403) [Size: unknown]
-[X] Unauthorized: https://www.kali.org/.passwd (Status: 403) [Size: unknown]
+[404] https://www.kali.org/.cache
+[404] https://www.kali.org/.config
+[404] https://www.kali.org/.cvsignore
+[404] https://www.kali.org/.forward
+[404] https://www.kali.org/.git-rewrite
+[404] https://www.kali.org/.git_release
+[404] https://www.kali.org/.gitattributes
+[404] https://www.kali.org/.gitconfig
+[404] https://www.kali.org/.gitignore
+[404] https://www.kali.org/.gitk
+[404] https://www.kali.org/.gitkeep
+[404] https://www.kali.org/.gitmodules
+[404] https://www.kali.org/.gitreview
+[404] https://www.kali.org/.hta
+[404] https://www.kali.org/.listing
+[404] https://www.kali.org/.listings
+[404] https://www.kali.org/.perf
+[404] https://www.kali.org/.rhosts
+[404] https://www.kali.org/.sh_history
+[404] https://www.kali.org/.subversion
+[404] https://www.kali.org/.svnignore
+[404] https://www.kali.org/.web
+[404] https://www.kali.org/.swf
+[404] https://www.kali.org/.well-known/acme-challenge
+[404] https://www.kali.org/.well-known/apple-app-site-association
+[404] https://www.kali.org/.well-known/apple-developer-merchantid-domain-association
+[404] https://www.kali.org/.well-known/ashrae
+[404] https://www.kali.org/.well-known/assetlinks.json
+[404] https://www.kali.org/.well-known/autoconfig/mail
+[404] https://www.kali.org/.well-known/browserid
+[404] https://www.kali.org/.well-known/caldav
+[404] https://www.kali.org/.well-known/carddav
+[404] https://www.kali.org/.well-known/change-password
+[404] https://www.kali.org/.well-known/coap
+[404] https://www.kali.org/.well-known/core
+[404] https://www.kali.org/.well-known/csvm
+[404] https://www.kali.org/.well-known/dnt
+[404] https://www.kali.org/.well-known/dnt-policy.txt
+[404] https://www.kali.org/.well-known/dots
+[404] https://www.kali.org/.well-known/ecips
+[404] https://www.kali.org/.well-known/enterprise-transport-security
+[404] https://www.kali.org/.well-known/est
+[404] https://www.kali.org/.well-known/genid
+[404] https://www.kali.org/.well-known/hoba
+[404] https://www.kali.org/.well-known/host-meta
+[200] https://www.kali.org/.well-known/http-opportunistic
+[404] https://www.kali.org/.well-known/host-meta.json
+[404] https://www.kali.org/.well-known/idp-proxy
+[404] https://www.kali.org/.well-known/jmap
+[404] https://www.kali.org/.well-known/jwks.json
+[404] https://www.kali.org/.well-known/keybase.txt
+[404] https://www.kali.org/.well-known/looking-glass
+[404] https://www.kali.org/.well-known/matrix
+[404] https://www.kali.org/.well-known/mercure
+[404] https://www.kali.org/.well-known/mta-sts.txt
+[404] https://www.kali.org/.well-known/mud
+[404] https://www.kali.org/.well-known/nfv-oauth-server-configuration
+[404] https://www.kali.org/.well-known/ni
+[404] https://www.kali.org/.well-known/nodeinfo
+[404] https://www.kali.org/.well-known/oauth-authorization-server
+[404] https://www.kali.org/.well-known/openid-configuration
+[404] https://www.kali.org/.well-known/openid-federation
+[404] https://www.kali.org/.well-known/openorg
+[404] https://www.kali.org/.well-known/openpgpkey
+[404] https://www.kali.org/.well-known/pki-validation
+[404] https://www.kali.org/.well-known/posh
+[404] https://www.kali.org/.well-known/pvd
+[404] https://www.kali.org/.well-known/reload-config
+[404] https://www.kali.org/.well-known/repute-template
+[404] https://www.kali.org/.well-known/resourcesync
+[200] https://www.kali.org/.well-known/security.txt
+[404] https://www.kali.org/.well-known/humans.txt
+[404] https://www.kali.org/.well-known/stun-key
+[404] https://www.kali.org/.well-known/thread
+[404] https://www.kali.org/.well-known/time
+[404] https://www.kali.org/.well-known/timezone
+[404] https://www.kali.org/.well-known/uma2-configuration
+[404] https://www.kali.org/.well-known/void
+[404] https://www.kali.org/.well-known/webfinger
+[404] https://www.kali.org/0
+[404] https://www.kali.org/00
+[404] https://www.kali.org/01
+[404] https://www.kali.org/02
+[404] https://www.kali.org/03
+[404] https://www.kali.org/04
+[404] https://www.kali.org/05
+[404] https://www.kali.org/06
+[404] https://www.kali.org/07
+[404] https://www.kali.org/08
+[404] https://www.kali.org/09
+[404] https://www.kali.org/1
+[404] https://www.kali.org/10
+[404] https://www.kali.org/100
+[404] https://www.kali.org/1000
+[404] https://www.kali.org/1001
+[404] https://www.kali.org/101
+[404] https://www.kali.org/102
+[404] https://www.kali.org/103
+[404] https://www.kali.org/11
+[404] https://www.kali.org/12
+[404] https://www.kali.org/123
+[404] https://www.kali.org/13
+[404] https://www.kali.org/14
+[404] https://www.kali.org/15
+[404] https://www.kali.org/1990
+[404] https://www.kali.org/1991
+[404] https://www.kali.org/1992
+[404] https://www.kali.org/1993
+[404] https://www.kali.org/1994
+[404] https://www.kali.org/1995
+[404] https://www.kali.org/1996
+[404] https://www.kali.org/1997
+[404] https://www.kali.org/1998
+[404] https://www.kali.org/1999
+[404] https://www.kali.org/1x1
+[404] https://www.kali.org/2
+[404] https://www.kali.org/20
+[404] https://www.kali.org/200
+[404] https://www.kali.org/2000
+[404] https://www.kali.org/2001
+[404] https://www.kali.org/.config
+[404] https://www.kali.org/.cvsignore
+[404] https://www.kali.org/.cache
+[404] https://www.kali.org/.git-rewrite
+[404] https://www.kali.org/.forward
+[404] https://www.kali.org/.git_release
+[404] https://www.kali.org/.gitattributes
+[404] https://www.kali.org/.gitconfig
+[404] https://www.kali.org/.gitignore
+[404] https://www.kali.org/.gitk
+[404] https://www.kali.org/.gitkeep
+[404] https://www.kali.org/.cache
+[404] https://www.kali.org/.config
+[404] https://www.kali.org/.cvsignore
+[404] https://www.kali.org/.forward
+[404] https://www.kali.org/.git-rewrite
+[404] https://www.kali.org/.git_release
+[404] https://www.kali.org/.gitattributes
+[404] https://www.kali.org/.gitconfig
+[404] https://www.kali.org/.cache
+[404] https://www.kali.org/.config
+[404] https://www.kali.org/.cvsignore
+[404] https://www.kali.org/.forward
+[404] https://www.kali.org/.git-rewrite
+[404] https://www.kali.org/.git_release
+[404] https://www.kali.org/.gitattributes
+[404] https://www.kali.org/.gitconfig
+[404] https://www.kali.org/.gitignore
+[404] https://www.kali.org/.gitk
+[404] https://www.kali.org/.gitkeep
+[404] https://www.kali.org/.gitmodules
+[404] https://www.kali.org/.gitreview
+[404] https://www.kali.org/.hta
+[404] https://www.kali.org/.listing
+[404] https://www.kali.org/.listings
+[404] https://www.kali.org/.perf
+[404] https://www.kali.org/.rhosts
+[404] https://www.kali.org/.sh_history
+[404] https://www.kali.org/.subversion
+[404] https://www.kali.org/.svnignore
+[404] https://www.kali.org/.web
+[404] https://www.kali.org/.swf
+[404] https://www.kali.org/.well-known/acme-challenge
+[404] https://www.kali.org/.well-known/apple-app-site-association
+[404] https://www.kali.org/.well-known/apple-developer-merchantid-domain-association
+[404] https://www.kali.org/.well-known/ashrae
+[404] https://www.kali.org/.well-known/assetlinks.json
+[404] https://www.kali.org/.well-known/autoconfig/mail
+[404] https://www.kali.org/.well-known/browserid
+[404] https://www.kali.org/.well-known/caldav
+[404] https://www.kali.org/.well-known/carddav
+[404] https://www.kali.org/.well-known/change-password
+[404] https://www.kali.org/.well-known/coap
+[404] https://www.kali.org/.well-known/core
+[404] https://www.kali.org/.well-known/csvm
+[404] https://www.kali.org/.well-known/dnt
+[404] https://www.kali.org/.well-known/dnt-policy.txt
+[404] https://www.kali.org/.well-known/dots
+[404] https://www.kali.org/.well-known/ecips
+[404] https://www.kali.org/.well-known/enterprise-transport-security
+[404] https://www.kali.org/.well-known/est
+[404] https://www.kali.org/.well-known/genid
+[404] https://www.kali.org/.well-known/hoba
+[404] https://www.kali.org/.well-known/host-meta
+[404] https://www.kali.org/.well-known/host-meta.json
+[200] https://www.kali.org/.well-known/http-opportunistic
+[200] https://www.kali.org/.well-known/http-opportunistic
+[404] https://www.kali.org/.well-known/idp-proxy
+[404] https://www.kali.org/.well-known/jmap
+[404] https://www.kali.org/.well-known/jwks.json
+[404] https://www.kali.org/.well-known/keybase.txt
+[404] https://www.kali.org/.well-known/looking-glass
+[404] https://www.kali.org/.well-known/matrix
+[404] https://www.kali.org/.well-known/mercure
+[404] https://www.kali.org/.well-known/mta-sts.txt
+[404] https://www.kali.org/.well-known/mud
+[404] https://www.kali.org/.well-known/nfv-oauth-server-configuration
+[404] https://www.kali.org/.well-known/ni
+[404] https://www.kali.org/.well-known/nodeinfo
+[404] https://www.kali.org/.well-known/oauth-authorization-server
+[404] https://www.kali.org/.well-known/openid-configuration
+[404] https://www.kali.org/.well-known/openid-federation
+[404] https://www.kali.org/.well-known/openorg
+[404] https://www.kali.org/.well-known/openpgpkey
+[404] https://www.kali.org/.well-known/pki-validation
+[404] https://www.kali.org/.well-known/posh
+[404] https://www.kali.org/.well-known/pvd
+[404] https://www.kali.org/.well-known/reload-config
+[404] https://www.kali.org/.well-known/repute-template
+[404] https://www.kali.org/.well-known/resourcesync
+[200] https://www.kali.org/.well-known/security.txt
+[200] https://www.kali.org/.well-known/security.txt
+[404] https://www.kali.org/.well-known/humans.txt
+[404] https://www.kali.org/.well-known/stun-key
+[404] https://www.kali.org/.well-known/thread
+[404] https://www.kali.org/.well-known/time
+[404] https://www.kali.org/.well-known/timezone
+[404] https://www.kali.org/.well-known/uma2-configuration
+[404] https://www.kali.org/.well-known/void
+[404] https://www.kali.org/.well-known/webfinger
+[404] https://www.kali.org/0
+[404] https://www.kali.org/00
+[404] https://www.kali.org/01
+[404] https://www.kali.org/02
+[404] https://www.kali.org/03
+[404] https://www.kali.org/04
+[404] https://www.kali.org/05
+[404] https://www.kali.org/06
+[404] https://www.kali.org/07
+[404] https://www.kali.org/08
+[404] https://www.kali.org/09
+[404] https://www.kali.org/1
+[404] https://www.kali.org/10
+[404] https://www.kali.org/100
+[404] https://www.kali.org/1000
+[404] https://www.kali.org/1001
+[404] https://www.kali.org/101
+[404] https://www.kali.org/102
+[404] https://www.kali.org/103
+[404] https://www.kali.org/11
+[404] https://www.kali.org/12
+[404] https://www.kali.org/123
+[404] https://www.kali.org/13
+[404] https://www.kali.org/14
+[404] https://www.kali.org/15
+[404] https://www.kali.org/.cache
+[404] https://www.kali.org/.config
+[404] https://www.kali.org/.cvsignore
+[404] https://www.kali.org/.forward
+[404] https://www.kali.org/.git-rewrite
+[404] https://www.kali.org/.git_release
+[404] https://www.kali.org/.gitattributes
+[404] https://www.kali.org/.gitconfig
+[404] https://www.kali.org/.gitignore
+[404] https://www.kali.org/.gitk
 [+] Found: https://www.kali.org/.well-known/http-opportunistic (Status: 200) [Size: unknown]
 [+] Found: https://www.kali.org/.well-known/security.txt (Status: 200) [Size: unknown]
 [+] Found: https://www.kali.org/404 (Status: 200) [Size: unknown]
 [>] Redirect: https://www.kali.org/Download -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
 [>] Redirect: https://www.kali.org/Downloads -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/about-us -> //www.kali.org/about-us/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/.well-known/http-opportunistic (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/.well-known/security.txt (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/404 (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/Download -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/Downloads -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/about-us -> //www.kali.org/about-us/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/author -> https://www.kali.org/about-us/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/.well-known/http-opportunistic (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/.well-known/security.txt (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/404 (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/Download -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/Downloads -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/about-us -> //www.kali.org/about-us/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/about-us/ (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/about-us/ (Status: 200) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.env (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.cvs (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.bash_history (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.bashrc (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.git (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.git/HEAD (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.git/config (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.git/index (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.git/logs/ (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.history (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.htaccess (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.htpasswd (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.mysql_history (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.passwd (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.profile (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.ssh (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.svn (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.svn/entries (Status: 403) [Size: unknown]
+[+] Found: https://www.kali.org/.well-known/http-opportunistic (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/.well-known/security.txt (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/404 (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/Download -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/Downloads -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/about-us -> //www.kali.org/about-us/ (Status: 302) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/access_log (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/authorized_keys (Status: 403) [Size: unknown]
+[>] Redirect: https://www.kali.org/author -> https://www.kali.org/about-us/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/blog -> //www.kali.org/blog/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/category -> https://www.kali.org/blog/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/community -> //www.kali.org/community/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/contact -> //www.kali.org/contact/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/css -> //www.kali.org/css/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/docs -> //www.kali.org/docs/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/download -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/downloads -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/error_log (Status: 403) [Size: unknown]
+[>] Redirect: https://www.kali.org/faq -> //www.kali.org/faq/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/favicon.ico -> https://www.kali.org/images/favicon.ico (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/features -> //www.kali.org/features/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/feed -> https://www.kali.org/rss.xml (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/get -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/humans.txt (Status: 200) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/id_rsa (Status: 403) [Size: unknown]
+[>] Redirect: https://www.kali.org/images -> //www.kali.org/images/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/index (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/index.html (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/js -> //www.kali.org/js/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/newsletter -> //www.kali.org/newsletter/ (Status: 302) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/phpinfo.php (Status: 403) [Size: unknown]
+[>] Redirect: https://www.kali.org/plugins -> //www.kali.org/plugins/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/releases -> //www.kali.org/releases/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/robots.txt (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/sitemap.xml (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/tools -> //www.kali.org/tools/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/wallpapers -> //www.kali.org/wallpapers/ (Status: 302) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/web.config (Status: 403) [Size: unknown]
+[>] Redirect: https://www.kali.org/Download/ -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/docs/ (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/Downloads/ -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/author/ -> https://www.kali.org/about-us/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/about-us/ (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/category/ -> https://www.kali.org/blog/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/blog/ (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/download/ -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/contact/ (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/community/ (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/downloads/ -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/faq/ (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/features/ (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/get/ -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/newsletter/ (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/releases/ (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/tools/ (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/wallpapers/ (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/author// -> https://www.kali.org/about-us/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/Downloads// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/category// -> https://www.kali.org/blog/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/download// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/downloads// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/get// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/Download// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/Downloads/// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/get/// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/author/// -> https://www.kali.org/about-us/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/category/// -> https://www.kali.org/blog/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/download/// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/downloads/// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/Download/// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.cvs (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.bashrc (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.bash_history (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.git (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.env (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.git/HEAD (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.git/config (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.git/index (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.git/logs/ (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.history (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.htaccess (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.htpasswd (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.mysql_history (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.passwd (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.profile (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.ssh (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.svn (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.svn/entries (Status: 403) [Size: unknown]
+[+] Found: https://www.kali.org/.well-known/http-opportunistic (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/.well-known/security.txt (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/404 (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/Download -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/Downloads -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/about-us -> //www.kali.org/about-us/ (Status: 302) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/access_log (Status: 403) [Size: unknown]
+[>] Redirect: https://www.kali.org/author -> https://www.kali.org/about-us/ (Status: 302) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/authorized_keys (Status: 403) [Size: unknown]
+[>] Redirect: https://www.kali.org/blog -> //www.kali.org/blog/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/category -> https://www.kali.org/blog/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/community -> //www.kali.org/community/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/contact -> //www.kali.org/contact/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/css -> //www.kali.org/css/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/docs -> //www.kali.org/docs/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/download -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/downloads -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/error_log (Status: 403) [Size: unknown]
+[>] Redirect: https://www.kali.org/faq -> //www.kali.org/faq/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/favicon.ico -> https://www.kali.org/images/favicon.ico (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/features -> //www.kali.org/features/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/feed -> https://www.kali.org/rss.xml (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/get -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/humans.txt (Status: 200) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/id_rsa (Status: 403) [Size: unknown]
+[>] Redirect: https://www.kali.org/images -> //www.kali.org/images/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/index (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/index.html (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/js -> //www.kali.org/js/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/newsletter -> //www.kali.org/newsletter/ (Status: 302) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/phpinfo.php (Status: 403) [Size: unknown]
+[>] Redirect: https://www.kali.org/plugins -> //www.kali.org/plugins/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/releases -> //www.kali.org/releases/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/robots.txt (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/sitemap.xml (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/tools -> //www.kali.org/tools/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/wallpapers -> //www.kali.org/wallpapers/ (Status: 302) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/web.config (Status: 403) [Size: unknown]
+[>] Redirect: https://www.kali.org/Download/ -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/docs/ (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/Downloads/ -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/about-us/ (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/author/ -> https://www.kali.org/about-us/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/category/ -> https://www.kali.org/blog/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/blog/ (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/community/ (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/download/ -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/contact/ (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/downloads/ -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/faq/ (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/get/ -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/features/ (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/newsletter/ (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/releases/ (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/tools/ (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/wallpapers/ (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/Download// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/Downloads// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/downloads// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/author// -> https://www.kali.org/about-us/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/download// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/get// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/category// -> https://www.kali.org/blog/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/Download/// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/Downloads/// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/downloads/// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/author/// -> https://www.kali.org/about-us/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/download/// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/get/// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/category/// -> https://www.kali.org/blog/ (Status: 302) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.bash_history (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.cvs (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.bashrc (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.git (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.env (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.git/HEAD (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.git/config (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.git/index (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.git/logs/ (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.history (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.htaccess (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.htpasswd (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.passwd (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.mysql_history (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.profile (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.ssh (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.svn (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.svn/entries (Status: 403) [Size: unknown]
+[+] Found: https://www.kali.org/.well-known/http-opportunistic (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/.well-known/security.txt (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/404 (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/Download -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/Downloads -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/about-us -> //www.kali.org/about-us/ (Status: 302) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/access_log (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/authorized_keys (Status: 403) [Size: unknown]
+[>] Redirect: https://www.kali.org/author -> https://www.kali.org/about-us/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/blog -> //www.kali.org/blog/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/category -> https://www.kali.org/blog/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/community -> //www.kali.org/community/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/contact -> //www.kali.org/contact/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/css -> //www.kali.org/css/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/docs -> //www.kali.org/docs/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/download -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/downloads -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/error_log (Status: 403) [Size: unknown]
+[>] Redirect: https://www.kali.org/faq -> //www.kali.org/faq/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/favicon.ico -> https://www.kali.org/images/favicon.ico (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/features -> //www.kali.org/features/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/feed -> https://www.kali.org/rss.xml (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/get -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/humans.txt (Status: 200) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/id_rsa (Status: 403) [Size: unknown]
+[>] Redirect: https://www.kali.org/images -> //www.kali.org/images/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/index (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/index.html (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/js -> //www.kali.org/js/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/newsletter -> //www.kali.org/newsletter/ (Status: 302) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/phpinfo.php (Status: 403) [Size: unknown]
+[>] Redirect: https://www.kali.org/plugins -> //www.kali.org/plugins/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/releases -> //www.kali.org/releases/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/robots.txt (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/sitemap.xml (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/tools -> //www.kali.org/tools/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/wallpapers -> //www.kali.org/wallpapers/ (Status: 302) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/web.config (Status: 403) [Size: unknown]
+[>] Redirect: https://www.kali.org/author/ -> https://www.kali.org/about-us/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/Downloads/ -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/category/ -> https://www.kali.org/blog/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/Download/ -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/blog/ (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/contact/ (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/about-us/ (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/community/ (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/docs/ (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/download/ -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/downloads/ -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/get/ -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/features/ (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/faq/ (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/newsletter/ (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/tools/ (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/wallpapers/ (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/releases/ (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/downloads// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/download// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/Download// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/get// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/Downloads// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/author// -> https://www.kali.org/about-us/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/category// -> https://www.kali.org/blog/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/category/// -> https://www.kali.org/blog/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/Downloads/// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/downloads/// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/author/// -> https://www.kali.org/about-us/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/get/// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/download/// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/Download/// -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.cvs (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.env (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.bash_history (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.bashrc (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.git (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.git/HEAD (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.git/config (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.git/index (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.git/logs/ (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.history (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.htaccess (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.htpasswd (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.passwd (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.mysql_history (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.profile (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.ssh (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.svn (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.svn/entries (Status: 403) [Size: unknown]
+[+] Found: https://www.kali.org/.well-known/http-opportunistic (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/.well-known/security.txt (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/404 (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/Download -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/Downloads -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/about-us -> //www.kali.org/about-us/ (Status: 302) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/access_log (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/authorized_keys (Status: 403) [Size: unknown]
+[>] Redirect: https://www.kali.org/author -> https://www.kali.org/about-us/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/blog -> //www.kali.org/blog/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/category -> https://www.kali.org/blog/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/community -> //www.kali.org/community/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/contact -> //www.kali.org/contact/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/css -> //www.kali.org/css/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/docs -> //www.kali.org/docs/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/download -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/downloads -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/error_log (Status: 403) [Size: unknown]
+[>] Redirect: https://www.kali.org/faq -> //www.kali.org/faq/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/favicon.ico -> https://www.kali.org/images/favicon.ico (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/features -> //www.kali.org/features/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/feed -> https://www.kali.org/rss.xml (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/get -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/humans.txt (Status: 200) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/id_rsa (Status: 403) [Size: unknown]
+[>] Redirect: https://www.kali.org/images -> //www.kali.org/images/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/index (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/index.html (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/js -> //www.kali.org/js/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/newsletter -> //www.kali.org/newsletter/ (Status: 302) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/phpinfo.php (Status: 403) [Size: unknown]
+[>] Redirect: https://www.kali.org/plugins -> //www.kali.org/plugins/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/releases -> //www.kali.org/releases/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/robots.txt (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/sitemap.xml (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/tools -> //www.kali.org/tools/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/wallpapers -> //www.kali.org/wallpapers/ (Status: 302) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/web.config (Status: 403) [Size: unknown]
+[+] Found: https://www.kali.org/get-kali/ (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/blog/ (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/about-us/ (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/images/favicon.ico/ (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/rss.xml/ (Status: 200) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.env (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.git (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.bashrc (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.bash_history (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.cvs (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.git/HEAD (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.git/index (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.git/config (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.git/logs/ (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.history (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.htaccess (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.htpasswd (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.mysql_history (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.passwd (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.profile (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.ssh (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.svn (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.svn/entries (Status: 403) [Size: unknown]
+[+] Found: https://www.kali.org/.well-known/http-opportunistic (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/.well-known/security.txt (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/404 (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/Download -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/Downloads -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/about-us -> //www.kali.org/about-us/ (Status: 302) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/access_log (Status: 403) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/authorized_keys (Status: 403) [Size: unknown]
+[>] Redirect: https://www.kali.org/author -> https://www.kali.org/about-us/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/blog -> //www.kali.org/blog/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/category -> https://www.kali.org/blog/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/community -> //www.kali.org/community/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/contact -> //www.kali.org/contact/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/css -> //www.kali.org/css/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/docs -> //www.kali.org/docs/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/download -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/downloads -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/error_log (Status: 403) [Size: unknown]
+[>] Redirect: https://www.kali.org/faq -> //www.kali.org/faq/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/favicon.ico -> https://www.kali.org/images/favicon.ico (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/features -> //www.kali.org/features/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/feed -> https://www.kali.org/rss.xml (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/get -> https://www.kali.org/get-kali/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/humans.txt (Status: 200) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/id_rsa (Status: 403) [Size: unknown]
+[>] Redirect: https://www.kali.org/images -> //www.kali.org/images/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/index (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/index.html (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/js -> //www.kali.org/js/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/newsletter -> //www.kali.org/newsletter/ (Status: 302) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/phpinfo.php (Status: 403) [Size: unknown]
+[>] Redirect: https://www.kali.org/plugins -> //www.kali.org/plugins/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/releases -> //www.kali.org/releases/ (Status: 302) [Size: unknown]
+[+] Found: https://www.kali.org/robots.txt (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/sitemap.xml (Status: 200) [Size: unknown]
+[>] Redirect: https://www.kali.org/tools -> //www.kali.org/tools/ (Status: 302) [Size: unknown]
+[>] Redirect: https://www.kali.org/wallpapers -> //www.kali.org/wallpapers/ (Status: 302) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/web.config (Status: 403) [Size: unknown]
+[+] Found: https://www.kali.org/get-kali/ (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/about-us/ (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/blog/ (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/rss.xml/ (Status: 200) [Size: unknown]
+[+] Found: https://www.kali.org/images/favicon.ico/ (Status: 200) [Size: unknown]
+[X] Unauthorized: https://www.kali.org/.bash_history (Status: 403)
+[X] Unauthorized: https://www.kali.org/.cvs (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git (Status: 403)
+[X] Unauthorized: https://www.kali.org/.env (Status: 403)
+[X] Unauthorized: https://www.kali.org/.bashrc (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git/HEAD (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git/config (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git/index (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git/logs/ (Status: 403)
+[?] Result: https://www.kali.org/.git-rewrite (Status: 404)
+[?] Result: https://www.kali.org/.forward (Status: 404)
+[?] Result: https://www.kali.org/.cvsignore (Status: 404)
+[?] Result: https://www.kali.org/.cache (Status: 404)
+[?] Result: https://www.kali.org/.git_release (Status: 404)
+[?] Result: https://www.kali.org/.gitignore (Status: 404)
+[?] Result: https://www.kali.org/.config (Status: 404)
+[?] Result: https://www.kali.org/.gitconfig (Status: 404)
+[X] Unauthorized: https://www.kali.org/.history (Status: 403)
+[?] Result: https://www.kali.org/.gitattributes (Status: 404)
+[X] Unauthorized: https://www.kali.org/.htaccess (Status: 403)
+[X] Unauthorized: https://www.kali.org/.htpasswd (Status: 403)
+[?] Result: https://www.kali.org/.gitk (Status: 404)
+[X] Unauthorized: https://www.kali.org/.mysql_history (Status: 403)
+[X] Unauthorized: https://www.kali.org/.passwd (Status: 403)
+[X] Unauthorized: https://www.kali.org/.profile (Status: 403)
+[X] Unauthorized: https://www.kali.org/.ssh (Status: 403)
+[?] Result: https://www.kali.org/.gitkeep (Status: 404)
+[?] Result: https://www.kali.org/.gitreview (Status: 404)
+[?] Result: https://www.kali.org/.gitmodules (Status: 404)
+[X] Unauthorized: https://www.kali.org/.svn (Status: 403)
+[?] Result: https://www.kali.org/.hta (Status: 404)
+[X] Unauthorized: https://www.kali.org/.svn/entries (Status: 403)
+[?] Result: https://www.kali.org/.listing (Status: 404)
+[?] Result: https://www.kali.org/.listings (Status: 404)
+[?] Result: https://www.kali.org/.rhosts (Status: 404)
+[?] Result: https://www.kali.org/.perf (Status: 404)
+[?] Result: https://www.kali.org/.sh_history (Status: 404)
+[?] Result: https://www.kali.org/.subversion (Status: 404)
+[?] Result: https://www.kali.org/.svnignore (Status: 404)
+[?] Result: https://www.kali.org/.well-known/acme-challenge (Status: 404)
+[?] Result: https://www.kali.org/.web (Status: 404)
+[?] Result: https://www.kali.org/.well-known/apple-developer-merchantid-domain-association (Status: 404)
+[?] Result: https://www.kali.org/.well-known/apple-app-site-association (Status: 404)
+[?] Result: https://www.kali.org/.well-known/assetlinks.json (Status: 404)
+[?] Result: https://www.kali.org/.well-known/ashrae (Status: 404)
+[?] Result: https://www.kali.org/.well-known/autoconfig/mail (Status: 404)
+[?] Result: https://www.kali.org/.well-known/browserid (Status: 404)
+[?] Result: https://www.kali.org/.well-known/caldav (Status: 404)
+[?] Result: https://www.kali.org/.swf (Status: 404)
+[?] Result: https://www.kali.org/.well-known/coap (Status: 404)
+[?] Result: https://www.kali.org/.well-known/change-password (Status: 404)
+[?] Result: https://www.kali.org/.well-known/carddav (Status: 404)
+[?] Result: https://www.kali.org/.well-known/core (Status: 404)
+[?] Result: https://www.kali.org/.well-known/csvm (Status: 404)
+[?] Result: https://www.kali.org/.well-known/dnt (Status: 404)
+[?] Result: https://www.kali.org/.well-known/dnt-policy.txt (Status: 404)
+[?] Result: https://www.kali.org/.well-known/dots (Status: 404)
+[+] Found: https://www.kali.org/.well-known/http-opportunistic (Status: 200)
+[?] Result: https://www.kali.org/.well-known/ecips (Status: 404)
+[?] Result: https://www.kali.org/.well-known/est (Status: 404)
+[?] Result: https://www.kali.org/.well-known/enterprise-transport-security (Status: 404)
+[?] Result: https://www.kali.org/.well-known/genid (Status: 404)
+[?] Result: https://www.kali.org/.well-known/hoba (Status: 404)
+[?] Result: https://www.kali.org/.well-known/host-meta (Status: 404)
+[?] Result: https://www.kali.org/.well-known/host-meta.json (Status: 404)
+[?] Result: https://www.kali.org/.well-known/idp-proxy (Status: 404)
+[?] Result: https://www.kali.org/.well-known/jmap (Status: 404)
+[?] Result: https://www.kali.org/.well-known/jwks.json (Status: 404)
+[?] Result: https://www.kali.org/.well-known/keybase.txt (Status: 404)
+[?] Result: https://www.kali.org/.well-known/looking-glass (Status: 404)
+[?] Result: https://www.kali.org/.well-known/matrix (Status: 404)
+[?] Result: https://www.kali.org/.well-known/mercure (Status: 404)
+[?] Result: https://www.kali.org/.well-known/mud (Status: 404)
+[?] Result: https://www.kali.org/.well-known/mta-sts.txt (Status: 404)
+[?] Result: https://www.kali.org/.well-known/nfv-oauth-server-configuration (Status: 404)
+[?] Result: https://www.kali.org/.well-known/ni (Status: 404)
+[?] Result: https://www.kali.org/.well-known/nodeinfo (Status: 404)
+[?] Result: https://www.kali.org/.well-known/oauth-authorization-server (Status: 404)
+[?] Result: https://www.kali.org/.well-known/openid-configuration (Status: 404)
+[?] Result: https://www.kali.org/.well-known/openid-federation (Status: 404)
+[?] Result: https://www.kali.org/.well-known/openorg (Status: 404)
+[?] Result: https://www.kali.org/.well-known/openpgpkey (Status: 404)
+[?] Result: https://www.kali.org/.well-known/pki-validation (Status: 404)
+[?] Result: https://www.kali.org/.well-known/reload-config (Status: 404)
+[?] Result: https://www.kali.org/.well-known/posh (Status: 404)
+[?] Result: https://www.kali.org/.well-known/repute-template (Status: 404)
+[?] Result: https://www.kali.org/.well-known/pvd (Status: 404)
+[?] Result: https://www.kali.org/.well-known/resourcesync (Status: 404)
+[+] Found: https://www.kali.org/.well-known/security.txt (Status: 200)
+[?] Result: https://www.kali.org/.well-known/humans.txt (Status: 404)
+[?] Result: https://www.kali.org/.well-known/stun-key (Status: 404)
+[?] Result: https://www.kali.org/.well-known/timezone (Status: 404)
+[?] Result: https://www.kali.org/.well-known/time (Status: 404)
+[?] Result: https://www.kali.org/.well-known/thread (Status: 404)
+[?] Result: https://www.kali.org/.well-known/void (Status: 404)
+[?] Result: https://www.kali.org/.well-known/webfinger (Status: 404)
+[?] Result: https://www.kali.org/.well-known/uma2-configuration (Status: 404)
+[?] Result: https://www.kali.org/0 (Status: 404)
+[?] Result: https://www.kali.org/00 (Status: 404)
+[?] Result: https://www.kali.org/01 (Status: 404)
+[?] Result: https://www.kali.org/02 (Status: 404)
+[?] Result: https://www.kali.org/03 (Status: 404)
+[?] Result: https://www.kali.org/04 (Status: 404)
+[?] Result: https://www.kali.org/06 (Status: 404)
+[?] Result: https://www.kali.org/05 (Status: 404)
+[?] Result: https://www.kali.org/07 (Status: 404)
+[?] Result: https://www.kali.org/08 (Status: 404)
+[?] Result: https://www.kali.org/1 (Status: 404)
+[?] Result: https://www.kali.org/09 (Status: 404)
+[?] Result: https://www.kali.org/10 (Status: 404)
+[?] Result: https://www.kali.org/100 (Status: 404)
+[?] Result: https://www.kali.org/1000 (Status: 404)
+[?] Result: https://www.kali.org/101 (Status: 404)
+[?] Result: https://www.kali.org/1001 (Status: 404)
+[?] Result: https://www.kali.org/102 (Status: 404)
+[?] Result: https://www.kali.org/103 (Status: 404)
+[?] Result: https://www.kali.org/11 (Status: 404)
+[?] Result: https://www.kali.org/12 (Status: 404)
+[?] Result: https://www.kali.org/123 (Status: 404)
+[?] Result: https://www.kali.org/13 (Status: 404)
+[?] Result: https://www.kali.org/15 (Status: 404)
+[?] Result: https://www.kali.org/14 (Status: 404)
+[?] Result: https://www.kali.org/1990 (Status: 404)
+[?] Result: https://www.kali.org/1991 (Status: 404)
+[?] Result: https://www.kali.org/1992 (Status: 404)
+[?] Result: https://www.kali.org/1994 (Status: 404)
+[?] Result: https://www.kali.org/1993 (Status: 404)
+[?] Result: https://www.kali.org/1995 (Status: 404)
+[?] Result: https://www.kali.org/1996 (Status: 404)
+[?] Result: https://www.kali.org/1997 (Status: 404)
+[?] Result: https://www.kali.org/1998 (Status: 404)
+[?] Result: https://www.kali.org/1999 (Status: 404)
+[?] Result: https://www.kali.org/1x1 (Status: 404)
+[?] Result: https://www.kali.org/2 (Status: 404)
+[?] Result: https://www.kali.org/200 (Status: 404)
+[?] Result: https://www.kali.org/20 (Status: 404)
+[?] Result: https://www.kali.org/2001 (Status: 404)
+[?] Result: https://www.kali.org/2000 (Status: 404)
+[?] Result: https://www.kali.org/2002 (Status: 404)
+[?] Result: https://www.kali.org/2003 (Status: 404)
+[?] Result: https://www.kali.org/2005 (Status: 404)
+[?] Result: https://www.kali.org/2004 (Status: 404)
+[?] Result: https://www.kali.org/2007 (Status: 404)
+[?] Result: https://www.kali.org/2006 (Status: 404)
+[?] Result: https://www.kali.org/2008 (Status: 404)
+[?] Result: https://www.kali.org/2009 (Status: 404)
+[?] Result: https://www.kali.org/2010 (Status: 404)
+[?] Result: https://www.kali.org/2012 (Status: 404)
+[?] Result: https://www.kali.org/2011 (Status: 404)
+[?] Result: https://www.kali.org/2013 (Status: 404)
+[?] Result: https://www.kali.org/2014 (Status: 404)
+[?] Result: https://www.kali.org/2015 (Status: 404)
+[?] Result: https://www.kali.org/2016 (Status: 404)
+[?] Result: https://www.kali.org/2017 (Status: 404)
+[?] Result: https://www.kali.org/2018 (Status: 404)
+[?] Result: https://www.kali.org/2019 (Status: 404)
+[?] Result: https://www.kali.org/2020 (Status: 404)
+[?] Result: https://www.kali.org/2021 (Status: 404)
+[?] Result: https://www.kali.org/2022 (Status: 404)
+[?] Result: https://www.kali.org/21 (Status: 404)
+[?] Result: https://www.kali.org/22 (Status: 404)
+[?] Result: https://www.kali.org/2257 (Status: 404)
+[?] Result: https://www.kali.org/23 (Status: 404)
+[?] Result: https://www.kali.org/25 (Status: 404)
+[?] Result: https://www.kali.org/24 (Status: 404)
+[?] Result: https://www.kali.org/3 (Status: 404)
+[?] Result: https://www.kali.org/2g (Status: 404)
+[?] Result: https://www.kali.org/30 (Status: 404)
+[?] Result: https://www.kali.org/300 (Status: 404)
+[?] Result: https://www.kali.org/3g (Status: 404)
+[?] Result: https://www.kali.org/32 (Status: 404)
+[?] Result: https://www.kali.org/3rdparty (Status: 404)
+[?] Result: https://www.kali.org/4 (Status: 404)
+[+] Found: https://www.kali.org/404 (Status: 200)
+[?] Result: https://www.kali.org/400 (Status: 404)
+[?] Result: https://www.kali.org/401 (Status: 404)
+[?] Result: https://www.kali.org/403 (Status: 404)
+[?] Result: https://www.kali.org/42 (Status: 404)
+[?] Result: https://www.kali.org/4DWEBTEST (Status: 404)
+[?] Result: https://www.kali.org/4DSTATS (Status: 404)
+[?] Result: https://www.kali.org/4DHTMLSTATS (Status: 404)
+[?] Result: https://www.kali.org/5 (Status: 404)
+[?] Result: https://www.kali.org/500 (Status: 404)
+[?] Result: https://www.kali.org/51 (Status: 404)
+[?] Result: https://www.kali.org/64 (Status: 404)
+[?] Result: https://www.kali.org/6 (Status: 404)
+[?] Result: https://www.kali.org/50 (Status: 404)
+[?] Result: https://www.kali.org/8 (Status: 404)
+[?] Result: https://www.kali.org/7z (Status: 404)
+[?] Result: https://www.kali.org/7 (Status: 404)
+[?] Result: https://www.kali.org/9 (Status: 404)
+[?] Result: https://www.kali.org/96 (Status: 404)
+[?] Result: https://www.kali.org/@ (Status: 404)
+[?] Result: https://www.kali.org/A (Status: 404)
+[?] Result: https://www.kali.org/ADMIN (Status: 404)
+[?] Result: https://www.kali.org/ADM (Status: 404)
+[?] Result: https://www.kali.org/ADMON (Status: 404)
+[?] Result: https://www.kali.org/AT-admin.cgi (Status: 404)
+[?] Result: https://www.kali.org/About (Status: 404)
+[?] Result: https://www.kali.org/AboutUs (Status: 404)
+[?] Result: https://www.kali.org/Admin (Status: 404)
+[?] Result: https://www.kali.org/AdminService (Status: 404)
+[?] Result: https://www.kali.org/AdminTools (Status: 404)
+[?] Result: https://www.kali.org/Administration (Status: 404)
+[?] Result: https://www.kali.org/AggreSpy (Status: 404)
+[?] Result: https://www.kali.org/AppsLogin (Status: 404)
+[?] Result: https://www.kali.org/AppsLocalLogin (Status: 404)
+[?] Result: https://www.kali.org/Archive (Status: 404)
+[?] Result: https://www.kali.org/Articles (Status: 404)
+[?] Result: https://www.kali.org/BUILD (Status: 404)
+[?] Result: https://www.kali.org/B (Status: 404)
+[?] Result: https://www.kali.org/BackOffice (Status: 404)
+[?] Result: https://www.kali.org/Base (Status: 404)
+[?] Result: https://www.kali.org/Books (Status: 404)
+[?] Result: https://www.kali.org/Blog (Status: 404)
+[?] Result: https://www.kali.org/C (Status: 404)
+[?] Result: https://www.kali.org/Browser (Status: 404)
+[?] Result: https://www.kali.org/Business (Status: 404)
+[?] Result: https://www.kali.org/CPAN (Status: 404)
+[?] Result: https://www.kali.org/CMS (Status: 404)
+[?] Result: https://www.kali.org/CVS (Status: 404)
+[?] Result: https://www.kali.org/CVS/Repository (Status: 404)
+[?] Result: https://www.kali.org/CVS/Entries (Status: 404)
+[?] Result: https://www.kali.org/CVS/Root (Status: 404)
+[?] Result: https://www.kali.org/CYBERDOCS25 (Status: 404)
+[?] Result: https://www.kali.org/CYBERDOCS (Status: 404)
+[?] Result: https://www.kali.org/CYBERDOCS31 (Status: 404)
+[?] Result: https://www.kali.org/Computers (Status: 404)
+[?] Result: https://www.kali.org/ChangeLog (Status: 404)
+[?] Result: https://www.kali.org/Contact (Status: 404)
+[?] Result: https://www.kali.org/ContactUs (Status: 404)
+[?] Result: https://www.kali.org/Content (Status: 404)
+[?] Result: https://www.kali.org/Creatives (Status: 404)
+[?] Result: https://www.kali.org/D (Status: 404)
+[>] Redirect: https://www.kali.org/Download (Status: 302)
+[?] Result: https://www.kali.org/DB (Status: 404)
+[?] Result: https://www.kali.org/Database_Administration (Status: 404)
+[?] Result: https://www.kali.org/DMSDump (Status: 404)
+[>] Redirect: https://www.kali.org/Downloads (Status: 302)
+[?] Result: https://www.kali.org/Default (Status: 404)
+[?] Result: https://www.kali.org/Documents and Settings (Status: 404)
+[?] Result: https://www.kali.org/Education (Status: 404)
+[?] Result: https://www.kali.org/E (Status: 404)
+[?] Result: https://www.kali.org/English (Status: 404)
+[?] Result: https://www.kali.org/Entries (Status: 404)
+[?] Result: https://www.kali.org/Events (Status: 404)
+[?] Result: https://www.kali.org/Entertainment (Status: 404)
+[?] Result: https://www.kali.org/Extranet (Status: 404)
+[?] Result: https://www.kali.org/FAQ (Status: 404)
+[?] Result: https://www.kali.org/F (Status: 404)
+[?] Result: https://www.kali.org/FCKeditor (Status: 404)
+[?] Result: https://www.kali.org/G (Status: 404)
+[?] Result: https://www.kali.org/Games (Status: 404)
+[?] Result: https://www.kali.org/Global (Status: 404)
+[?] Result: https://www.kali.org/Graphics (Status: 404)
+[?] Result: https://www.kali.org/H (Status: 404)
+[?] Result: https://www.kali.org/Health (Status: 404)
+[?] Result: https://www.kali.org/HTML (Status: 404)
+[?] Result: https://www.kali.org/Help (Status: 404)
+[?] Result: https://www.kali.org/I (Status: 404)
+[?] Result: https://www.kali.org/Home (Status: 404)
+[?] Result: https://www.kali.org/INSTALL_admin (Status: 404)
+[?] Result: https://www.kali.org/Image (Status: 404)
+[?] Result: https://www.kali.org/Images (Status: 404)
+[?] Result: https://www.kali.org/Index (Status: 404)
+[?] Result: https://www.kali.org/Indy_admin (Status: 404)
+[?] Result: https://www.kali.org/Internet (Status: 404)
+[?] Result: https://www.kali.org/J (Status: 404)
+[?] Result: https://www.kali.org/JMXSoapAdapter (Status: 404)
+[?] Result: https://www.kali.org/Java (Status: 404)
+[?] Result: https://www.kali.org/L (Status: 404)
+[?] Result: https://www.kali.org/LICENSE (Status: 404)
+[?] Result: https://www.kali.org/Legal (Status: 404)
+[?] Result: https://www.kali.org/Links (Status: 404)
+[?] Result: https://www.kali.org/Log (Status: 404)
+[?] Result: https://www.kali.org/Linux (Status: 404)
+[?] Result: https://www.kali.org/LogFiles (Status: 404)
+[?] Result: https://www.kali.org/Login (Status: 404)
+[?] Result: https://www.kali.org/Lotus_Domino_Admin (Status: 404)
+[?] Result: https://www.kali.org/Logs (Status: 404)
+[?] Result: https://www.kali.org/M (Status: 404)
+[?] Result: https://www.kali.org/META-INF (Status: 404)
+[?] Result: https://www.kali.org/Main (Status: 404)
+[?] Result: https://www.kali.org/MANIFEST.MF (Status: 404)
+[?] Result: https://www.kali.org/Main_Page (Status: 404)
+[?] Result: https://www.kali.org/Makefile (Status: 404)
+[?] Result: https://www.kali.org/Members (Status: 404)
+[?] Result: https://www.kali.org/Media (Status: 404)
+[?] Result: https://www.kali.org/Menus (Status: 404)
+[?] Result: https://www.kali.org/Misc (Status: 404)
+[?] Result: https://www.kali.org/Music (Status: 404)
+[?] Result: https://www.kali.org/N (Status: 404)
+[?] Result: https://www.kali.org/OA (Status: 404)
+[?] Result: https://www.kali.org/News (Status: 404)
+[?] Result: https://www.kali.org/O (Status: 404)
+[?] Result: https://www.kali.org/OAErrorDetailPage (Status: 404)
+[?] Result: https://www.kali.org/OA_HTML (Status: 404)
+[?] Result: https://www.kali.org/OasDefault (Status: 404)
+[?] Result: https://www.kali.org/P (Status: 404)
+[?] Result: https://www.kali.org/Office (Status: 404)
+[?] Result: https://www.kali.org/PDF (Status: 404)
+[?] Result: https://www.kali.org/PHP (Status: 404)
+[?] Result: https://www.kali.org/Pipfile (Status: 404)
+[?] Result: https://www.kali.org/Pipfile.lock (Status: 404)
+[?] Result: https://www.kali.org/Pages (Status: 404)
+[?] Result: https://www.kali.org/PMA (Status: 404)
+[?] Result: https://www.kali.org/Press (Status: 404)
+[?] Result: https://www.kali.org/People (Status: 404)
+[?] Result: https://www.kali.org/Privacy (Status: 404)
+[?] Result: https://www.kali.org/Products (Status: 404)
+[?] Result: https://www.kali.org/Program Files (Status: 404)
+[?] Result: https://www.kali.org/Projects (Status: 404)
+[?] Result: https://www.kali.org/R (Status: 404)
+[?] Result: https://www.kali.org/Publications (Status: 404)
+[?] Result: https://www.kali.org/RCS (Status: 404)
+[?] Result: https://www.kali.org/RSS (Status: 404)
+[?] Result: https://www.kali.org/Rakefile (Status: 404)
+[?] Result: https://www.kali.org/README (Status: 404)
+[?] Result: https://www.kali.org/Readme (Status: 404)
+[?] Result: https://www.kali.org/RealMedia (Status: 404)
+[?] Result: https://www.kali.org/Research (Status: 404)
+[?] Result: https://www.kali.org/Recycled (Status: 404)
+[?] Result: https://www.kali.org/Resources (Status: 404)
+[?] Result: https://www.kali.org/Root (Status: 404)
+[?] Result: https://www.kali.org/SERVER-INF (Status: 404)
+[?] Result: https://www.kali.org/S (Status: 404)
+[?] Result: https://www.kali.org/SOAPMonitor (Status: 404)
+[?] Result: https://www.kali.org/SQL (Status: 404)
+[?] Result: https://www.kali.org/Scripts (Status: 404)
+[?] Result: https://www.kali.org/Search (Status: 404)
+[?] Result: https://www.kali.org/SUNWmc (Status: 404)
+[?] Result: https://www.kali.org/Security (Status: 404)
+[?] Result: https://www.kali.org/Server (Status: 404)
+[?] Result: https://www.kali.org/ServerAdministrator (Status: 404)
+[?] Result: https://www.kali.org/Services (Status: 404)
+[?] Result: https://www.kali.org/Servlet (Status: 404)
+[?] Result: https://www.kali.org/Servlets (Status: 404)
+[?] Result: https://www.kali.org/Shibboleth.sso/Metadata (Status: 404)
+[?] Result: https://www.kali.org/SiteMap (Status: 404)
+[?] Result: https://www.kali.org/SiteScope (Status: 404)
+[?] Result: https://www.kali.org/SiteServer (Status: 404)
+[?] Result: https://www.kali.org/Sites (Status: 404)
+[?] Result: https://www.kali.org/Software (Status: 404)
+[?] Result: https://www.kali.org/Sources (Status: 404)
+[?] Result: https://www.kali.org/Statistics (Status: 404)
+[?] Result: https://www.kali.org/Spy (Status: 404)
+[?] Result: https://www.kali.org/Sports (Status: 404)
+[?] Result: https://www.kali.org/Stats (Status: 404)
+[?] Result: https://www.kali.org/Super-Admin (Status: 404)
+[?] Result: https://www.kali.org/Support (Status: 404)
+[?] Result: https://www.kali.org/SysAdmin (Status: 404)
+[?] Result: https://www.kali.org/SysAdmin2 (Status: 404)
+[?] Result: https://www.kali.org/TEMP (Status: 404)
+[?] Result: https://www.kali.org/T (Status: 404)
+[?] Result: https://www.kali.org/TODO (Status: 404)
+[?] Result: https://www.kali.org/TMP (Status: 404)
+[?] Result: https://www.kali.org/Technology (Status: 404)
+[?] Result: https://www.kali.org/Themes (Status: 404)
+[?] Result: https://www.kali.org/Thumbs.db (Status: 404)
+[?] Result: https://www.kali.org/Travel (Status: 404)
+[?] Result: https://www.kali.org/U (Status: 404)
+[?] Result: https://www.kali.org/US (Status: 404)
+[?] Result: https://www.kali.org/UserFiles (Status: 404)
+[?] Result: https://www.kali.org/Utilities (Status: 404)
+[?] Result: https://www.kali.org/V (Status: 404)
+[?] Result: https://www.kali.org/Video (Status: 404)
+[?] Result: https://www.kali.org/W (Status: 404)
+[?] Result: https://www.kali.org/W3SVC1 (Status: 404)
+[?] Result: https://www.kali.org/W3SVC2 (Status: 404)
+[?] Result: https://www.kali.org/W3SVC (Status: 404)
+[?] Result: https://www.kali.org/W3SVC3 (Status: 404)
+[?] Result: https://www.kali.org/WEB-INF (Status: 404)
+[?] Result: https://www.kali.org/WS_FTP (Status: 404)
+[?] Result: https://www.kali.org/WS_FTP.LOG (Status: 404)
+[?] Result: https://www.kali.org/WebAdmin (Status: 404)
+[?] Result: https://www.kali.org/Windows (Status: 404)
+[?] Result: https://www.kali.org/X (Status: 404)
+[?] Result: https://www.kali.org/XML (Status: 404)
+[?] Result: https://www.kali.org/XXX (Status: 404)
+[?] Result: https://www.kali.org/_ (Status: 404)
+[?] Result: https://www.kali.org/_adm (Status: 404)
+[?] Result: https://www.kali.org/_admin (Status: 404)
+[?] Result: https://www.kali.org/_ajax (Status: 404)
+[?] Result: https://www.kali.org/_archive (Status: 404)
+[?] Result: https://www.kali.org/_assets (Status: 404)
+[?] Result: https://www.kali.org/_backup (Status: 404)
+[?] Result: https://www.kali.org/_baks (Status: 404)
+[?] Result: https://www.kali.org/_borders (Status: 404)
+[?] Result: https://www.kali.org/_config (Status: 404)
+[?] Result: https://www.kali.org/_conf (Status: 404)
+[?] Result: https://www.kali.org/_cache (Status: 404)
+[?] Result: https://www.kali.org/_catalogs (Status: 404)
+[?] Result: https://www.kali.org/_common (Status: 404)
+[?] Result: https://www.kali.org/_css (Status: 404)
+[?] Result: https://www.kali.org/_data (Status: 404)
+[?] Result: https://www.kali.org/_database (Status: 404)
+[?] Result: https://www.kali.org/_db_backups (Status: 404)
+[?] Result: https://www.kali.org/_flash (Status: 404)
+[?] Result: https://www.kali.org/_files (Status: 404)
+[?] Result: https://www.kali.org/_fpclass (Status: 404)
+[?] Result: https://www.kali.org/_dummy (Status: 404)
+[?] Result: https://www.kali.org/_derived (Status: 404)
+[?] Result: https://www.kali.org/_dev (Status: 404)
+[?] Result: https://www.kali.org/_framework/blazor.boot.json (Status: 404)
+[?] Result: https://www.kali.org/_framework/wasm/dotnet.wasm (Status: 404)
+[?] Result: https://www.kali.org/_framework/_bin/WebAssembly.Bindings.dll (Status: 404)
+[?] Result: https://www.kali.org/_inc (Status: 404)
+[?] Result: https://www.kali.org/_img (Status: 404)
+[?] Result: https://www.kali.org/_images (Status: 404)
+[?] Result: https://www.kali.org/_framework/blazor.webassembly.js (Status: 404)
+[?] Result: https://www.kali.org/_install (Status: 404)
+[?] Result: https://www.kali.org/_include (Status: 404)
+[?] Result: https://www.kali.org/_includes (Status: 404)
+[?] Result: https://www.kali.org/_js (Status: 404)
+[?] Result: https://www.kali.org/_layouts (Status: 404)
+[?] Result: https://www.kali.org/_lib (Status: 404)
+[?] Result: https://www.kali.org/_media (Status: 404)
+[?] Result: https://www.kali.org/_mem_bin (Status: 404)
+[?] Result: https://www.kali.org/_mm (Status: 404)
+[?] Result: https://www.kali.org/_mygallery (Status: 404)
+[?] Result: https://www.kali.org/_mmserverscripts (Status: 404)
+[?] Result: https://www.kali.org/_old (Status: 404)
+[?] Result: https://www.kali.org/_notes (Status: 404)
+[?] Result: https://www.kali.org/_overlay (Status: 404)
+[?] Result: https://www.kali.org/_pages (Status: 404)
+[?] Result: https://www.kali.org/_private (Status: 404)
+[?] Result: https://www.kali.org/_reports (Status: 404)
+[?] Result: https://www.kali.org/_resources (Status: 404)
+[?] Result: https://www.kali.org/_scriptlibrary (Status: 404)
+[?] Result: https://www.kali.org/_res (Status: 404)
+[?] Result: https://www.kali.org/_scripts (Status: 404)
+[?] Result: https://www.kali.org/_src (Status: 404)
+[?] Result: https://www.kali.org/_source (Status: 404)
+[?] Result: https://www.kali.org/_stats (Status: 404)
+[?] Result: https://www.kali.org/_styles (Status: 404)
+[?] Result: https://www.kali.org/_swf (Status: 404)
+[?] Result: https://www.kali.org/_temp (Status: 404)
+[?] Result: https://www.kali.org/_tempalbums (Status: 404)
+[?] Result: https://www.kali.org/_template (Status: 404)
+[?] Result: https://www.kali.org/_templates (Status: 404)
+[?] Result: https://www.kali.org/_test (Status: 404)
+[?] Result: https://www.kali.org/_themes (Status: 404)
+[?] Result: https://www.kali.org/_tmp (Status: 404)
+[?] Result: https://www.kali.org/_tmpfileop (Status: 404)
+[?] Result: https://www.kali.org/_vti_aut (Status: 404)
+[?] Result: https://www.kali.org/_vti_bin (Status: 404)
+[?] Result: https://www.kali.org/_vti_bin/_vti_aut/author.dll (Status: 404)
+[?] Result: https://www.kali.org/_vti_bin/shtml.dll (Status: 404)
+[?] Result: https://www.kali.org/_vti_bin/_vti_adm/admin.dll (Status: 404)
+[?] Result: https://www.kali.org/_vti_cnf (Status: 404)
+[?] Result: https://www.kali.org/_vti_log (Status: 404)
+[?] Result: https://www.kali.org/_vti_inf (Status: 404)
+[?] Result: https://www.kali.org/_vti_map (Status: 404)
+[?] Result: https://www.kali.org/_vti_pvt (Status: 404)
+[?] Result: https://www.kali.org/_vti_rpc (Status: 404)
+[?] Result: https://www.kali.org/_vti_script (Status: 404)
+[?] Result: https://www.kali.org/a (Status: 404)
+[?] Result: https://www.kali.org/_vti_txt (Status: 404)
+[?] Result: https://www.kali.org/_www (Status: 404)
+[?] Result: https://www.kali.org/aa (Status: 404)
+[?] Result: https://www.kali.org/aaa (Status: 404)
+[?] Result: https://www.kali.org/abc (Status: 404)
+[?] Result: https://www.kali.org/abc123 (Status: 404)
+[>] Redirect: https://www.kali.org/about-us (Status: 302)
+[?] Result: https://www.kali.org/abcd1234 (Status: 404)
+[?] Result: https://www.kali.org/abcd (Status: 404)
+[?] Result: https://www.kali.org/about (Status: 404)
+[?] Result: https://www.kali.org/about_us (Status: 404)
+[?] Result: https://www.kali.org/abstract (Status: 404)
+[?] Result: https://www.kali.org/abuse (Status: 404)
+[?] Result: https://www.kali.org/aboutus (Status: 404)
+[?] Result: https://www.kali.org/ac (Status: 404)
+[?] Result: https://www.kali.org/academic (Status: 404)
+[?] Result: https://www.kali.org/acatalog (Status: 404)
+[X] Unauthorized: https://www.kali.org/access_log (Status: 403)
+[?] Result: https://www.kali.org/academics (Status: 404)
+[?] Result: https://www.kali.org/acc (Status: 404)
+[?] Result: https://www.kali.org/access (Status: 404)
+[?] Result: https://www.kali.org/access-log (Status: 404)
+[?] Result: https://www.kali.org/access-log.1 (Status: 404)
+[?] Result: https://www.kali.org/access.1 (Status: 404)
+[?] Result: https://www.kali.org/access_db (Status: 404)
+[?] Result: https://www.kali.org/accessgranted (Status: 404)
+[?] Result: https://www.kali.org/accessibility (Status: 404)
+[?] Result: https://www.kali.org/access_log.1 (Status: 404)
+[?] Result: https://www.kali.org/accessories (Status: 404)
+[?] Result: https://www.kali.org/accommodation (Status: 404)
+[?] Result: https://www.kali.org/account (Status: 404)
+[?] Result: https://www.kali.org/account_edit (Status: 404)
+[?] Result: https://www.kali.org/accountants (Status: 404)
+[?] Result: https://www.kali.org/account_history (Status: 404)
+[?] Result: https://www.kali.org/accounts (Status: 404)
+[?] Result: https://www.kali.org/accountsettings (Status: 404)
+[?] Result: https://www.kali.org/accounting (Status: 404)
+[?] Result: https://www.kali.org/acct_login (Status: 404)
+[?] Result: https://www.kali.org/achitecture (Status: 404)
+[?] Result: https://www.kali.org/acp (Status: 404)
+[?] Result: https://www.kali.org/act (Status: 404)
+[?] Result: https://www.kali.org/actions (Status: 404)
+[?] Result: https://www.kali.org/action (Status: 404)
+[?] Result: https://www.kali.org/activate (Status: 404)
+[?] Result: https://www.kali.org/activation (Status: 404)
+[?] Result: https://www.kali.org/activeCollab (Status: 404)
+[?] Result: https://www.kali.org/activex (Status: 404)
+[?] Result: https://www.kali.org/activities (Status: 404)
+[?] Result: https://www.kali.org/ad (Status: 404)
+[?] Result: https://www.kali.org/activity (Status: 404)
+[?] Result: https://www.kali.org/active (Status: 404)
+[?] Result: https://www.kali.org/ad_js (Status: 404)
+[?] Result: https://www.kali.org/adclick (Status: 404)
+[?] Result: https://www.kali.org/adaptive (Status: 404)
+[?] Result: https://www.kali.org/add (Status: 404)
+[?] Result: https://www.kali.org/addfav (Status: 404)
+[?] Result: https://www.kali.org/add_cart (Status: 404)
+[?] Result: https://www.kali.org/addnews (Status: 404)
+[?] Result: https://www.kali.org/addons (Status: 404)
+[?] Result: https://www.kali.org/addpost (Status: 404)
+[?] Result: https://www.kali.org/address (Status: 404)
+[?] Result: https://www.kali.org/addreply (Status: 404)
+[?] Result: https://www.kali.org/address_book (Status: 404)
+[?] Result: https://www.kali.org/addressbook (Status: 404)
+[?] Result: https://www.kali.org/addresses (Status: 404)
+[?] Result: https://www.kali.org/adlogger (Status: 404)
+[?] Result: https://www.kali.org/addtocart (Status: 404)
+[?] Result: https://www.kali.org/adlog (Status: 404)
+[?] Result: https://www.kali.org/adm (Status: 404)
+[?] Result: https://www.kali.org/admin-admin (Status: 404)
+[?] Result: https://www.kali.org/admin (Status: 404)
+[?] Result: https://www.kali.org/admin-console (Status: 404)
+[?] Result: https://www.kali.org/admin-interface (Status: 404)
+[?] Result: https://www.kali.org/administrator-panel (Status: 404)
+[?] Result: https://www.kali.org/admin.cgi (Status: 404)
+[?] Result: https://www.kali.org/admin.pl (Status: 404)
+[?] Result: https://www.kali.org/admin.php (Status: 404)
+[?] Result: https://www.kali.org/admin1 (Status: 404)
+[?] Result: https://www.kali.org/admin2 (Status: 404)
+[?] Result: https://www.kali.org/admin3 (Status: 404)
+[?] Result: https://www.kali.org/admin4_account (Status: 404)
+[?] Result: https://www.kali.org/admin4_colon (Status: 404)
+[?] Result: https://www.kali.org/admin_ (Status: 404)
+[?] Result: https://www.kali.org/admin_area (Status: 404)
+[?] Result: https://www.kali.org/admin_banner (Status: 404)
+[?] Result: https://www.kali.org/admin_interface (Status: 404)
+[?] Result: https://www.kali.org/admin_index (Status: 404)
+[?] Result: https://www.kali.org/admin_c (Status: 404)
+[?] Result: https://www.kali.org/admin_logon (Status: 404)
+[?] Result: https://www.kali.org/admin_login (Status: 404)
+[?] Result: https://www.kali.org/admincontrol (Status: 404)
+[?] Result: https://www.kali.org/admincp (Status: 404)
+[?] Result: https://www.kali.org/adminhelp (Status: 404)
+[?] Result: https://www.kali.org/administer (Status: 404)
+[?] Result: https://www.kali.org/administr8 (Status: 404)
+[?] Result: https://www.kali.org/administracion (Status: 404)
+[?] Result: https://www.kali.org/administrat (Status: 404)
+[?] Result: https://www.kali.org/administrador (Status: 404)
+[?] Result: https://www.kali.org/administratie (Status: 404)
+[?] Result: https://www.kali.org/administration (Status: 404)
+[?] Result: https://www.kali.org/administrator (Status: 404)
+[?] Result: https://www.kali.org/administrivia (Status: 404)
+[?] Result: https://www.kali.org/administrators (Status: 404)
+[?] Result: https://www.kali.org/administratoraccounts (Status: 404)
+[?] Result: https://www.kali.org/adminlogin (Status: 404)
+[?] Result: https://www.kali.org/adminpanel (Status: 404)
+[?] Result: https://www.kali.org/adminlogon (Status: 404)
+[?] Result: https://www.kali.org/adminpro (Status: 404)
+[?] Result: https://www.kali.org/admins (Status: 404)
+[?] Result: https://www.kali.org/adminsessions (Status: 404)
+[?] Result: https://www.kali.org/adminsql (Status: 404)
+[?] Result: https://www.kali.org/admissions (Status: 404)
+[?] Result: https://www.kali.org/admon (Status: 404)
+[?] Result: https://www.kali.org/admintools (Status: 404)
+[?] Result: https://www.kali.org/adobe (Status: 404)
+[?] Result: https://www.kali.org/ads (Status: 404)
+[?] Result: https://www.kali.org/adodb (Status: 404)
+[?] Result: https://www.kali.org/adserver (Status: 404)
+[?] Result: https://www.kali.org/adsl (Status: 404)
+[?] Result: https://www.kali.org/adv (Status: 404)
+[?] Result: https://www.kali.org/adv_counter (Status: 404)
+[?] Result: https://www.kali.org/advanced (Status: 404)
+[?] Result: https://www.kali.org/advanced_search (Status: 404)
+[?] Result: https://www.kali.org/advancedsearch (Status: 404)
+[?] Result: https://www.kali.org/advert (Status: 404)
+[?] Result: https://www.kali.org/advertise (Status: 404)
+[?] Result: https://www.kali.org/advertisement (Status: 404)
+[?] Result: https://www.kali.org/advertisers (Status: 404)
+[?] Result: https://www.kali.org/advertising (Status: 404)
+[?] Result: https://www.kali.org/adverts (Status: 404)
+[?] Result: https://www.kali.org/adview (Status: 404)
+[?] Result: https://www.kali.org/advice (Status: 404)
+[?] Result: https://www.kali.org/af (Status: 404)
+[?] Result: https://www.kali.org/advisories (Status: 404)
+[?] Result: https://www.kali.org/aff (Status: 404)
+[?] Result: https://www.kali.org/affiche (Status: 404)
+[?] Result: https://www.kali.org/affiliate (Status: 404)
+[?] Result: https://www.kali.org/affiliate_info (Status: 404)
+[?] Result: https://www.kali.org/affiliate_terms (Status: 404)
+[?] Result: https://www.kali.org/affiliatewiz (Status: 404)
+[?] Result: https://www.kali.org/africa (Status: 404)
+[?] Result: https://www.kali.org/affiliates (Status: 404)
+[?] Result: https://www.kali.org/agb (Status: 404)
+[?] Result: https://www.kali.org/agency (Status: 404)
+[?] Result: https://www.kali.org/agenda (Status: 404)
+[?] Result: https://www.kali.org/agents (Status: 404)
+[?] Result: https://www.kali.org/aggregator (Status: 404)
+[?] Result: https://www.kali.org/agent (Status: 404)
+[?] Result: https://www.kali.org/ajax (Status: 404)
+[?] Result: https://www.kali.org/ajax_cron (Status: 404)
+[?] Result: https://www.kali.org/akeeba.backend.log (Status: 404)
+[?] Result: https://www.kali.org/akamai (Status: 404)
+[?] Result: https://www.kali.org/alarm (Status: 404)
+[?] Result: https://www.kali.org/album (Status: 404)
+[?] Result: https://www.kali.org/alarms (Status: 404)
+[?] Result: https://www.kali.org/alcatel (Status: 404)
+[?] Result: https://www.kali.org/albums (Status: 404)
+[?] Result: https://www.kali.org/alerts (Status: 404)
+[?] Result: https://www.kali.org/alert (Status: 404)
+[?] Result: https://www.kali.org/alias (Status: 404)
+[?] Result: https://www.kali.org/aliases (Status: 404)
+[?] Result: https://www.kali.org/all (Status: 404)
+[?] Result: https://www.kali.org/all-wcprops (Status: 404)
+[?] Result: https://www.kali.org/alltime (Status: 404)
+[?] Result: https://www.kali.org/alive (Status: 404)
+[?] Result: https://www.kali.org/alumni (Status: 404)
+[X] Unauthorized: https://www.kali.org/.cvs (Status: 403)
+[X] Unauthorized: https://www.kali.org/.bash_history (Status: 403)
+[X] Unauthorized: https://www.kali.org/.env (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git (Status: 403)
+[X] Unauthorized: https://www.kali.org/.bashrc (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git/config (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git/HEAD (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git/index (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git/logs/ (Status: 403)
+[X] Unauthorized: https://www.kali.org/.history (Status: 403)
+[X] Unauthorized: https://www.kali.org/.htaccess (Status: 403)
+[X] Unauthorized: https://www.kali.org/.htpasswd (Status: 403)
+[X] Unauthorized: https://www.kali.org/.mysql_history (Status: 403)
+[X] Unauthorized: https://www.kali.org/.passwd (Status: 403)
+[X] Unauthorized: https://www.kali.org/.profile (Status: 403)
+[X] Unauthorized: https://www.kali.org/.ssh (Status: 403)
+[X] Unauthorized: https://www.kali.org/.svn (Status: 403)
+[X] Unauthorized: https://www.kali.org/.svn/entries (Status: 403)
+[+] Found: https://www.kali.org/.well-known/http-opportunistic (Status: 200)
+[+] Found: https://www.kali.org/.well-known/security.txt (Status: 200)
+[+] Found: https://www.kali.org/404 (Status: 200)
+[>] Redirect: https://www.kali.org/Download (Status: 302)
+[>] Redirect: https://www.kali.org/Downloads (Status: 302)
+[>] Redirect: https://www.kali.org/about-us (Status: 302)
+[X] Unauthorized: https://www.kali.org/access_log (Status: 403)
+[>] Redirect: https://www.kali.org/author (Status: 302)
+[X] Unauthorized: https://www.kali.org/authorized_keys (Status: 403)
+[>] Redirect: https://www.kali.org/blog (Status: 302)
+[>] Redirect: https://www.kali.org/category (Status: 302)
+[>] Redirect: https://www.kali.org/community (Status: 302)
+[>] Redirect: https://www.kali.org/contact (Status: 302)
+[>] Redirect: https://www.kali.org/css (Status: 302)
+[>] Redirect: https://www.kali.org/docs (Status: 302)
+[>] Redirect: https://www.kali.org/download (Status: 302)
+[>] Redirect: https://www.kali.org/downloads (Status: 302)
+[X] Unauthorized: https://www.kali.org/error_log (Status: 403)
+[>] Redirect: https://www.kali.org/faq (Status: 302)
+[>] Redirect: https://www.kali.org/favicon.ico (Status: 302)
+[>] Redirect: https://www.kali.org/features (Status: 302)
+[>] Redirect: https://www.kali.org/feed (Status: 302)
+[>] Redirect: https://www.kali.org/get (Status: 302)
+[+] Found: https://www.kali.org/humans.txt (Status: 200)
+[X] Unauthorized: https://www.kali.org/id_rsa (Status: 403)
+[>] Redirect: https://www.kali.org/images (Status: 302)
+[+] Found: https://www.kali.org/index (Status: 200)
+[+] Found: https://www.kali.org/index.html (Status: 200)
+[>] Redirect: https://www.kali.org/js (Status: 302)
+[>] Redirect: https://www.kali.org/newsletter (Status: 302)
+[X] Unauthorized: https://www.kali.org/phpinfo.php (Status: 403)
+[>] Redirect: https://www.kali.org/plugins (Status: 302)
+[>] Redirect: https://www.kali.org/releases (Status: 302)
+[+] Found: https://www.kali.org/robots.txt (Status: 200)
+[+] Found: https://www.kali.org/sitemap.xml (Status: 200)
+[>] Redirect: https://www.kali.org/tools (Status: 302)
+[>] Redirect: https://www.kali.org/wallpapers (Status: 302)
+[X] Unauthorized: https://www.kali.org/web.config (Status: 403)
+[>] Redirect: https://www.kali.org/Download/ (Status: 302)
+[>] Redirect: https://www.kali.org/author/ (Status: 302)
+[>] Redirect: https://www.kali.org/Downloads/ (Status: 302)
+[>] Redirect: https://www.kali.org/category/ (Status: 302)
+[+] Found: https://www.kali.org/docs/ (Status: 200)
+[+] Found: https://www.kali.org/blog/ (Status: 200)
+[+] Found: https://www.kali.org/contact/ (Status: 200)
+[+] Found: https://www.kali.org/about-us/ (Status: 200)
+[+] Found: https://www.kali.org/community/ (Status: 200)
+[>] Redirect: https://www.kali.org/downloads/ (Status: 302)
+[>] Redirect: https://www.kali.org/download/ (Status: 302)
+[>] Redirect: https://www.kali.org/favicon.ico/ (Status: 302)
+[+] Found: https://www.kali.org/faq/ (Status: 200)
+[>] Redirect: https://www.kali.org/feed/ (Status: 302)
+[>] Redirect: https://www.kali.org/get/ (Status: 302)
+[+] Found: https://www.kali.org/features/ (Status: 200)
+[+] Found: https://www.kali.org/wallpapers/ (Status: 200)
+[+] Found: https://www.kali.org/newsletter/ (Status: 200)
+[+] Found: https://www.kali.org/releases/ (Status: 200)
+[+] Found: https://www.kali.org/tools/ (Status: 200)
+[X] Unauthorized: https://www.kali.org/.git (Status: 403)
+[X] Unauthorized: https://www.kali.org/.cvs (Status: 403)
+[X] Unauthorized: https://www.kali.org/.bashrc (Status: 403)
+[X] Unauthorized: https://www.kali.org/.env (Status: 403)
+[X] Unauthorized: https://www.kali.org/.bash_history (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git/HEAD (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git/config (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git/logs/ (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git/index (Status: 403)
+[X] Unauthorized: https://www.kali.org/.htaccess (Status: 403)
+[X] Unauthorized: https://www.kali.org/.history (Status: 403)
+[X] Unauthorized: https://www.kali.org/.htpasswd (Status: 403)
+[X] Unauthorized: https://www.kali.org/.mysql_history (Status: 403)
+[X] Unauthorized: https://www.kali.org/.passwd (Status: 403)
+[X] Unauthorized: https://www.kali.org/.profile (Status: 403)
+[X] Unauthorized: https://www.kali.org/.ssh (Status: 403)
+[X] Unauthorized: https://www.kali.org/.svn (Status: 403)
+[X] Unauthorized: https://www.kali.org/.svn/entries (Status: 403)
+[+] Found: https://www.kali.org/.well-known/http-opportunistic (Status: 200)
+[+] Found: https://www.kali.org/.well-known/security.txt (Status: 200)
+[+] Found: https://www.kali.org/404 (Status: 200)
+[>] Redirect: https://www.kali.org/Download (Status: 302)
+[>] Redirect: https://www.kali.org/Downloads (Status: 302)
+[>] Redirect: https://www.kali.org/about-us (Status: 302)
+[X] Unauthorized: https://www.kali.org/access_log (Status: 403)
+[>] Redirect: https://www.kali.org/author (Status: 302)
+[X] Unauthorized: https://www.kali.org/authorized_keys (Status: 403)
+[>] Redirect: https://www.kali.org/blog (Status: 302)
+[>] Redirect: https://www.kali.org/category (Status: 302)
+[>] Redirect: https://www.kali.org/community (Status: 302)
+[>] Redirect: https://www.kali.org/contact (Status: 302)
+[>] Redirect: https://www.kali.org/css (Status: 302)
+[>] Redirect: https://www.kali.org/docs (Status: 302)
+[>] Redirect: https://www.kali.org/download (Status: 302)
+[>] Redirect: https://www.kali.org/downloads (Status: 302)
+[X] Unauthorized: https://www.kali.org/error_log (Status: 403)
+[>] Redirect: https://www.kali.org/faq (Status: 302)
+[>] Redirect: https://www.kali.org/favicon.ico (Status: 302)
+[>] Redirect: https://www.kali.org/features (Status: 302)
+[>] Redirect: https://www.kali.org/feed (Status: 302)
+[>] Redirect: https://www.kali.org/get (Status: 302)
+[+] Found: https://www.kali.org/humans.txt (Status: 200)
+[X] Unauthorized: https://www.kali.org/id_rsa (Status: 403)
+[>] Redirect: https://www.kali.org/images (Status: 302)
+[+] Found: https://www.kali.org/index (Status: 200)
+[+] Found: https://www.kali.org/index.html (Status: 200)
+[>] Redirect: https://www.kali.org/js (Status: 302)
+[>] Redirect: https://www.kali.org/newsletter (Status: 302)
+[X] Unauthorized: https://www.kali.org/phpinfo.php (Status: 403)
+[>] Redirect: https://www.kali.org/plugins (Status: 302)
+[>] Redirect: https://www.kali.org/releases (Status: 302)
+[+] Found: https://www.kali.org/robots.txt (Status: 200)
+[+] Found: https://www.kali.org/sitemap.xml (Status: 200)
+[>] Redirect: https://www.kali.org/tools (Status: 302)
+[>] Redirect: https://www.kali.org/wallpapers (Status: 302)
+[X] Unauthorized: https://www.kali.org/web.config (Status: 403)
+[X] Unauthorized: https://www.kali.org/Download/.bashrc (Status: 403)
+[X] Unauthorized: https://www.kali.org/Download/.env (Status: 403)
+[X] Unauthorized: https://www.kali.org/Download/.bash_history (Status: 403)
+[X] Unauthorized: https://www.kali.org/Download/.cvs (Status: 403)
+[X] Unauthorized: https://www.kali.org/Download/.git (Status: 403)
+[X] Unauthorized: https://www.kali.org/Download/.git/HEAD (Status: 403)
+[X] Unauthorized: https://www.kali.org/Download/.git/config (Status: 403)
+[X] Unauthorized: https://www.kali.org/Download/.git/logs/ (Status: 403)
+[X] Unauthorized: https://www.kali.org/Download/.git/index (Status: 403)
+[X] Unauthorized: https://www.kali.org/Download/.history (Status: 403)
+[X] Unauthorized: https://www.kali.org/Download/.htaccess (Status: 403)
+[X] Unauthorized: https://www.kali.org/Download/.htpasswd (Status: 403)
+[X] Unauthorized: https://www.kali.org/Download/.mysql_history (Status: 403)
+[X] Unauthorized: https://www.kali.org/Download/.passwd (Status: 403)
+[X] Unauthorized: https://www.kali.org/Download/.profile (Status: 403)
+[X] Unauthorized: https://www.kali.org/Download/.ssh (Status: 403)
+[X] Unauthorized: https://www.kali.org/Download/.svn (Status: 403)
+[X] Unauthorized: https://www.kali.org/Download/.svn/entries (Status: 403)
+[X] Unauthorized: https://www.kali.org/Download/access_log (Status: 403)
+[X] Unauthorized: https://www.kali.org/Download/authorized_keys (Status: 403)
+[X] Unauthorized: https://www.kali.org/Download/error_log (Status: 403)
+[X] Unauthorized: https://www.kali.org/Download/id_rsa (Status: 403)
+[X] Unauthorized: https://www.kali.org/Download/phpinfo.php (Status: 403)
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 200 - https://www.kali.org
+[+] 403 - https://www.kali.org/.env
+[+] 403 - https://www.kali.org/.git
+[+] 403 - https://www.kali.org/.bash_history
+[+] 403 - https://www.kali.org/.bashrc
+[+] 403 - https://www.kali.org/.cvs
+[+] 403 - https://www.kali.org/.git/HEAD
+[+] 403 - https://www.kali.org/.git/config
+[+] 403 - https://www.kali.org/.git/index
+[+] 403 - https://www.kali.org/.git/logs/
+[+] 403 - https://www.kali.org/.history
+[+] 403 - https://www.kali.org/.htpasswd
+[+] 403 - https://www.kali.org/.htaccess
+[+] 403 - https://www.kali.org/.mysql_history
+[+] 403 - https://www.kali.org/.passwd
+[+] 403 - https://www.kali.org/.profile
+[+] 403 - https://www.kali.org/.ssh
+[+] 403 - https://www.kali.org/.svn
+[+] 403 - https://www.kali.org/.svn/entries
+[+] 200 - https://www.kali.org/.well-known/http-opportunistic
+[+] 200 - https://www.kali.org/.well-known/security.txt
+[+] 200 - https://www.kali.org/404
+[+] 200 - https://www.kali.org/Downloads
+[+] 200 - https://www.kali.org/Download
+[X] Unauthorized: https://www.kali.org/.bashrc (Status: 403)
+[X] Unauthorized: https://www.kali.org/.bash_history (Status: 403)
+[X] Unauthorized: https://www.kali.org/.cvs (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git (Status: 403)
+[X] Unauthorized: https://www.kali.org/.env (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git/index (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git/HEAD (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git/config (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git/logs/ (Status: 403)
+[X] Unauthorized: https://www.kali.org/.history (Status: 403)
+[X] Unauthorized: https://www.kali.org/.htaccess (Status: 403)
+[X] Unauthorized: https://www.kali.org/.htpasswd (Status: 403)
+[X] Unauthorized: https://www.kali.org/.mysql_history (Status: 403)
+[X] Unauthorized: https://www.kali.org/.passwd (Status: 403)
+[X] Unauthorized: https://www.kali.org/.profile (Status: 403)
+[X] Unauthorized: https://www.kali.org/.ssh (Status: 403)
+[X] Unauthorized: https://www.kali.org/.svn/entries (Status: 403)
+[X] Unauthorized: https://www.kali.org/.svn (Status: 403)
+[+] Found: https://www.kali.org/.well-known/http-opportunistic (Status: 200)
+[+] Found: https://www.kali.org/.well-known/security.txt (Status: 200)
+[+] Found: https://www.kali.org/404 (Status: 200)
+[+] Found: https://www.kali.org/Download (Status: 200)
+[+] Found: https://www.kali.org/Downloads (Status: 200)
+[+] Found: https://www.kali.org/about-us (Status: 200)
+[X] Unauthorized: https://www.kali.org/access_log (Status: 403)
+[X] Unauthorized: https://www.kali.org/authorized_keys (Status: 403)
+[+] Found: https://www.kali.org/author (Status: 200)
+[+] Found: https://www.kali.org/blog (Status: 200)
+[+] Found: https://www.kali.org/category (Status: 200)
+[+] Found: https://www.kali.org/community (Status: 200)
+[+] Found: https://www.kali.org/contact (Status: 200)
+[+] Found: https://www.kali.org/docs (Status: 200)
+[+] Found: https://www.kali.org/download (Status: 200)
+[+] Found: https://www.kali.org/downloads (Status: 200)
+[X] Unauthorized: https://www.kali.org/error_log (Status: 403)
+[+] Found: https://www.kali.org/favicon.ico (Status: 200)
+[+] Found: https://www.kali.org/faq (Status: 200)
+[+] Found: https://www.kali.org/features (Status: 200)
+[+] Found: https://www.kali.org/feed (Status: 200)
+[+] Found: https://www.kali.org/get (Status: 200)
+[+] Found: https://www.kali.org/humans.txt (Status: 200)
+[X] Unauthorized: https://www.kali.org/id_rsa (Status: 403)
+[+] Found: https://www.kali.org/index.html (Status: 200)
+[+] Found: https://www.kali.org/index (Status: 200)
+[+] Found: https://www.kali.org/newsletter (Status: 200)
+[X] Unauthorized: https://www.kali.org/phpinfo.php (Status: 403)
+[+] Found: https://www.kali.org/releases (Status: 200)
+[+] Found: https://www.kali.org/robots.txt (Status: 200)
+[+] Found: https://www.kali.org/sitemap.xml (Status: 200)
+[+] Found: https://www.kali.org/tools (Status: 200)
+[+] Found: https://www.kali.org/wallpapers (Status: 200)
+[X] Unauthorized: https://www.kali.org/web.config (Status: 403)
+[X] Unauthorized: https://www.kali.org/.bash_history (Status: 403)
+[X] Unauthorized: https://www.kali.org/.cvs (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git (Status: 403)
+[X] Unauthorized: https://www.kali.org/.bashrc (Status: 403)
+[X] Unauthorized: https://www.kali.org/.env (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git/HEAD (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git/config (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git/index (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git/logs/ (Status: 403)
+[X] Unauthorized: https://www.kali.org/.history (Status: 403)
+[X] Unauthorized: https://www.kali.org/.htaccess (Status: 403)
+[X] Unauthorized: https://www.kali.org/.htpasswd (Status: 403)
+[X] Unauthorized: https://www.kali.org/.mysql_history (Status: 403)
+[X] Unauthorized: https://www.kali.org/.passwd (Status: 403)
+[X] Unauthorized: https://www.kali.org/.profile (Status: 403)
+[X] Unauthorized: https://www.kali.org/.ssh (Status: 403)
+[X] Unauthorized: https://www.kali.org/.svn/entries (Status: 403)
+[X] Unauthorized: https://www.kali.org/.svn (Status: 403)
+[+] Found: https://www.kali.org/.well-known/http-opportunistic (Status: 200)
+[+] Found: https://www.kali.org/.well-known/security.txt (Status: 200)
+[+] Found: https://www.kali.org/404 (Status: 200)
+[>] Redirect: https://www.kali.org/Download (Status: 302)
+[>] Redirect: https://www.kali.org/Downloads (Status: 302)
+[>] Redirect: https://www.kali.org/about-us (Status: 302)
+[X] Unauthorized: https://www.kali.org/access_log (Status: 403)
+[>] Redirect: https://www.kali.org/author (Status: 302)
+[X] Unauthorized: https://www.kali.org/authorized_keys (Status: 403)
+[X] Unauthorized: https://www.kali.org/.bash_history (Status: 403)
+[X] Unauthorized: https://www.kali.org/.env (Status: 403)
+[X] Unauthorized: https://www.kali.org/.cvs (Status: 403)
+[X] Unauthorized: https://www.kali.org/.bashrc (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git/HEAD (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git/config (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git/index (Status: 403)
+[X] Unauthorized: https://www.kali.org/.git/logs/ (Status: 403)
+[X] Unauthorized: https://www.kali.org/.history (Status: 403)
+[X] Unauthorized: https://www.kali.org/.htaccess (Status: 403)
+[X] Unauthorized: https://www.kali.org/.htpasswd (Status: 403)
+[X] Unauthorized: https://www.kali.org/.mysql_history (Status: 403)
+[X] Unauthorized: https://www.kali.org/.passwd (Status: 403)
+[X] Unauthorized: https://www.kali.org/.profile (Status: 403)
+[X] Unauthorized: https://www.kali.org/.ssh (Status: 403)
+[X] Unauthorized: https://www.kali.org/.svn (Status: 403)
+[X] Unauthorized: https://www.kali.org/.svn/entries (Status: 403)
+[+] Found: https://www.kali.org/.well-known/http-opportunistic (Status: 200)
+[+] Found: https://www.kali.org/.well-known/security.txt (Status: 200)
+[+] Found: https://www.kali.org/404 (Status: 200)
+[>] Redirect: https://www.kali.org/Download (Status: %!d(string=https://www.kali.org/get-kali/))%!(EXTRA int=302)
+[>] Redirect: https://www.kali.org/Downloads (Status: %!d(string=https://www.kali.org/get-kali/))%!(EXTRA int=302)
+[>] Redirect: https://www.kali.org/about-us (Status: %!d(string=//www.kali.org/about-us/))%!(EXTRA int=302)
+[X] Unauthorized: https://www.kali.org/access_log (Status: 403)
+[X] Unauthorized: https://www.kali.org/authorized_keys (Status: 403)
+[>] Redirect: https://www.kali.org/author (Status: %!d(string=https://www.kali.org/about-us/))%!(EXTRA int=302)
+[>] Redirect: https://www.kali.org/blog (Status: %!d(string=//www.kali.org/blog/))%!(EXTRA int=302)
+[>] Redirect: https://www.kali.org/category (Status: %!d(string=https://www.kali.org/blog/))%!(EXTRA int=302)
+[>] Redirect: https://www.kali.org/community (Status: %!d(string=//www.kali.org/community/))%!(EXTRA int=302)
+[>] Redirect: https://www.kali.org/contact (Status: %!d(string=//www.kali.org/contact/))%!(EXTRA int=302)
+[>] Redirect: https://www.kali.org/css (Status: %!d(string=//www.kali.org/css/))%!(EXTRA int=302)
+[>] Redirect: https://www.kali.org/docs (Status: %!d(string=//www.kali.org/docs/))%!(EXTRA int=302)
+[>] Redirect: https://www.kali.org/download (Status: %!d(string=https://www.kali.org/get-kali/))%!(EXTRA int=302)
+[>] Redirect: https://www.kali.org/downloads (Status: %!d(string=https://www.kali.org/get-kali/))%!(EXTRA int=302)
+[X] Unauthorized: https://www.kali.org/error_log (Status: 403)
+[>] Redirect: https://www.kali.org/faq (Status: %!d(string=//www.kali.org/faq/))%!(EXTRA int=302)
+[>] Redirect: https://www.kali.org/favicon.ico (Status: %!d(string=https://www.kali.org/images/favicon.ico))%!(EXTRA int=302)
+[>] Redirect: https://www.kali.org/features (Status: %!d(string=//www.kali.org/features/))%!(EXTRA int=302)
+[>] Redirect: https://www.kali.org/feed (Status: %!d(string=https://www.kali.org/rss.xml))%!(EXTRA int=302)
+[>] Redirect: https://www.kali.org/get (Status: %!d(string=https://www.kali.org/get-kali/))%!(EXTRA int=302)
+[+] Found: https://www.kali.org/humans.txt (Status: 200)
+[X] Unauthorized: https://www.kali.org/id_rsa (Status: 403)
+[>] Redirect: https://www.kali.org/images (Status: %!d(string=//www.kali.org/images/))%!(EXTRA int=302)
+[+] Found: https://www.kali.org/index (Status: 200)
+[+] Found: https://www.kali.org/index.html (Status: 200)
+[>] Redirect: https://www.kali.org/js (Status: %!d(string=//www.kali.org/js/))%!(EXTRA int=302)
+[>] Redirect: https://www.kali.org/newsletter (Status: %!d(string=//www.kali.org/newsletter/))%!(EXTRA int=302)
+[X] Unauthorized: https://www.kali.org/phpinfo.php (Status: 403)
+[>] Redirect: https://www.kali.org/plugins (Status: %!d(string=//www.kali.org/plugins/))%!(EXTRA int=302)
+[>] Redirect: https://www.kali.org/releases (Status: %!d(string=//www.kali.org/releases/))%!(EXTRA int=302)
+[+] Found: https://www.kali.org/robots.txt (Status: 200)
+[+] Found: https://www.kali.org/sitemap.xml (Status: 200)
+[>] Redirect: https://www.kali.org/tools (Status: %!d(string=//www.kali.org/tools/))%!(EXTRA int=302)
+[>] Redirect: https://www.kali.org/wallpapers (Status: %!d(string=//www.kali.org/wallpapers/))%!(EXTRA int=302)
+[X] Unauthorized: https://www.kali.org/web.config (Status: 403)
