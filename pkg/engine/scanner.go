@@ -6,6 +6,7 @@ import (
         "net/http"
         "os"
         "sync"
+        "time"
 )
 
 // ReadLines: Helper to read wordlist files
@@ -25,7 +26,12 @@ func ReadLines(path string) ([]string, error) {
 }
 
 // ConcurrentScan: manage workers to scan paths in parallel
-func ConcurrentScan(baseURL string, paths []string, workerCount int) {
+func ConcurrentScan(baseURL string, paths []string, workerCount int, rps int) {
+
+	delay := time.Second / time.Duration(rps)
+	ticker := time.NewTicker(delay)
+	defer ticker.Stop()
+
         jobs := make(chan string, len(paths))
         results := make(chan string)
         var wg sync.WaitGroup
@@ -36,11 +42,27 @@ func ConcurrentScan(baseURL string, paths []string, workerCount int) {
                 go func() {
                         defer wg.Done()
                         for path := range jobs {
-                                url := fmt.Sprint("%s/%s", baseURL, path)
+                        	<-ticker.C
+                                url := fmt.Sprintf("%s/%s", baseURL, path)
                                 resp, err := http.Get(url)
-                                if err == nil && resp.StatusCode == 200 {
-                                        results <- fmt.Sprintf("[+] Found: %s (Status: 200)", url)
+                                if err != nil {
+                                	continue
                                 }
+                                defer resp.Body.Close()
+
+                                switch resp.StatusCode {
+				case 200:
+				    results <- fmt.Sprintf("[+] Found: %s (Status: 200)", url)
+				case 301, 302:
+				    results <- fmt.Sprintf("[>] Redirect: %s (Status: %d)", url, resp.StatusCode)
+				case 401, 403:
+				    results <- fmt.Sprintf("[X] Unauthorized: %s (Status: %d)", url, resp.StatusCode)
+				case 404:
+				    results <- fmt.Sprintf("[-] Not Found: %s (Status: 404)", url)
+				default:
+				    // This catches other codes like 500 (Internal Server Error)
+				    results <- fmt.Sprintf("[?] Unknown: %s (Status: %d)", url, resp.StatusCode)
+				}
                         }
                 }()
         }
