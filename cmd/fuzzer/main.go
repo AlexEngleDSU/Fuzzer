@@ -36,7 +36,7 @@ var rootCmd = &cobra.Command{
                 fmt.Printf("[+] Wordlist: %d entries from %s\n", len(paths), wordlistPath)
                 fmt.Printf("[+] Thread count: %d\n", threadCount)
                 fmt.Printf("[+] Rate count: %d\n", rate)
-                fmt.Printf("[+] Output file: %s", outputFile)
+                fmt.Printf("[+] Output file: %s\n", outputFile)
                 fmt.Println("-------------------------------------------")
                 engine.ConcurrentScan(targetURL, paths, threadCount, rate, quiet, outputFile)
         },
