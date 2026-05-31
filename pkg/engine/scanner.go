@@ -26,7 +26,7 @@ func ReadLines(path string) ([]string, error) {
 }
 
 // ConcurrentScan: manage workers to scan paths in parallel
-func ConcurrentScan(baseURL string, paths []string, workerCount int, rps int) {
+func ConcurrentScan(baseURL string, paths []string, workerCount int, rps int, quiet bool) {
 
 	delay := time.Second / time.Duration(rps)
 	ticker := time.NewTicker(delay)
@@ -36,6 +36,15 @@ func ConcurrentScan(baseURL string, paths []string, workerCount int, rps int) {
         results := make(chan string)
         var wg sync.WaitGroup
 
+        client := &http.Client{
+    		Timeout: 5 * time.Second,
+    		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+        		// This stops the client from following redirects,
+        		// allowing your code to see the 301/302 status codes.
+        		return http.ErrUseLastResponse
+		},
+	}
+	
         // 1. Start workers
         for w := 1; w <= workerCount; w++ {
                 wg.Add(1)
@@ -44,21 +53,26 @@ func ConcurrentScan(baseURL string, paths []string, workerCount int, rps int) {
                         for path := range jobs {
                         	<-ticker.C
                                 url := fmt.Sprintf("%s/%s", baseURL, path)
-                                resp, err := http.Get(url)
+                                
+                                resp, err := client.Get(url)
                                 if err != nil {
                                 	continue
                                 }
-                                defer resp.Body.Close()
+
+                                loc := resp.Header.Get("Location")
+                                resp.Body.Close()
 
                                 switch resp.StatusCode {
 				case 200:
 				    results <- fmt.Sprintf("[+] Found: %s (Status: 200)", url)
 				case 301, 302:
-				    results <- fmt.Sprintf("[>] Redirect: %s (Status: %d)", url, resp.StatusCode)
+				    results <- fmt.Sprintf("[>] Redirect: %s -> %s (Status: %d)", url, loc, resp.StatusCode)
 				case 401, 403:
 				    results <- fmt.Sprintf("[X] Unauthorized: %s (Status: %d)", url, resp.StatusCode)
 				case 404:
-				    results <- fmt.Sprintf("[-] Not Found: %s (Status: 404)", url)
+					if !quiet {
+				    		results <- fmt.Sprintf("[-] Not Found: %s (Status: 404)", url)
+				    	}
 				default:
 				    // This catches other codes like 500 (Internal Server Error)
 				    results <- fmt.Sprintf("[?] Unknown: %s (Status: %d)", url, resp.StatusCode)

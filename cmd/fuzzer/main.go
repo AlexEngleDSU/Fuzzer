@@ -12,6 +12,7 @@ var (
         threadCount int
         wordlistPath string
         rate int
+        quiet bool
 )
 
 var rootCmd = &cobra.Command{
@@ -33,8 +34,9 @@ var rootCmd = &cobra.Command{
                 fmt.Printf("[+] Scanning target: %s\n", targetURL)
                 fmt.Printf("[+] Wordlist: %d entries from %s\n", len(paths), wordlistPath)
                 fmt.Printf("[+] Thread count: %d\n", threadCount)
+                fmt.Printf("[+] Rate count: %d\n", rate)
                 fmt.Println("-------------------------------------------")
-                engine.ConcurrentScan(targetURL, paths, threadCount, rate)
+                engine.ConcurrentScan(targetURL, paths, threadCount, rate, quiet)
         },
 }
 
@@ -44,6 +46,7 @@ func init() {
         rootCmd.Flags().StringVarP(&wordlistPath, "wordlist", "w", "", "Wordlist selected")
         rootCmd.Flags().IntVarP(&threadCount, "threads", "t", 10, "Number of concurrent threads")
         rootCmd.Flags().IntVarP(&rate, "rate", "r", 10, "Number of requests per second")
+        rootCmd.Flags().BoolVarP(&quiet, "quiet", "q", false, "Only show found/interesting results")
 }
 
 func main() {
