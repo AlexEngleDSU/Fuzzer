@@ -1,0 +1,10 @@
+# Binaries
+bin/
+*.exe
+
+# Dependencies
+vendor/
+
+# IDE/OS files
+.vscode/
+.DS_Store
