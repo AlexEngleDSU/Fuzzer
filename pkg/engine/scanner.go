@@ -7,6 +7,8 @@ import (
         "os"
         "sync"
         "time"
+        "strconv"
+        "strings"
 )
 
 // ReadLines: Helper to read wordlist files
@@ -26,8 +28,8 @@ func ReadLines(path string) ([]string, error) {
 }
 
 // ConcurrentScan: manage workers to scan paths in parallel
-func ConcurrentScan(baseURL string, paths []string, workerCount int, rps int, quiet bool, outputFile string) {
-
+func ConcurrentScan(baseURL string, paths []string, workerCount int, rps int, quiet bool, outputFile string, filterCodes string) {
+	fmt.Printf("[DEBUG] Received filterCodes string: '%s'\n", filterCodes)
 	var f *os.File
     	var err error
     	if outputFile != "" {
@@ -35,6 +37,13 @@ func ConcurrentScan(baseURL string, paths []string, workerCount int, rps int, qu
 	        if err == nil {
         		defer f.Close()
         	}
+    	}
+
+    	filterMap := make(map[int]bool)
+    	for _, codeStr := range strings.Split(filterCodes, ",") {
+    		if code, err := strconv.Atoi(strings.TrimSpace(codeStr)); err == nil {
+    			filterMap[code] = true
+    		}
     	}
 
 	delay := time.Second / time.Duration(rps)
@@ -68,7 +77,10 @@ func ConcurrentScan(baseURL string, paths []string, workerCount int, rps int, qu
                                 	continue
                                 }
 
-                                resp.Body.Close()
+                                if filterMap[resp.StatusCode] {
+                                	resp.Body.Close()
+                                	continue
+                                }
 
 				length := resp.ContentLength
 				sizeStr := fmt.Sprintf("%d", length) // Convert int64 to string
@@ -118,3 +130,4 @@ func ConcurrentScan(baseURL string, paths []string, workerCount int, rps int, qu
         	}
     	}
 }
+

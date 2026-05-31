@@ -14,6 +14,8 @@ var (
         rate int
         quiet bool
         outputFile string
+        filterCodes string
+        filterAlias string
 )
 
 var rootCmd = &cobra.Command{
@@ -37,8 +39,9 @@ var rootCmd = &cobra.Command{
                 fmt.Printf("[+] Thread count: %d\n", threadCount)
                 fmt.Printf("[+] Rate count: %d\n", rate)
                 fmt.Printf("[+] Output file: %s\n", outputFile)
+                fmt.Printf("[-] Filtering codes: %s\n", filterCodes)
                 fmt.Println("-------------------------------------------")
-                engine.ConcurrentScan(targetURL, paths, threadCount, rate, quiet, outputFile)
+                engine.ConcurrentScan(targetURL, paths, threadCount, rate, quiet, outputFile, filterCodes)
         },
 }
 
@@ -50,6 +53,11 @@ func init() {
         rootCmd.Flags().IntVarP(&rate, "rate", "r", 10, "Number of requests per second")
         rootCmd.Flags().BoolVarP(&quiet, "quiet", "q", false, "Only show found/interesting results")
         rootCmd.Flags().StringVarP(&outputFile, "output", "o", "", "Output file to save results")
+        rootCmd.Flags().StringVar(&filterCodes, "filter", "", "Comma-separated status codes to ignore")
+    
+	// 2. Add the alias exactly as before
+	rootCmd.Flags().StringVar(&filterCodes, "fc", "", "Alias for --filter")
+	rootCmd.Flags().MarkHidden("fc")
 }
 
 func main() {
