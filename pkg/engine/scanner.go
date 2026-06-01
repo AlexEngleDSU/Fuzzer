@@ -2,7 +2,9 @@ package engine
 
 import (
 	"bufio"
+	"fmt"
 	"net/http"
+	"net/url"
 	"os"
 	"strconv"
 	"strings"
@@ -10,35 +12,33 @@ import (
 	"time"
 )
 
-// ScanResult holds the data for the UI to consume
 type ScanResult struct {
 	URL        string
 	StatusCode int
 	Location   string
+	Message    string
 }
 
-// ReadLines helper to load wordlists efficiently
 func ReadLines(path string) ([]string, error) {
 	file, err := os.Open(path)
-	if err != nil {
-		return nil, err
-	}
+	if err != nil { return nil, err }
 	defer file.Close()
-
 	var lines []string
 	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
-	}
+	for scanner.Scan() { lines = append(lines, scanner.Text()) }
 	return lines, scanner.Err()
 }
 
-// ConcurrentScan is now decoupled: it returns a channel for the UI to listen to.
-func ConcurrentScan(urlTemplate string, wordlist []string, workerCount int, filterCodes string) chan ScanResult {
-	results := make(chan ScanResult, 100)
-	jobs := make(chan string, 100)
-	var wg sync.WaitGroup
+func resolveURL(base, loc string) string {
+	if strings.HasPrefix(loc, "http") { return loc }
+	if strings.HasPrefix(loc, "//") { return "https:" + loc }
+	parsedBase, _ := url.Parse(base)
+	cleanLoc := strings.TrimLeft(loc, "/")
+	return fmt.Sprintf("%s://%s/%s", parsedBase.Scheme, parsedBase.Host, cleanLoc)
+}
 
+func ConcurrentScan(urlTemplate string, wordlist []string, workerCount int, filterCodes string, recursive bool, maxDepth int) chan ScanResult {
+	results := make(chan ScanResult, 500)
 	filterMap := make(map[int]bool)
 	for _, codeStr := range strings.Split(filterCodes, ",") {
 		if code, err := strconv.Atoi(strings.TrimSpace(codeStr)); err == nil {
@@ -53,41 +53,68 @@ func ConcurrentScan(urlTemplate string, wordlist []string, workerCount int, filt
 		},
 	}
 
-	// 1. Worker Pool
-	for w := 1; w <= workerCount; w++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			for word := range jobs {
-				targetURL := strings.ReplaceAll(urlTemplate, "FUZZ", word)
-				
-				resp, err := client.Get(targetURL)
-				if err != nil { continue }
+	go func() {
+		// Queue starts with the initial user-provided template
+		queue := []string{urlTemplate}
 
-				loc := resp.Header.Get("Location")
-				statusCode := resp.StatusCode
-				resp.Body.Close()
+		for depth := 0; depth <= maxDepth; depth++ {
+			if len(queue) == 0 { break }
 
-				if !filterMap[statusCode] {
-					results <- ScanResult{URL: targetURL, StatusCode: statusCode, Location: loc}
+			results <- ScanResult{Message: fmt.Sprintf("[+] Starting depth level: %d | Base Paths: %d", depth, len(queue))}
+
+			// Findings for next depth
+			nextGen := []string{}
+			var mu sync.Mutex
+			var globalSeen sync.Map
+			var wg sync.WaitGroup
+
+			// Job channel for the wordlist expansion
+			jobs := make(chan string, 100)
+
+			// Spawn workers
+			for w := 1; w <= workerCount; w++ {
+				wg.Add(1)
+				go func() {
+					defer wg.Done()
+					for target := range jobs {
+						if _, loaded := globalSeen.LoadOrStore(target, true); loaded { continue }
+
+						resp, err := client.Get(target)
+						if err != nil { continue }
+
+						status := resp.StatusCode
+						loc := resp.Header.Get("Location")
+						resp.Body.Close()
+
+						if !filterMap[status] {
+							results <- ScanResult{URL: target, StatusCode: status, Location: loc}
+
+							if recursive && (status >= 300 && status < 400) && loc != "" {
+								resolved := resolveURL(target, loc)
+								newPath := strings.TrimSuffix(resolved, "/") + "/FUZZ"
+								mu.Lock()
+								nextGen = append(nextGen, newPath)
+								mu.Unlock()
+							}
+						}
+					}
+				}()
+			}
+
+			// Feed workers: for every base in the queue, run the whole wordlist
+			for _, base := range queue {
+				for _, word := range wordlist {
+					finalURL := strings.ReplaceAll(base, "FUZZ", word)
+					jobs <- finalURL
 				}
 			}
-		}()
-	}
+			close(jobs)
+			wg.Wait()
 
-	// 2. Job Dispatcher
-	go func() {
-		for _, word := range wordlist {
-			jobs <- word
+			// Reset queue to discovered paths
+			queue = nextGen
 		}
-		close(jobs)
-	}()
-
-	// 3. Closer: Ensures channel closes only after workers finish
-	go func() {
-		wg.Wait()
 		close(results)
 	}()
-
 	return results
 }

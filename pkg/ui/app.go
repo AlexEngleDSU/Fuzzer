@@ -2,105 +2,136 @@ package ui
 
 import (
 	"fmt"
+	"image/color"
+	"net/url"
+	"strconv"
+	"strings"
 	"sync"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
-	"fyne.io/fyne/v2/dialog"
-	"fyne.io/fyne/v2/storage"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/dialog"
+	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
-	"fyne.io/fyne/v2/layout"
 	"github.com/AlexEngleDSU/Fuzzer/pkg/engine"
 )
 
+// compactLink forces list rows to be dense (20px height)
+type compactLink struct {
+	*widget.Hyperlink
+}
+
+func (c *compactLink) MinSize() fyne.Size {
+	return fyne.NewSize(c.Hyperlink.MinSize().Width, 25)
+}
+
+type myTheme struct{ fyne.Theme }
+
+func (m myTheme) Color(n fyne.ThemeColorName, v fyne.ThemeVariant) color.Color {
+	if n == theme.ColorNameForeground || n == theme.ColorNameHyperlink {
+		return color.White
+	}
+	return m.Theme.Color(n, v)
+}
+
 func StartGUI() {
-	a := app.New()
+	a := app.NewWithID("com.fuzzer.app")
+	a.Settings().SetTheme(&myTheme{Theme: theme.DefaultTheme()})
 	w := a.NewWindow("Fuzzer GUI")
-	w.Resize(fyne.NewSize(600, 400))
+	w.Resize(fyne.NewSize(700, 500))
 
-	// State management
-	var results []string
-	var mu sync.Mutex // Prevents UI crashes during concurrent updates
-	var selectedWordlist string
-
-	// UI Components
 	urlEntry := widget.NewEntry()
 	urlEntry.SetPlaceHolder("https://example.com/FUZZ")
+	recursiveCheck := widget.NewCheck("Enable Recursion", nil)
+	depthEntry := widget.NewEntry()
+	depthEntry.SetText("3")
 
-	wordlistLable := widget.NewLabel("Default: /usr/share/wordlists")
+	var wordlistPath string
+	pathLabel := widget.NewLabel("No wordlist selected")
+
+	selectButton := widget.NewButton("Select Wordlist", func() {
+		dialog.ShowFileOpen(func(reader fyne.URIReadCloser, err error) {
+			if err != nil || reader == nil {
+				return
+			}
+			wordlistPath = reader.URI().Path()
+			pathLabel.SetText("Selected: " + wordlistPath)
+		}, w)
+	})
+
+	var mu sync.Mutex
+	resultsList := []string{}
 
 	list := widget.NewList(
-		func() int { return len(results) },
-		func() fyne.CanvasObject { return widget.NewLabel("") },
-		func(i widget.ListItemID, o fyne.CanvasObject) {
-			o.(*widget.Label).SetText(results[i])
+		func() int { return len(resultsList) },
+		func() fyne.CanvasObject { return &compactLink{widget.NewHyperlink("", nil)} },
+		func(id widget.ListItemID, obj fyne.CanvasObject) {
+			mu.Lock()
+			text := resultsList[id]
+			mu.Unlock()
+
+			link := obj.(*compactLink)
+			link.SetText(text)
+
+			parts := strings.Fields(text)
+			for _, p := range parts {
+				if strings.HasPrefix(p, "http") {
+					parsed, _ := url.Parse(strings.TrimSuffix(p, "/"))
+					link.URL = parsed
+					break
+				}
+			}
 		},
 	)
 
-
-	fileButton := widget.NewButton("Select Wordlist", func() {
-		fd := dialog.NewFileOpen(func(reader fyne.URIReadCloser, err error) {
-			if err != nil || reader == nil { return }
-			selectedWordlist = reader.URI().Path()
-			wordlistLable.SetText("Wordlist: " + selectedWordlist)
-		}, w)
-
-		defaultPath := "/usr/share/wordlists"
-		listable, err := storage.ListerForURI(storage.NewFileURI(defaultPath))
-		if err == nil{ fd.SetLocation(listable) }
-		// Optional: filter to only show .txt files
-		fd.SetFilter(storage.NewExtensionFileFilter([]string{".txt"}))
-		fd.Show()
-	})
-
 	startButton := widget.NewButton("Start Scan", func() {
-		if selectedWordlist == "" {
-			dialog.ShowError(fmt.Errorf("Please select a wordlist first"), w)
+		if wordlistPath == "" {
+			dialog.ShowError(fmt.Errorf("please select a wordlist first"), w)
 			return
 		}
 
-		wordlist, err := engine.ReadLines(selectedWordlist)
-		if err != nil {
-			dialog.ShowError(err, w)
-			return
-		}
-
-		// Clear previous results
-		results = []string{}
+		mu.Lock()
+		resultsList = []string{}
+		mu.Unlock()
 		list.Refresh()
 
-		// Run in background so UI stays responsive
+		depth, _ := strconv.Atoi(depthEntry.Text)
+		wordlist, _ := engine.ReadLines(wordlistPath)
+
 		go func() {
-			// Hardcoded wordlist for testing; you can add a file picker later!
-			resChan := engine.ConcurrentScan(urlEntry.Text, wordlist, 10, "404")
+			resChan := engine.ConcurrentScan(urlEntry.Text, wordlist, 10, "404", recursiveCheck.Checked, depth)
+			displayed := make(map[string]bool)
+
 			for res := range resChan {
+				displayString := ""
+				if res.Message != "" {
+					displayString = res.Message
+				} else {
+					displayString = fmt.Sprintf("\t[%d] %s", res.StatusCode, res.URL)
+					if res.Location != "" {
+						displayString += " -> " + res.Location
+					}
+				}
+
 				mu.Lock()
-				msg := fmt.Sprintf("[%d] %s", res.StatusCode, res.URL)
-				results = append(results, msg)
-				list.Refresh()
+				if !displayed[res.URL] || res.Message != "" {
+					resultsList = append(resultsList, displayString)
+					displayed[res.URL] = true
+				}
 				mu.Unlock()
+
+				fyne.Do(func() {
+					list.Refresh()
+					list.ScrollToBottom()
+				})
 			}
 		}()
 	})
 
-	// Replace your existing container logic with this:
-	// Using FormLayout makes labels and inputs align perfectly
-	inputRow := container.New(layout.NewFormLayout(), 
-	    widget.NewLabel("Target URL:"), 
-	    urlEntry,
-	)
-
 	w.SetContent(container.NewBorder(
-	    container.NewVBox(
-	    	inputRow,
-	    	container.NewHBox(fileButton, wordlistLable),
-	    	startButton,
-	    ),
-	    nil, nil, nil,
-	    list,
+		container.NewVBox(urlEntry, container.NewHBox(widget.NewLabel("Options: "), recursiveCheck, depthEntry), container.NewHBox(selectButton, pathLabel), startButton),
+		nil, nil, nil, list,
 	))
-
-
 	w.ShowAndRun()
 }
