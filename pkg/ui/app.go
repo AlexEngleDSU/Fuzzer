@@ -8,7 +8,9 @@ import (
 	"strings"
 	"sync"
 
+
 	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/dialog"
@@ -26,6 +28,15 @@ func (c *compactLink) MinSize() fyne.Size {
 	return fyne.NewSize(c.Hyperlink.MinSize().Width, 25)
 }
 
+type fixedEntry struct {
+	*widget.Entry
+	width float32
+}
+
+func (f *fixedEntry) MinSize() fyne.Size {
+	return fyne.NewSize(f.width, f.Entry.MinSize().Height)
+}
+
 type myTheme struct{ fyne.Theme }
 
 func (m myTheme) Color(n fyne.ThemeColorName, v fyne.ThemeVariant) color.Color {
@@ -36,17 +47,26 @@ func (m myTheme) Color(n fyne.ThemeColorName, v fyne.ThemeVariant) color.Color {
 }
 
 func StartGUI() {
+	fmt.Println("Initializing Application...")
 	a := app.NewWithID("com.fuzzer.app")
+	fmt.Println("App object created.")
 	a.Settings().SetTheme(&myTheme{Theme: theme.DefaultTheme()})
 	w := a.NewWindow("Fuzzer GUI")
+	fmt.Println("Window object created.")
 	w.Resize(fyne.NewSize(700, 500))
+
 
 	urlEntry := widget.NewEntry()
 	urlEntry.SetPlaceHolder("https://example.com/FUZZ")
-	recursiveCheck := widget.NewCheck("Enable Recursion", nil)
+
+	recursiveCheck := widget.NewCheck("", nil)
+
 	depthEntry := widget.NewEntry()
 	depthEntry.SetText("3")
 
+	filterEntry := widget.NewEntry()
+	// Replace the filterContainer definition with this:
+	filterContainer := container.New(layout.NewGridWrapLayout(fyne.NewSize(150, 40)), filterEntry)
 	var wordlistPath string
 	pathLabel := widget.NewLabel("No wordlist selected")
 
@@ -100,7 +120,7 @@ func StartGUI() {
 		wordlist, _ := engine.ReadLines(wordlistPath)
 
 		go func() {
-			resChan := engine.ConcurrentScan(urlEntry.Text, wordlist, 10, "404", recursiveCheck.Checked, depth)
+			resChan := engine.ConcurrentScan(urlEntry.Text, wordlist, 10, filterEntry.Text, recursiveCheck.Checked, depth)
 			displayed := make(map[string]bool)
 
 			for res := range resChan {
@@ -129,9 +149,26 @@ func StartGUI() {
 		}()
 	})
 
-	w.SetContent(container.NewBorder(
-		container.NewVBox(urlEntry, container.NewHBox(widget.NewLabel("Options: "), recursiveCheck, depthEntry), container.NewHBox(selectButton, pathLabel), startButton),
-		nil, nil, nil, list,
-	))
-	w.ShowAndRun()
+
+        optionsRow := container.NewHBox(
+        	widget.NewLabel("Recursive Check"),
+                recursiveCheck,
+                widget.NewLabel("Depth:"),
+                depthEntry,
+                widget.NewLabel("Filter:"),
+                filterContainer,
+        )
+
+        // Now set the window content
+        w.SetContent(container.NewBorder(
+                container.NewVBox(
+                        urlEntry,
+                        optionsRow,
+                        container.NewHBox(selectButton, pathLabel),
+                        startButton,
+                ),
+                nil, nil, nil, list,
+        ))
+
+        w.ShowAndRun()
 }

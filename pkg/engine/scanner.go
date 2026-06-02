@@ -37,7 +37,7 @@ func resolveURL(base, loc string) string {
 	return fmt.Sprintf("%s://%s/%s", parsedBase.Scheme, parsedBase.Host, cleanLoc)
 }
 
-func ConcurrentScan(urlTemplate string, wordlist []string, workerCount int, filterCodes string, recursive bool, maxDepth int) chan ScanResult {
+func ConcurrentScan(urlTemplate string, wordlist []string, workerCount int, filterCodes string, recursive bool, maxDepth int) <-chan ScanResult {
 	results := make(chan ScanResult, 500)
 	filterMap := make(map[int]bool)
 	for _, codeStr := range strings.Split(filterCodes, ",") {
