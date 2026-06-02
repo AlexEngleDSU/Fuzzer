@@ -19,6 +19,25 @@ import (
 	"github.com/AlexEngleDSU/Fuzzer/pkg/engine"
 )
 
+type SelectableEntry struct {
+    widget.Entry
+    isFocused bool
+}
+
+func (m *SelectableEntry) FocusGained() {
+	m.Entry.FocusGained()
+	fmt.Println("FocusGained() was triggered!")
+	m.isFocused = true
+	m.Refresh()
+
+	// Use fyne.Do to ensure thread-safe UI execution
+	fyne.Do(func() {
+		// This tells the entry to execute the standard "Select All" 
+		// shortcut command used by the context menus.
+		m.TypedShortcut(&fyne.ShortcutSelectAll{})
+	})
+}
+
 // compactLink forces list rows to be dense (20px height)
 type compactLink struct {
 	*widget.Hyperlink
@@ -62,23 +81,35 @@ func StartGUI() {
 
 	recursiveCheck := widget.NewCheck("", nil)
 
-	depthEntry := widget.NewEntry()
+	depthEntry := &SelectableEntry{}
+	depthEntry.ExtendBaseWidget(depthEntry)
 	depthEntry.SetText("3")
 
-	filterEntry := widget.NewEntry()
-	// Replace the filterContainer definition with this:
-	filterContainer := container.New(layout.NewGridWrapLayout(fyne.NewSize(150, 40)), filterEntry)
+	filterEntry := &SelectableEntry{}
+	filterEntry.ExtendBaseWidget(filterEntry)
+	filterEntry.SetPlaceHolder("Enter filter...")
+	filterContainer := container.New(layout.NewGridWrapLayout(fyne.NewSize(140, 40)), filterEntry)
 
-	threadEntry := widget.NewEntry()
+
+	threadEntry := &SelectableEntry{}
+	threadEntry.ExtendBaseWidget(threadEntry)
 	threadEntry.SetText("10")
 	threadContainer := container.New(layout.NewGridWrapLayout(fyne.NewSize(50, 40)), threadEntry)
 
-	delayEntry := widget.NewEntry()
+	delayEntry := &SelectableEntry{}
+	delayEntry.ExtendBaseWidget(delayEntry)
 	delayEntry.SetText("0")
 	delayContainer := container.New(layout.NewGridWrapLayout(fyne.NewSize(100, 40)), delayEntry)
 
 	var wordlistPath string
-	pathLabel := widget.NewLabel("No wordlist selected")
+	pathEntry := &SelectableEntry{}
+	pathEntry.ExtendBaseWidget(pathEntry)
+	pathEntry.SetPlaceHolder("No wordlist selected")
+	pathContainer := container.New(
+	    layout.NewBorderLayout(nil, nil, nil, nil), // Padding is handled by the container
+	    pathEntry,
+	)
+
 
 	selectButton := widget.NewButton("Select Wordlist", func() {
 		dialog.ShowFileOpen(func(reader fyne.URIReadCloser, err error) {
@@ -86,7 +117,7 @@ func StartGUI() {
 				return
 			}
 			wordlistPath = reader.URI().Path()
-			pathLabel.SetText("Selected: " + wordlistPath)
+			pathEntry.SetText(wordlistPath)
 		}, w)
 	})
 
@@ -122,6 +153,10 @@ func StartGUI() {
 
 		var ctx context.Context
 		ctx, cancelFunc = context.WithCancel(context.Background())
+
+		if urlEntry.Text == "" {
+			dialog.ShowError(fmt.Errorf("Please select a target first"), w)
+		}
 		
 		if wordlistPath == "" {
 			dialog.ShowError(fmt.Errorf("please select a wordlist first"), w)
@@ -200,16 +235,25 @@ func StartGUI() {
                 delayContainer,
         )
 
+        pathRow := container.New(
+	    layout.NewBorderLayout(nil, nil, selectButton, nil),
+	    selectButton,   // Pin to the left
+	    pathContainer,  // The pathContainer takes the remaining space in the center
+	)
+
         // Now set the window content
-        w.SetContent(container.NewBorder(
-                container.NewVBox(
-                        urlEntry,
-                        optionsRow,
-                        container.NewHBox(selectButton, pathLabel),
-                        startButton,
-                ),
-                nil, nil, nil, list,
-        ))
+        header := container.NewVBox(
+	    urlEntry,
+	    optionsRow,
+	    pathRow, // This replaces the old HBox container
+	    startButton,
+	)
+
+	w.SetContent(container.NewBorder(
+	    header, // Use the variable here!
+	    nil, nil, nil, 
+	    list,
+	))
 
         w.ShowAndRun()
 }
