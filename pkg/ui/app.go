@@ -155,7 +155,7 @@ func StartGUI() {
                 recursiveCheck,
                 widget.NewLabel("Depth:"),
                 depthEntry,
-                widget.NewLabel("Filter:"),
+                widget.NewLabel("Filter Status:"),
                 filterContainer,
         )
 
