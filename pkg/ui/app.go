@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"strings"
 	"sync"
-
-
+	"context"
+	"time"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/app"
@@ -55,6 +55,7 @@ func StartGUI() {
 	fmt.Println("Window object created.")
 	w.Resize(fyne.NewSize(700, 500))
 
+	var cancelFunc context.CancelFunc
 
 	urlEntry := widget.NewEntry()
 	urlEntry.SetPlaceHolder("https://example.com/FUZZ")
@@ -67,6 +68,15 @@ func StartGUI() {
 	filterEntry := widget.NewEntry()
 	// Replace the filterContainer definition with this:
 	filterContainer := container.New(layout.NewGridWrapLayout(fyne.NewSize(150, 40)), filterEntry)
+
+	threadEntry := widget.NewEntry()
+	threadEntry.SetText("10")
+	threadContainer := container.New(layout.NewGridWrapLayout(fyne.NewSize(50, 40)), threadEntry)
+
+	delayEntry := widget.NewEntry()
+	delayEntry.SetText("0")
+	delayContainer := container.New(layout.NewGridWrapLayout(fyne.NewSize(100, 40)), delayEntry)
+
 	var wordlistPath string
 	pathLabel := widget.NewLabel("No wordlist selected")
 
@@ -106,6 +116,13 @@ func StartGUI() {
 	)
 
 	startButton := widget.NewButton("Start Scan", func() {
+		if cancelFunc != nil {
+			cancelFunc()
+		}
+
+		var ctx context.Context
+		ctx, cancelFunc = context.WithCancel(context.Background())
+		
 		if wordlistPath == "" {
 			dialog.ShowError(fmt.Errorf("please select a wordlist first"), w)
 			return
@@ -117,10 +134,30 @@ func StartGUI() {
 		list.Refresh()
 
 		depth, _ := strconv.Atoi(depthEntry.Text)
+
 		wordlist, _ := engine.ReadLines(wordlistPath)
 
+		threads, err := strconv.Atoi(threadEntry.Text)
+		if err != nil {
+			threads = 10
+		}
+
+		delayS, err := strconv.Atoi(delayEntry.Text)
+                if err != nil {
+	       		delayS = 0 // Default to 0 if input is invalid
+	        }
+
 		go func() {
-			resChan := engine.ConcurrentScan(urlEntry.Text, wordlist, 10, filterEntry.Text, recursiveCheck.Checked, depth)
+			resChan := engine.ConcurrentScan(
+				ctx,
+				urlEntry.Text,
+				wordlist,
+				threads,
+				filterEntry.Text,
+				recursiveCheck.Checked,
+				depth,
+				time.Duration(delayS) * time.Second,
+			)
 			displayed := make(map[string]bool)
 
 			for res := range resChan {
@@ -157,6 +194,10 @@ func StartGUI() {
                 depthEntry,
                 widget.NewLabel("Filter Status:"),
                 filterContainer,
+                widget.NewLabel("Threads:"),
+                threadContainer,
+                widget.NewLabel("Delay (s): "),
+                delayContainer,
         )
 
         // Now set the window content

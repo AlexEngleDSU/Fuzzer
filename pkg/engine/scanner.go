@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"context"
 	"os"
 	"strconv"
 	"strings"
@@ -37,7 +38,7 @@ func resolveURL(base, loc string) string {
 	return fmt.Sprintf("%s://%s/%s", parsedBase.Scheme, parsedBase.Host, cleanLoc)
 }
 
-func ConcurrentScan(urlTemplate string, wordlist []string, workerCount int, filterCodes string, recursive bool, maxDepth int) <-chan ScanResult {
+func ConcurrentScan(ctx context.Context, urlTemplate string, wordlist []string, workerCount int, filterCodes string, recursive bool, maxDepth int, delay time.Duration) <-chan ScanResult {
 	results := make(chan ScanResult, 500)
 	filterMap := make(map[int]bool)
 	for _, codeStr := range strings.Split(filterCodes, ",") {
@@ -76,7 +77,21 @@ func ConcurrentScan(urlTemplate string, wordlist []string, workerCount int, filt
 				wg.Add(1)
 				go func() {
 					defer wg.Done()
+
+					var ticker *time.Ticker
+					if delay > 0 {
+						ticker := time.NewTicker(delay)
+						defer ticker.Stop()
+					}
 					for target := range jobs {
+						select {
+						case <-ctx.Done():
+							return
+						default:
+							if ticker != nil {
+								<-ticker.C
+							}
+						}
 						if _, loaded := globalSeen.LoadOrStore(target, true); loaded { continue }
 
 						resp, err := client.Get(target)
