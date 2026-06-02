@@ -11,7 +11,7 @@ tidy:
 
 # Standard build command
 build:
-	go build -o $(BINARY_NAME) ./cmd/fuzzer/main.go
+	go build -o fuzzer .
 
 # Install requires a build (which now runs tidy first)
 install: build
