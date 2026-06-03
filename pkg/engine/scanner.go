@@ -11,6 +11,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"io"
 )
 
 type ScanResult struct {
@@ -18,6 +19,7 @@ type ScanResult struct {
 	StatusCode int
 	Location   string
 	Message    string
+	ContentLength int64
 }
 
 func ReadLines(path string) ([]string, error) {
@@ -38,21 +40,31 @@ func resolveURL(base, loc string) string {
 	return fmt.Sprintf("%s://%s/%s", parsedBase.Scheme, parsedBase.Host, cleanLoc)
 }
 
-func ConcurrentScan(ctx context.Context, urlTemplate string, wordlist []string, workerCount int, filterCodes string, recursive bool, maxDepth int, delay time.Duration) <-chan ScanResult {
+func get404Length(client *http.Client, baseURL string) int64 {
+    resp, err := client.Get(baseURL + "/a-random-string-that-does-not-exist-123")
+    if err != nil { return -1 }
+    defer resp.Body.Close()
+    return resp.ContentLength
+}
+
+
+
+func ConcurrentScan(ctx context.Context, urlTemplate string, wordlist []string, workerCount int, filterCodes string, recursive bool, maxDepth int, delay time.Duration, headers map[string]string) <-chan ScanResult {
+
 	results := make(chan ScanResult, 500)
+
 	filterMap := make(map[int]bool)
+
 	for _, codeStr := range strings.Split(filterCodes, ",") {
-		if code, err := strconv.Atoi(strings.TrimSpace(codeStr)); err == nil {
-			filterMap[code] = true
-		}
+		if code, err := strconv.Atoi(strings.TrimSpace(codeStr)); err == nil { filterMap[code] = true }
 	}
 
 	client := &http.Client{
 		Timeout: 5 * time.Second,
-		CheckRedirect: func(req *http.Request, via []*http.Request) error {
-			return http.ErrUseLastResponse
-		},
+		CheckRedirect: func(req *http.Request, via []*http.Request) error { return http.ErrUseLastResponse },
 	}
+
+	badContentLength := get404Length(client, urlTemplate)
 
 	go func() {
 		// Queue starts with the initial user-provided template
@@ -80,7 +92,7 @@ func ConcurrentScan(ctx context.Context, urlTemplate string, wordlist []string, 
 
 					var ticker *time.Ticker
 					if delay > 0 {
-						ticker := time.NewTicker(delay)
+						ticker = time.NewTicker(delay)
 						defer ticker.Stop()
 					}
 					for target := range jobs {
@@ -88,21 +100,35 @@ func ConcurrentScan(ctx context.Context, urlTemplate string, wordlist []string, 
 						case <-ctx.Done():
 							return
 						default:
-							if ticker != nil {
-								<-ticker.C
-							}
+							if ticker != nil { <-ticker.C }
 						}
 						if _, loaded := globalSeen.LoadOrStore(target, true); loaded { continue }
 
-						resp, err := client.Get(target)
+						req, err := http.NewRequestWithContext(ctx, "GET", target, nil)
 						if err != nil { continue }
+
+						for key, value := range headers { req.Header.Set(key, value) }
+
+						resp, err := client.Do(req)
+						if err != nil { continue }
+
+						body, _ := io.ReadAll(resp.Body)
+						resp.Body.Close()
+						currentLen := int64(len(body))
 
 						status := resp.StatusCode
 						loc := resp.Header.Get("Location")
-						resp.Body.Close()
 
 						if !filterMap[status] {
-							results <- ScanResult{URL: target, StatusCode: status, Location: loc}
+							if status == 200 && currentLen == badContentLength {
+                                                                continue // It's a Soft 404, ignore it
+                                                        }
+							results <- ScanResult{
+								URL: target, 
+								StatusCode: status, 
+								Location: loc,
+								ContentLength: currentLen,
+							}
 
 							if recursive && (status >= 300 && status < 400) && loc != "" {
 								resolved := resolveURL(target, loc)

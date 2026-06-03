@@ -101,6 +101,10 @@ func StartGUI() {
 	delayEntry.SetText("0")
 	delayContainer := container.New(layout.NewGridWrapLayout(fyne.NewSize(100, 40)), delayEntry)
 
+	headerInput := widget.NewMultiLineEntry()
+	headerInput.SetPlaceHolder("User-Agent: MyFuzzer\nAuthorization: Bearer token123")
+	headerContainer := container.New(layout.NewGridWrapLayout(fyne.NewSize(200, 60)), headerInput)
+
 	var wordlistPath string
 	pathEntry := &SelectableEntry{}
 	pathEntry.ExtendBaseWidget(pathEntry)
@@ -182,6 +186,13 @@ func StartGUI() {
 	       		delayS = 0 // Default to 0 if input is invalid
 	        }
 
+		customHeaders := make(map[string]string)
+		lines := strings.Split(headerInput.Text, "\n")
+		for _, line := range lines {
+		        parts := strings.SplitN(line, ":", 2)
+		        if len(parts) == 2 { customHeaders[strings.TrimSpace(parts[0])] = strings.TrimSpace(parts[1]) }
+		}
+
 		go func() {
 			resChan := engine.ConcurrentScan(
 				ctx,
@@ -192,6 +203,7 @@ func StartGUI() {
 				recursiveCheck.Checked,
 				depth,
 				time.Duration(delayS) * time.Second,
+				customHeaders,
 			)
 			displayed := make(map[string]bool)
 
@@ -200,7 +212,7 @@ func StartGUI() {
 				if res.Message != "" {
 					displayString = res.Message
 				} else {
-					displayString = fmt.Sprintf("\t[%d] %s", res.StatusCode, res.URL)
+					displayString = fmt.Sprintf("Status: %d | URL: %s | Len: %d\n", res.StatusCode, res.URL, res.ContentLength)
 					if res.Location != "" {
 						displayString += " -> " + res.Location
 					}
@@ -235,6 +247,10 @@ func StartGUI() {
                 delayContainer,
         )
 
+        optionsRow2 := container.NewHBox(
+        	headerContainer,
+        )
+
         pathRow := container.New(
 	    layout.NewBorderLayout(nil, nil, selectButton, nil),
 	    selectButton,   // Pin to the left
@@ -245,6 +261,7 @@ func StartGUI() {
         header := container.NewVBox(
 	    urlEntry,
 	    optionsRow,
+	    optionsRow2,
 	    pathRow, // This replaces the old HBox container
 	    startButton,
 	)
