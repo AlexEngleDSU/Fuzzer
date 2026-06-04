@@ -218,9 +218,9 @@ func StartGUI() {
 					case 200:
 						displayString = fmt.Sprintf("[+] Status: %d | Len: %d | URL: %s\n", res.StatusCode, res.ContentLength, res.URL)
 					case 301:
-						displayString = fmt.Sprintf("[/] Status: %d | Len: %d | URL: %s", res.StatusCode, res.ContentLength, res.URL)
+						displayString = fmt.Sprintf("[/] Status: %d | Len: %d | URL: %s\n", res.StatusCode, res.ContentLength, res.URL)
 					case 302:
-						displayString = fmt.Sprintf("[/] Status: %d | Len: %d | URL: %s", res.StatusCode, res.ContentLength, res.URL)
+						displayString = fmt.Sprintf("[/] Status: %d | Len: %d | URL: %s\n", res.StatusCode, res.ContentLength, res.URL)
 					case 401:
 						displayString = fmt.Sprintf("[X] Status: %d | Len: %d | URL: %s\n", res.StatusCode, res.ContentLength, res.URL)	
 					case 403: 
@@ -231,7 +231,7 @@ func StartGUI() {
 						displayString = fmt.Sprintf("[?] Status: %d | Len: %d | URL: %s\n", res.StatusCode, res.ContentLength, res.URL)
 					}
 					if res.Location != "" {
-						displayString += " -> " + res.Location + "\n"
+						displayString += " -> " + res.Location
 					}
 				}
 

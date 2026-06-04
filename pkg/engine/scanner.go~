@@ -71,6 +71,10 @@ type headerTransport struct {
     headers map[string]string
 }
 
+type headerTransport struct {
+    headers map[string]string
+}
+
 func (t *headerTransport) RoundTrip(req *http.Request) (*http.Response, error) {
     // Clone the request to avoid race conditions
     req2 := req.Clone(req.Context())
@@ -95,11 +99,11 @@ func ConcurrentScan(ctx context.Context, urlTemplate string, wordlist []string, 
 	}
 
 	client := &http.Client{
-	    Timeout: 5 * time.Second,
-	    Transport: &headerTransport{
-	        headers: headers,
-	    },
-	    CheckRedirect: func(req *http.Request, via []*http.Request) error { return http.ErrUseLastResponse },
+		Timeout: 5 * time.Second,
+		Transport: &http.Transport{
+      			DisableCompression: true, // Prevents "Accept-Encoding: gzip" default
+    		},
+		CheckRedirect: func(req *http.Request, via []*http.Request) error { return http.ErrUseLastResponse },
 	}
 
 	badContentLength := get404Length(client, urlTemplate)
