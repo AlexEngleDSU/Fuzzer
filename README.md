@@ -27,12 +27,12 @@ To build and run this project from source, ensure you have:
 ## Installation & Build
 
 1.  **Clone the repository:**
-    ```bash
-    git clone [https://github.com/your-username/fuzzer.git](https://github.com/your-username/fuzzer.git)
+    ```
+    git clone https://github.com/AlexEngleDSU/fuzzer.git
     cd fuzzer
     ```
 2.  **Tidy dependencies:**
-    ```bash
+    ```
     go mod tidy
     ```
 3.  **Build the application:**
