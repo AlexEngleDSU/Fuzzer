@@ -140,9 +140,11 @@ func CreateBrowserClient() tls_client.HttpClient {
         tls_client.WithTimeoutSeconds(30),
         tls_client.WithClientProfile(profiles.Chrome_146), // Matches your browser
         tls_client.WithCookieJar(jar),
+// 	Disable Redirects
+        tls_client.WithNotFollowRedirects(),
 //	Burp
 //      tls_client.WithProxyUrl(proxyUrl),
-//       tls_client.WithInsecureSkipVerify(),
+//      tls_client.WithInsecureSkipVerify(),
     }
 
     client, _ := tls_client.NewHttpClient(tls_client.NewNoopLogger(), options...)
@@ -206,10 +208,18 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 	performHandshake(browserClient, host)
 
 	badContentLength := get404Length(browserClient, urlTemplate)
-
-	go func() {
-		defer close(results)
 	
+	var closeOnce sync.Once
+	
+
+	go func() {	
+	
+		closeChannel := func() {
+			closeOnce.Do(func() {
+	    			close(results)
+			})
+		}
+		
 		queue := []string{urlTemplate}
 
 		for depth := 0; depth <= maxDepth; depth++ {
@@ -292,6 +302,7 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 						once.Do(func() {
 							fmt.Printf("--- FIRST REQUEST DUMP ---\n%s\n", req.Header)
 							fmt.Printf("--- RESPONSE DUMP ---\n%s\n", resp.StatusCode)
+							
 						})
 
 						
@@ -305,10 +316,11 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 						status := resp.StatusCode
 						loc := resp.Header.Get("Location")
 						
+						resolved := ""
 						if loc != "" {
-						    resolved := resolveURL(target, loc)
+						    resolved = resolveURL(target, loc)
 						    
-						    // 2. Clean the redirect URL to always end in a directory slash
+						    // Store for Referer tracking
 						    lastSlash := strings.LastIndex(resolved, "/")
 						    if lastSlash != -1 {
 							cleanReferer := resolved[:lastSlash+1]
@@ -317,24 +329,30 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 						}
 
 						if !filterMap[status] {
-							if status == 200 && currentLen == badContentLength {
-								continue
-							}
-							results <- ScanResult{
-								URL:           target,
-								StatusCode:    status,
-								Location:      loc,
-								ContentLength: currentLen,
-								Cookies:       cookies,
-							}
+						    if status == 200 && currentLen == badContentLength {
+							continue
+						    }
+						    
+						    displayURL := target
+						    if status >= 300 && status < 400 && resolved != "" {
+								displayURL = fmt.Sprintf("%s -> %s", target, resolved)
+	     					    }						    
 
-							if recursive && (status >= 300 && status < 400) && loc != "" {
-								resolved := resolveURL(target, loc)
-								newPath := strings.TrimSuffix(resolved, "/") + "/FUZZ"
-								mu.Lock()
-								nextGen = append(nextGen, newPath)
-								mu.Unlock()
-							}
+						    results <- ScanResult{
+							URL:           displayURL,
+							StatusCode:    status,
+							Location:      loc, // loc is the raw header, you might prefer 'resolved' here
+							ContentLength: currentLen,
+							Cookies:       cookies,
+						    }
+
+						    // 2. Reuse the already resolved URL
+						    if recursive && (status >= 300 && status < 400) && resolved != "" {
+							//newPath := strings.TrimSuffix(resolved, "/") + "/FUZZ"
+							mu.Lock()
+							nextGen = append(nextGen, resolved)
+							mu.Unlock()
+						    }
 						}
 					}
 				}()

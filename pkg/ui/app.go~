@@ -127,7 +127,7 @@ Connection: keep-alive`
 	    }
 
 	    // 4. Fill the template: [GET Path, Host, Referer]
-	    userHeaderInput.SetText(fmt.Sprintf(headerTemplate, path, u.Host, baseReferer))
+	    userHeaderInput.SetText(fmt.Sprintf(headerTemplate, u.Host, baseReferer))
 	}
 		
 	var mu sync.Mutex
