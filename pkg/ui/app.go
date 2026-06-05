@@ -1,60 +1,41 @@
 package ui
 
 import (
+	"context"
 	"fmt"
 	"image/color"
 	"net/url"
 	"strconv"
 	"strings"
 	"sync"
-	"context"
 	"time"
+
 	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 	"github.com/AlexEngleDSU/Fuzzer/pkg/engine"
 )
 
+// --- Custom Widgets ---
 type SelectableEntry struct {
-    widget.Entry
-    isFocused bool
+	widget.Entry
+	isFocused bool
 }
 
 func (m *SelectableEntry) FocusGained() {
 	m.Entry.FocusGained()
-	fmt.Println("FocusGained() was triggered!")
 	m.isFocused = true
 	m.Refresh()
-
-	// Use fyne.Do to ensure thread-safe UI execution
-	fyne.Do(func() {
-		// This tells the entry to execute the standard "Select All" 
-		// shortcut command used by the context menus.
-		m.TypedShortcut(&fyne.ShortcutSelectAll{})
-	})
+	fyne.Do(func() { m.TypedShortcut(&fyne.ShortcutSelectAll{}) })
 }
 
-// compactLink forces list rows to be dense (20px height)
-type compactLink struct {
-	*widget.Hyperlink
-}
+type compactLink struct{ *widget.Hyperlink }
 
-func (c *compactLink) MinSize() fyne.Size {
-	return fyne.NewSize(c.Hyperlink.MinSize().Width, 25)
-}
-
-type fixedEntry struct {
-	*widget.Entry
-	width float32
-}
-
-func (f *fixedEntry) MinSize() fyne.Size {
-	return fyne.NewSize(f.width, f.Entry.MinSize().Height)
-}
+func (c *compactLink) MinSize() fyne.Size { return fyne.NewSize(c.Hyperlink.MinSize().Width, 25) }
 
 type myTheme struct{ fyne.Theme }
 
@@ -65,70 +46,92 @@ func (m myTheme) Color(n fyne.ThemeColorName, v fyne.ThemeVariant) color.Color {
 	return m.Theme.Color(n, v)
 }
 
+func extractHost(rawURL string) string {
+	u, err := url.Parse(rawURL)
+	if err != nil {
+		return rawURL
+	}
+	return u.Host
+}
+
 func StartGUI() {
-	fmt.Println("Initializing Application...")
 	a := app.NewWithID("com.fuzzer.app")
-	fmt.Println("App object created.")
 	a.Settings().SetTheme(&myTheme{Theme: theme.DefaultTheme()})
 	w := a.NewWindow("Fuzzer GUI")
-	fmt.Println("Window object created.")
 	w.Resize(fyne.NewSize(700, 500))
 
 	var cancelFunc context.CancelFunc
+	var wordlistPath string
 
 	urlEntry := widget.NewEntry()
 	urlEntry.SetPlaceHolder("https://example.com/FUZZ")
 
 	recursiveCheck := widget.NewCheck("", nil)
-
 	depthEntry := &SelectableEntry{}
 	depthEntry.ExtendBaseWidget(depthEntry)
 	depthEntry.SetText("3")
 
 	filterEntry := &SelectableEntry{}
 	filterEntry.ExtendBaseWidget(filterEntry)
-	filterEntry.SetPlaceHolder("Enter filter...")
 	filterContainer := container.New(layout.NewGridWrapLayout(fyne.NewSize(140, 40)), filterEntry)
-
-
+	
 	threadEntry := &SelectableEntry{}
 	threadEntry.ExtendBaseWidget(threadEntry)
 	threadEntry.SetText("10")
 	threadContainer := container.New(layout.NewGridWrapLayout(fyne.NewSize(50, 40)), threadEntry)
-
+	
 	delayEntry := &SelectableEntry{}
 	delayEntry.ExtendBaseWidget(delayEntry)
-	delayEntry.SetText("0")
+	delayEntry.SetText("1")
 	delayContainer := container.New(layout.NewGridWrapLayout(fyne.NewSize(100, 40)), delayEntry)
 
-	headerInput := widget.NewMultiLineEntry()
-	headerInput.ExtendBaseWidget(headerInput)
-	headerInput.SetText("User-Agent: MyFuzzer\nAuthorization: Bearer token123")
-	headerContainer := container.New(layout.NewGridWrapLayout(fyne.NewSize(250, 60)), headerInput)
+	userHeaderInput := widget.NewMultiLineEntry()
+	userHeaderInput.ExtendBaseWidget(userHeaderInput)
+	headerTemplate := `Host: %s
+Sec-Ch-Ua: "Not-A.Brand";v="24", "Chromium";v="146"
+Sec-Ch-Ua-Mobile: ?0
+Sec-Ch-Ua-Platform: "Linux"
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9
+Referer: %s
+Priority: u=0, i
+Connection: keep-alive`
+	headerBox := container.NewMax(userHeaderInput)
 
-	var wordlistPath string
-	pathEntry := &SelectableEntry{}
-	pathEntry.ExtendBaseWidget(pathEntry)
-	pathEntry.SetPlaceHolder("No wordlist selected")
-	pathContainer := container.New(
-	    layout.NewBorderLayout(nil, nil, nil, nil), // Padding is handled by the container
-	    pathEntry,
-	)
+	urlEntry.OnChanged = func(newURL string) {
+	    // 1. Prepare Referer: Trim /FUZZ and ensure it ends with a trailing slash
+	    baseReferer := strings.TrimSuffix(newURL, "/FUZZ")
+	    if !strings.HasSuffix(baseReferer, "/") {
+		baseReferer += "/"
+	    }
 
+	    // 2. Parse the URL
+	    u, err := url.Parse(newURL)
+	    if err != nil {
+		return
+	    }
 
-	selectButton := widget.NewButton("Select Wordlist", func() {
-		dialog.ShowFileOpen(func(reader fyne.URIReadCloser, err error) {
-			if err != nil || reader == nil {
-				return
-			}
-			wordlistPath = reader.URI().Path()
-			pathEntry.SetText(wordlistPath)
-		}, w)
-	})
+	    // 3. Prepare GET Path: Take the full path, remove the /FUZZ suffix
+	    // If the path was /FUZZ, this makes it /
+	    path := u.Path
+	    path = strings.TrimSuffix(path, "/FUZZ")
+	    if path == "" {
+		path = "/"
+	    }
 
+	    // 4. Fill the template: [GET Path, Host, Referer]
+	    userHeaderInput.SetText(fmt.Sprintf(headerTemplate, u.Host, baseReferer))
+	}
+		
 	var mu sync.Mutex
 	resultsList := []string{}
-
 	list := widget.NewList(
 		func() int { return len(resultsList) },
 		func() fyne.CanvasObject { return &compactLink{widget.NewHyperlink("", nil)} },
@@ -136,36 +139,50 @@ func StartGUI() {
 			mu.Lock()
 			text := resultsList[id]
 			mu.Unlock()
-
 			link := obj.(*compactLink)
 			link.SetText(text)
-
-			parts := strings.Fields(text)
-			for _, p := range parts {
-				if strings.HasPrefix(p, "http") {
-					parsed, _ := url.Parse(strings.TrimSuffix(p, "/"))
-					link.URL = parsed
-					break
-				}
+			if idx := strings.Index(text, "http"); idx != -1 {
+				urlPart := text[idx:]
+				if spaceIdx := strings.Index(urlPart, " "); spaceIdx != -1 { urlPart = urlPart[:spaceIdx] }
+				if parsed, err := url.Parse(strings.TrimSuffix(urlPart, "/")); err == nil { link.URL = parsed }
 			}
 		},
 	)
 
-	startButton := widget.NewButton("Start Scan", func() {
-		if cancelFunc != nil {
-			cancelFunc()
-		}
+	var isPaused bool
+	pauseButton := widget.NewButton("Pause", nil)
+	pauseButton.OnTapped = func() {
+		isPaused = !isPaused
+		engine.SetPause(isPaused)
+		if isPaused { pauseButton.SetText("Resume") } else { pauseButton.SetText("Pause") }
+	}
 
+	pathEntry := &SelectableEntry{}
+	pathEntry.ExtendBaseWidget(pathEntry)
+	selectButton := widget.NewButton("Select Wordlist", func() {
+		dialog.ShowFileOpen(func(reader fyne.URIReadCloser, err error) {
+			if err == nil && reader != nil {
+				wordlistPath = reader.URI().Path()
+				pathEntry.SetText(wordlistPath)
+			}
+		}, w)
+	})
+	pathRow := container.NewBorder(nil, nil, selectButton, nil, pathEntry)
+
+	resultsContent := container.NewBorder(pauseButton, nil, nil, nil, list)
+	resultsTab := container.NewTabItem("Results", resultsContent)
+	tabs := container.NewAppTabs(container.NewTabItem("Configuration", container.NewVBox()), resultsTab)
+	
+	startButton := widget.NewButton("Start Scan", func() {
+		if cancelFunc != nil { cancelFunc() }
 		var ctx context.Context
 		ctx, cancelFunc = context.WithCancel(context.Background())
-
-		if urlEntry.Text == "" {
-			dialog.ShowError(fmt.Errorf("Please select a target first"), w)
-		}
 		
-		if wordlistPath == "" {
-			dialog.ShowError(fmt.Errorf("please select a wordlist first"), w)
-			return
+		// Parse Headers
+		customHeaders := make(map[string]string)
+		for _, line := range strings.Split(userHeaderInput.Text, "\n") {
+			parts := strings.SplitN(line, ":", 2)
+			if len(parts) == 2 { customHeaders[strings.TrimSpace(parts[0])] = strings.TrimSpace(parts[1]) }
 		}
 
 		mu.Lock()
@@ -174,133 +191,67 @@ func StartGUI() {
 		list.Refresh()
 
 		depth, _ := strconv.Atoi(depthEntry.Text)
-
 		wordlist, _ := engine.ReadLines(wordlistPath)
-
-		threads, err := strconv.Atoi(threadEntry.Text)
-		if err != nil {
-			threads = 10
-		}
-
-		delayS, err := strconv.Atoi(delayEntry.Text)
-                if err != nil {
-	       		delayS = 0 // Default to 0 if input is invalid
-	        }
-
-		customHeaders := make(map[string]string)
-		lines := strings.Split(headerInput.Text, "\n")
-		for _, line := range lines {
-		        parts := strings.SplitN(line, ":", 2)
-		        if len(parts) == 2 { customHeaders[strings.TrimSpace(parts[0])] = strings.TrimSpace(parts[1]) }
-		}
+		threads, _ := strconv.Atoi(threadEntry.Text)
+		delayS, _ := strconv.Atoi(delayEntry.Text)
 
 		go func() {
+			// Filtering logic passed to engine
 			resChan := engine.ConcurrentScan(
-				ctx,
-				urlEntry.Text,
-				wordlist,
-				threads,
-				filterEntry.Text,
-				recursiveCheck.Checked,
-				depth,
-				time.Duration(delayS) * time.Second,
-				customHeaders,
+			    ctx, 
+			    extractHost(urlEntry.Text), 
+			    urlEntry.Text, 
+			    userHeaderInput.Text, // Pass the raw string template here
+			    wordlist, 
+			    threads, 
+			    filterEntry.Text, 
+			    recursiveCheck.Checked, 
+			    depth, 
+			    time.Duration(delayS)*time.Second,
 			)
-			displayed := make(map[string]bool)
 
 			for res := range resChan {
-				displayString := ""
-				if res.Message != "" {
-					displayString = res.Message
-				} else {
-					status := res.StatusCode
-					switch status {
-					case 200:
-						displayString = fmt.Sprintf("[+] Status: %d | Len: %d | URL: %s\n", res.StatusCode, res.ContentLength, res.URL)
-					case 301:
-						displayString = fmt.Sprintf("[/] Status: %d | Len: %d | URL: %s", res.StatusCode, res.ContentLength, res.URL)
-					case 302:
-						displayString = fmt.Sprintf("[/] Status: %d | Len: %d | URL: %s", res.StatusCode, res.ContentLength, res.URL)
-					case 401:
-						displayString = fmt.Sprintf("[X] Status: %d | Len: %d | URL: %s\n", res.StatusCode, res.ContentLength, res.URL)	
-					case 403: 
-						displayString = fmt.Sprintf("[X] Status: %d | Len: %d | URL: %s\n", res.StatusCode, res.ContentLength, res.URL)
-					case 404:
-						displayString = fmt.Sprintf("[-] Status: %d | Len: %d | URL: %s\n", res.StatusCode, res.ContentLength, res.URL)
-					default:
-						displayString = fmt.Sprintf("[?] Status: %d | Len: %d | URL: %s\n", res.StatusCode, res.ContentLength, res.URL)
-					}
-					if res.Location != "" {
-						displayString += " -> " + res.Location + "\n"
-					}
+				// Internal Filter Check
+				if filterEntry.Text != "" && strconv.Itoa(res.StatusCode) == filterEntry.Text {
+					continue
 				}
-
 				mu.Lock()
-				if !displayed[res.URL] || res.Message != "" {
-					resultsList = append(resultsList, displayString)
-					displayed[res.URL] = true
-				}
+				resultsList = append(resultsList, fmt.Sprintf("Status: %d | URL: %s", res.StatusCode, res.URL))
 				mu.Unlock()
-
-				fyne.Do(func() {
-					list.Refresh()
-					list.ScrollToBottom()
-				})
+				fyne.Do(func() { list.Refresh(); list.ScrollToBottom() })
 			}
+			resultsTab.Text = "Results •"
+			tabs.Refresh()
 		}()
+		tabs.SelectIndex(1)
 	})
 
-	var isPaused bool
-	pauseButton := widget.NewButton("Pause", nil)
-	pauseButton.OnTapped = func() {
-	    isPaused = !isPaused
-	    if isPaused {
-		engine.SetPause(true)
-		pauseButton.SetText("Resume")
-	    } else {
-		engine.SetPause(false)
-		pauseButton.SetText("Pause")
-	    }
-	}
-
-        optionsRow := container.NewHBox(
-        	widget.NewLabel("Recursive Check"),
-                recursiveCheck,
-                widget.NewLabel("Depth:"),
-                depthEntry,
-                widget.NewLabel("Filter Status:"),
-                filterContainer,
-                widget.NewLabel("Threads:"),
-                threadContainer,
-                widget.NewLabel("Delay (s): "),
-                delayContainer,
-        )
-
-        optionsRow2 := container.NewHBox(
-        	headerContainer,
-        )
-
-        pathRow := container.New(
-	    layout.NewBorderLayout(nil, nil, selectButton, nil),
-	    selectButton,   // Pin to the left
-	    pathContainer,  // The pathContainer takes the remaining space in the center
-	)
-
-        // Now set the window content
-        header := container.NewVBox(
+	topControls := container.NewVBox(
 	    urlEntry,
-	    optionsRow,
-	    optionsRow2,
-	    pathRow, // This replaces the old HBox container
+	    container.NewHBox(
+		widget.NewLabel("Rec:"), recursiveCheck, 
+		widget.NewLabel("Depth:"), depthEntry, 
+		widget.NewLabel("Filter Code:"), filterContainer, // Note: ensure filterEntry is used directly
+		widget.NewLabel("Threads:"), threadContainer,
+		widget.NewLabel("Delay (s):"), delayContainer,
+	    ),
+	    pathRow,
 	    startButton,
-	    pauseButton,
+	    widget.NewLabel("Initial Request:"),
 	)
 
-	w.SetContent(container.NewBorder(
-	    header, // Use the variable here!
-	    nil, nil, nil, 
-	    list,
-	))
+	// 2. Use a Border layout to pin the controls to the TOP 
+	// and let the headers box expand to fill the rest of the tab area
+	configContent := container.NewBorder(
+	    topControls, // Top
+	    nil,         // Bottom
+	    nil,         // Left
+	    nil,         // Right
+	    headerBox,   // Center (This will stretch to fill all remaining height)
+	)
 
-        w.ShowAndRun()
+	tabs.Items[0].Content = configContent
+
+	w.SetContent(tabs)
+	w.ShowAndRun()
 }
