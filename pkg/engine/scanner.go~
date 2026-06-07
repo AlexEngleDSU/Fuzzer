@@ -182,9 +182,7 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 	browserClient := CreateBrowserClient() 
 	
 	resp, err := browserClient.Get(getBaseURL(urlTemplate))
-	if err == nil {
-		resp.Body.Close()
-	}
+	if err == nil { resp.Body.Close() }
 	
 	
         fmt.Printf("DEBUG: Header Template received: '%s'\n", headerTemplate)
@@ -199,9 +197,7 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 	filterMap := make(map[int]bool)
 
 	for _, codeStr := range strings.Split(filterCodes, ",") {
-		if code, err := strconv.Atoi(strings.TrimSpace(codeStr)); err == nil {
-			filterMap[code] = true
-		}
+		if code, err := strconv.Atoi(strings.TrimSpace(codeStr)); err == nil { filterMap[code] = true }
 	}
 
 	// Perform Handshake
@@ -215,9 +211,7 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 	go func() {	
 	
 		closeChannel := func() {
-			closeOnce.Do(func() {
-	    			close(results)
-			})
+			closeOnce.Do(func() { close(results) })
 		}
 		
 		defer closeChannel()
@@ -225,9 +219,7 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 		queue := []string{urlTemplate}
 
 		for depth := 0; depth <= maxDepth; depth++ {
-			if len(queue) == 0 {
-				break
-			}
+			if len(queue) == 0 { break }
 
 			results <- ScanResult{Message: fmt.Sprintf("[+] Starting depth level: %d | Base Paths: %d", depth, len(queue))}
 
@@ -254,27 +246,19 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 							pChan := pauseChan
 							pauseMu.Unlock()
 							<-pChan
-						} else {
-							pauseMu.Unlock()
-						}
+						} else { pauseMu.Unlock() }
 						
 						select {
-						case <-ctx.Done():
-							return
-						default:
-							if ticker != nil {
-								<-ticker.C
-							}
+							case <-ctx.Done():
+								return
+							default:
+								if ticker != nil { <-ticker.C }
 						}
 
-						if _, loaded := globalSeen.LoadOrStore(target, true); loaded {
-							continue
-						}
+						if _, loaded := globalSeen.LoadOrStore(target, true); loaded { continue }
 
 						req, err := fhttp.NewRequest("GET", target, nil)
-						if err != nil {
-							continue
-						}
+						if err != nil { continue }
 						
 						req.Header = fhttp.Header{}
 						
@@ -287,9 +271,7 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 						    req.Header.Add(h.Key, h.Value)
 						}
 						
-						if val, ok := lastRedirectURL.Load("latest"); ok {
-					                req.Header.Set("Referer", val.(string))
-				                }
+						if val, ok := lastRedirectURL.Load("latest"); ok { req.Header.Set("Referer", val.(string)) }
 				                
 				                targetURL, _ := url.Parse(target)
 					        cookies := browserClient.GetCookieJar().Cookies(targetURL)
@@ -300,6 +282,8 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 						req.Header.Set("Sec-Fetch-Site", "same-origin")
 						
 						resp, err := browserClient.Do(req)
+						if err != nil { continue }
+						if resp == nil { continue }
 						
 						once.Do(func() {
 							fmt.Printf("--- FIRST REQUEST DUMP ---\n%s\n", req.Header)
@@ -307,13 +291,7 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 							
 						})
 
-						
-						if err != nil {
-							continue
-						}
-						
-						body, _ := io.ReadAll(resp.Body)
-						resp.Body.Close()
+						body, err := io.ReadAll(resp.Body)
 						currentLen := int64(len(body))
 						status := resp.StatusCode
 						loc := resp.Header.Get("Location")
@@ -331,9 +309,7 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 						}
 
 						if !filterMap[status] {
-						    if status == 200 && currentLen == badContentLength {
-							continue
-						    }
+						    if status == 200 && currentLen == badContentLength { continue }
 						    
 						    displayURL := target
 						    if status >= 300 && status < 400 && resolved != "" {
@@ -350,9 +326,13 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 
 						    // 2. Reuse the already resolved URL
 						    if recursive && (status >= 300 && status < 400) && resolved != "" {
-							//newPath := strings.TrimSuffix(resolved, "/") + "/FUZZ"
+							dirPath := resolved
+							if !strings.HasSuffix(dirPath, "/") { dirPath += "/" }
+							    
+							// Add FUZZ to the path so the loop below will replace it
+							newBase := dirPath + "FUZZ"
 							mu.Lock()
-							nextGen = append(nextGen, resolved)
+							nextGen = append(nextGen, newBase)
 							mu.Unlock()
 						    }
 						}
@@ -368,9 +348,10 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 			}
 			close(jobs)
 			wg.Wait()
+			if len(nextGen) == 0 { break }
 			queue = nextGen
+			nextGen = []string{}
 		}
-		close(results)
 	}()
 	return results
 }
