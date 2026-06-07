@@ -29,7 +29,7 @@ type SelectableEntry struct {
 func (m *SelectableEntry) FocusGained() {
 	m.Entry.FocusGained()
 	m.isFocused = true
-	m.Refresh()
+	fyne.Do(func() { m.Refresh() })
 	fyne.Do(func() { m.TypedShortcut(&fyne.ShortcutSelectAll{}) })
 }
 
@@ -221,7 +221,7 @@ Connection: keep-alive`
 				fyne.Do(func() { list.Refresh(); list.ScrollToBottom() })
 			}
 			resultsTab.Text = "Results •"
-			tabs.Refresh()
+			fyne.Do(func() { tabs.Refresh() })
 		}()
 		tabs.SelectIndex(1)
 	})
