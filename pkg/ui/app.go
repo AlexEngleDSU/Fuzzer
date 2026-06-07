@@ -188,7 +188,7 @@ Connection: keep-alive`
 		mu.Lock()
 		resultsList = []string{}
 		mu.Unlock()
-		list.Refresh()
+		fyne.Do(func() {list.Refresh()})
 
 		depth, _ := strconv.Atoi(depthEntry.Text)
 		wordlist, _ := engine.ReadLines(wordlistPath)

@@ -370,7 +370,6 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 			wg.Wait()
 			queue = nextGen
 		}
-		close(results)
 	}()
 	return results
 }

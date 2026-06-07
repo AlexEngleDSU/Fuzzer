@@ -220,6 +220,8 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 			})
 		}
 		
+		defer closeChannel()
+		
 		queue := []string{urlTemplate}
 
 		for depth := 0; depth <= maxDepth; depth++ {
