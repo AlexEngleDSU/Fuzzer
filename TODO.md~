@@ -1,4 +1,5 @@
 Critical: Stability
+	- nil response validation within worker loop
 	- explicit error handling before accessing response properties
 	- Manual cookieJar updates following handshake process
 Features: WAF Bypass
