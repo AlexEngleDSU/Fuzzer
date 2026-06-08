@@ -8,6 +8,7 @@ import (
 	"sync"
 	"time"
 	"strconv"
+	"net/url"
 	fhttp "github.com/bogdanfinn/fhttp"
 )
 
@@ -30,24 +31,27 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 	go func() {
 		defer close(results)
 		queue := []string{urlTemplate}
+		
 		lastRedirectURL := &sync.Map{}
 		lastRedirectURL.Store("latest", getBaseURL(urlTemplate))
 
 		for depth := 0; depth <= maxDepth; depth++ {
 			if len(queue) == 0 { break }
 
-			results <- ScanResult{Message: fmt.Sprintf("[+] Depth %d | Paths: %d", depth, len(queue))}
+			results <- ScanResult{}
 
 			nextGen := []string{}
 			var mu sync.Mutex
 			var globalSeen sync.Map
 			var wg sync.WaitGroup
-			jobs := make(chan string, 100)
-
+			jobs := make(chan string, len(queue)*len(wordlist))		
+			
+			semaphore := make(chan struct{}, workerCount)
+			throttle := time.NewTicker(delay)
+			defer throttle.Stop()
+			
 			for w := 1; w <= workerCount; w++ {
-				wg.Add(1)
 				go func() {
-					defer wg.Done()
 					for target := range jobs {
 						// Resume/Pause check
 						PauseMu.Lock()
@@ -59,26 +63,41 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 							PauseMu.Unlock()
 						}
 
-						select {
-						case <-ctx.Done(): return
-						default:
-						}
+						<-throttle.C
+
+						semaphore <- struct{}{}
 
 						if _, loaded := globalSeen.LoadOrStore(target, true); loaded { continue }
 
-						req, _ := fhttp.NewRequest("GET", target, nil)
+						req, err := fhttp.NewRequest("GET", target, nil)
+						if err != nil { continue }
+						
+						u, _ := url.Parse(target)
+						cookies := GlobalJar.Cookies(u)
+						if len(cookies) == 0 {
+						    fmt.Printf("DEBUG: No cookies found for host: %s\n", u.Host)
+						}
 						// Reconstruct headers
 						req.Header = fhttp.Header{}
+						
+						if len(cookies) > 0 {
+							cookieString := ""
+							for _, c := range cookies {
+								cookieString += c.Name + "=" + c.Value + "; "
+							}
+							req.Header.Add("Cookie", cookieString)
+						}
 						for _, h := range headers {
 							if strings.EqualFold(h.Key, "Host") { req.Host = h.Value; continue }
 							req.Header.Add(h.Key, h.Value)
 						}
-						
+					
 						resp, err := browserClient.Do(req)
 						if err != nil || resp == nil { continue }
 						
-						body, _ := io.ReadAll(resp.Body)
+						body, err := io.ReadAll(resp.Body)
 						resp.Body.Close()
+						if err != nil { continue }
 
 						status := resp.StatusCode
 						if !filterMap[status] && !(status == 200 && int64(len(body)) == badContentLength) {
@@ -87,24 +106,40 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 							if recursive && (status >= 300 && status < 400) {
 								loc := resp.Header.Get("Location")
 								if loc != "" {
-									resolved := ResolveURL(target, loc)
-									mu.Lock()
-									nextGen = append(nextGen, resolved)
-									mu.Unlock()
+								    resolved := ResolveURL(target, loc)
+								    // CRITICAL: Ensure the new URL is prepared for the next FUZZ iteration
+								    // If it doesn't end in /FUZZ, you might need to append it
+								    if !strings.Contains(resolved, "FUZZ") {
+									if !strings.HasSuffix(resolved, "/") {
+									    resolved += "/"
+									}
+									resolved += "FUZZ"
+								    }
+
+								    mu.Lock()
+								    nextGen = append(nextGen, resolved)
+								    mu.Unlock()
 								}
 							}
 						}
+						<-semaphore
+						wg.Done()
 					}
 				}()
 			}
 
 			for _, base := range queue {
 				for _, word := range wordlist {
+					wg.Add(1)
 					jobs <- strings.ReplaceAll(base, "FUZZ", word)
 				}
 			}
-			close(jobs)
 			wg.Wait()
+			close(jobs)
+			
+			if delay > 0 {
+				time.Sleep(delay)
+			}
 			queue = nextGen
 		}
 	}()

@@ -6,15 +6,36 @@ import (
 	"fmt"
 	"strings"
 	"net/url"
-
+	//"image/color"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
+	//"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
 )
+
+type mouseTrap struct {
+	widget.BaseWidget
+	onInteract func()
+}
+
+func (m *mouseTrap) Tapped(e *fyne.PointEvent) { m.onInteract() }
+func (m *mouseTrap) Dragged(e *fyne.DragEvent) { m.onInteract() }
+
+func (m *mouseTrap) CreateRenderer() fyne.WidgetRenderer {
+    return &emptyRenderer{}
+}
+
+type emptyRenderer struct{}
+
+func (e *emptyRenderer) Destroy() {}
+func (e *emptyRenderer) Layout(fyne.Size) {}
+func (e *emptyRenderer) MinSize() fyne.Size { return fyne.NewSize(0, 0) }
+func (e *emptyRenderer) Refresh() {}
+func (e *emptyRenderer) Objects() []fyne.CanvasObject { return []fyne.CanvasObject{} }
 
 func StartGUI() {
     a := app.NewWithID("com.fuzzer.app")
@@ -82,7 +103,7 @@ Connection: keep-alive`
 
     threadEntry := &SelectableEntry{}
     threadEntry.ExtendBaseWidget(threadEntry)
-    threadEntry.SetText("10")
+    threadEntry.SetText("3")
     threadContainer := container.New(layout.NewGridWrapLayout(fyne.NewSize(50, 40)), threadEntry)
 
     delayEntry := &SelectableEntry{}
@@ -108,27 +129,69 @@ Connection: keep-alive`
     pathRow := container.NewBorder(nil, nil, selectButton, nil, pathEntry)
 
     list := widget.NewList(
-        func() int { return len(resultsList) },
-        func() fyne.CanvasObject { return &compactLink{widget.NewHyperlink("", nil)} },
-        func(id widget.ListItemID, obj fyne.CanvasObject) {
-            mu.Lock()
-            text := resultsList[id]
-            mu.Unlock()
-            link := obj.(*compactLink)
-            link.SetText(text)
-        },
+		func() int { return len(resultsList) },
+		func() fyne.CanvasObject { 
+                // We use the custom compactLink from your original code
+                return &compactLink{widget.NewHyperlink("", nil)} 
+                },
+		func(id widget.ListItemID, obj fyne.CanvasObject) {
+			mu.Lock()
+			text := resultsList[id]
+			mu.Unlock()
+			link := obj.(*compactLink)
+			link.SetText(text)
+            
+                // --- RESTORED LINK CLICK LOGIC ---
+			if idx := strings.Index(text, "http"); idx != -1 {
+				urlPart := text[idx:]
+				if spaceIdx := strings.Index(urlPart, " "); spaceIdx != -1 {
+					urlPart = urlPart[:spaceIdx]
+				}
+				if parsed, err := url.Parse(strings.TrimSuffix(urlPart, "/")); err == nil {
+					link.URL = parsed
+                    			link.Refresh() // Ensure the UI updates the link target
+				}
+			}
+                // ---------------------------------
+		},
     )
+    
+    var resumeBtn *widget.Button
+    
+    resumeBtn = widget.NewButton("↓", func() {
+        *followMode = true
+        // Add any logic needed to jump back to bottom if required
+    })
+        
+    statusLabel := widget.NewLabel("Ready")
+    
+    
+    trap := &mouseTrap{onInteract: func() {
+        if *followMode {
+            *followMode = false
+            resumeBtn.Show()
+        }
+    }}
+    
+    trap.ExtendBaseWidget(trap)
+
+    resultsContent := container.NewBorder(nil, resumeBtn, nil, nil, container.NewMax(list, trap))
 
     tabs := container.NewAppTabs(
         container.NewTabItem("Configuration", container.NewVBox()),
-        container.NewTabItem("Results", container.NewBorder(nil, nil, nil, nil, list)),
+        container.NewTabItem("Results", resultsContent),
     )
-
+    
     startButton := widget.NewButton("Start Scan", HandleStartScan(
         tabs, list, &resultsList, &mu, urlEntry, userHeaderInput,
         depthEntry, threadEntry, delayEntry, pathEntry, filterEntry,
-        recursiveCheck, &cancelFunc,
+        recursiveCheck, &cancelFunc, statusLabel, resumeBtn, followMode,
     ))
+    
+    list.OnSelected = func(id widget.ListItemID) {
+    	*followMode = false // User clicked an item; they want to look at it.
+    	resumeBtn.Show()
+    }
 
     // Fix: Assemble the layout here correctly
     topControls := container.NewVBox(
@@ -136,9 +199,9 @@ Connection: keep-alive`
         container.NewHBox(
             widget.NewLabel("Rec:"), recursiveCheck,
             widget.NewLabel("Depth:"), depthEntry,
-            widget.NewLabel("Filter:"), filterEntry,
-            widget.NewLabel("Threads:"), container.New(layout.NewGridWrapLayout(fyne.NewSize(50, 40)), threadEntry),
-            widget.NewLabel("Delay:"), container.New(layout.NewGridWrapLayout(fyne.NewSize(100, 40)), delayEntry),
+            widget.NewLabel("Filter:"), filterContainer,
+            widget.NewLabel("Threads:"), threadContainer,
+            widget.NewLabel("Delay:"), delayContainer,
         ),
         pathRow,
         startButton,

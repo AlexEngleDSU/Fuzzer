@@ -13,6 +13,8 @@ import (
         "github.com/bogdanfinn/tls-client/profiles"
 )
 
+var GlobalJar, _ = cookiejar.New(nil)
+
 var (
 	paused    bool
 	pauseMu   sync.Mutex
@@ -80,21 +82,30 @@ func get404Length(client tls_client.HttpClient, baseURL string) int64 {
 }
 
 func performHandshake(client tls_client.HttpClient, host string) {
-    target := host
-    if !strings.HasPrefix(target, "http") { target = "https://" + target }
-    
-    req, _ := fhttp.NewRequest("GET", target, nil)
-    resp, err := client.Do(req)
-    if err != nil {
-        fmt.Printf("Handshake Error: %v\n", err)
-        return
+    targetURL := host
+    if !strings.HasPrefix(targetURL, "http") {
+        targetURL = "https://" + targetURL
     }
-    
-    // Check if the server sent ANY cookies
+
+    req, err := fhttp.NewRequest("GET", targetURL, nil)
+    if err != nil { return }
+
+    resp, err := client.Do(req)
+    if err != nil { return }
+    defer resp.Body.Close()
+
     cookies := resp.Cookies()
-    fmt.Printf("DEBUG: Handshake received %d cookies: %+v\n", len(cookies), cookies)
+    fmt.Printf("DEBUG: Captured %d cookies from server: %+v\n", len(cookies), cookies)
+
+    // Use our stored globalJar reference
+    if GlobalJar != nil && len(cookies) > 0 {
+        parsedURL, _ := url.Parse(targetURL)
     
-    resp.Body.Close()
+        // Just call it! Do not assign it to a variable or check its return value.
+        GlobalJar.SetCookies(parsedURL, cookies) 
+    
+        fmt.Printf("DEBUG: Handshake successfully synced %d cookies\n", len(cookies))
+    }
 }
 
 func getBaseURL(rawURL string) string {
@@ -112,23 +123,40 @@ func getBaseURL(rawURL string) string {
 }
 
 func CreateBrowserClient() tls_client.HttpClient {
-    // This profile mimics Chrome 146's TLS handshake
-    jar, _ := cookiejar.New(&cookiejar.Options{})
-    
-//    proxyUrl := "http://127.0.0.1:8080"
+    // Fix: cookiejar.New returns (Jar, error)
+    if GlobalJar == nil {
+        GlobalJar, _ = cookiejar.New(nil)
+    }
     
     options := []tls_client.HttpClientOption{
         tls_client.WithTimeoutSeconds(30),
-        tls_client.WithClientProfile(profiles.Chrome_146), // Matches your browser
-        tls_client.WithCookieJar(jar),
-// 	Disable Redirects
+        tls_client.WithClientProfile(profiles.Chrome_146),
+        tls_client.WithCookieJar(GlobalJar),
         tls_client.WithNotFollowRedirects(),
-//	Burp
-//      tls_client.WithProxyUrl(proxyUrl),
-//      tls_client.WithInsecureSkipVerify(),
     }
 
+    // Fix: NewHttpClient takes variadic arguments, not a slice directly 
+    // depending on the library version, or it might need a specific call.
+    // If it expects HttpClientOption, pass them directly.
     client, _ := tls_client.NewHttpClient(tls_client.NewNoopLogger(), options...)
     return client
+}
+
+func InjectCookies(jar *cookiejar.Jar, targetURL string, playCookies []map[string]interface{}) {
+    u, _ := url.Parse(targetURL)
+    var cookies []*fhttp.Cookie
+
+    for _, pc := range playCookies {
+        c := &fhttp.Cookie{
+            Name:  pc["name"].(string),
+            Value: pc["value"].(string),
+            Domain: u.Host,
+            Path:   "/",
+            Secure:   true,
+            HttpOnly: true,
+        }
+        cookies = append(cookies, c)
+    }
+    jar.SetCookies(u, cookies)
 }
 
