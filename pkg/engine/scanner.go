@@ -47,7 +47,12 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 			jobs := make(chan string, len(queue)*len(wordlist))		
 			
 			semaphore := make(chan struct{}, workerCount)
-			throttle := time.NewTicker(delay)
+			
+			interval := delay
+			if interval <= 0 {
+			    interval = time.Millisecond * 10 // Fallback to a safe minimum if delay is 0
+			}
+			throttle := time.NewTicker(interval)
 			defer throttle.Stop()
 			
 			for w := 1; w <= workerCount; w++ {

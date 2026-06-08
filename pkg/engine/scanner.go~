@@ -54,7 +54,6 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 				go func() {
 					for target := range jobs {
 						// Resume/Pause check
-                    				<-throttle.C
 						PauseMu.Lock()
 						if Paused {
 							pChan := PauseChan
@@ -63,6 +62,8 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 						} else {
 							PauseMu.Unlock()
 						}
+
+						<-throttle.C
 
 						semaphore <- struct{}{}
 
