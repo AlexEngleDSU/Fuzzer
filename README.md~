@@ -11,14 +11,6 @@ A high-performance, concurrent web fuzzer with a clean, high-density graphical i
 * **One-Click Navigation:** Directly open discovered URLs in your default browser from the list.
 * **Recursive Options:** Optional depth-based recursion for deep directory discovery.
 
-##Technical Highlights
-
-* **Synchronized Engine:** Utilizes a global shared-ticker mechanism to ensure predictable request rates across all worker threads.
-
-* **Barrier Synchronization:** Implements sync.WaitGroup to handle batch processing, ensuring clean and reliable transitions between recursion depths.
-
-* **Control:** Built-in Pause/Resume functionality allows for real-time interaction without losing scan state.
-
 ## Prerequisites
 
 To build and run this project from source, ensure you have:
@@ -53,7 +45,6 @@ To build and run this project from source, ensure you have:
     ```bash
     ./fuzzer
     ```
-* **Note for Linux Users: Fyne requires standard desktop development headers. If you encounter build errors, ensure your pkg-config is configured and that you have the required graphics development libraries installed as shown above.**
 
 ## Usage
 
@@ -73,10 +64,6 @@ Contributions are what make the open-source community such an amazing place to l
 3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 4.  Push to the Branch (`git push origin feature/AmazingFeature`)
 5.  Open a Pull Request
-
-## Ethical Use & Legal Disclaimer
-
-This tool is designed for authorized penetration testing and educational purposes only. Using this tool against targets without prior explicit permission from the owner is illegal and unethical. The developer assumes no liability and is not responsible for any misuse or damage caused by this software. Use responsibly.
 
 ## License
 
