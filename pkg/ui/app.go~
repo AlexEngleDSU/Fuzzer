@@ -15,29 +15,31 @@ import (
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
+	"github.com/AlexEngleDSU/Fuzzer/pkg/engine"
 )
 
-type mouseTrap struct {
-	widget.BaseWidget
-	onInteract func()
-}
+//type mouseTrap struct {
+//	widget.BaseWidget
+//	onInteract func()
+//}
 
-func (m *mouseTrap) Tapped(e *fyne.PointEvent) { m.onInteract() }
-func (m *mouseTrap) Dragged(e *fyne.DragEvent) { m.onInteract() }
+//func (m *mouseTrap) Tapped(e *fyne.PointEvent) { m.onInteract() }
+//func (m *mouseTrap) Dragged(e *fyne.DragEvent) { m.onInteract() }
 
-func (m *mouseTrap) CreateRenderer() fyne.WidgetRenderer {
-    return &emptyRenderer{}
-}
+//func (m *mouseTrap) CreateRenderer() fyne.WidgetRenderer {
+//    return &emptyRenderer{}
+//}
 
-type emptyRenderer struct{}
+//type emptyRenderer struct{}
 
-func (e *emptyRenderer) Destroy() {}
-func (e *emptyRenderer) Layout(fyne.Size) {}
-func (e *emptyRenderer) MinSize() fyne.Size { return fyne.NewSize(0, 0) }
-func (e *emptyRenderer) Refresh() {}
-func (e *emptyRenderer) Objects() []fyne.CanvasObject { return []fyne.CanvasObject{} }
+//func (e *emptyRenderer) Destroy() {}
+//func (e *emptyRenderer) Layout(fyne.Size) {}
+//func (e *emptyRenderer) MinSize() fyne.Size { return fyne.NewSize(0, 0) }
+//func (e *emptyRenderer) Refresh() {}
+//func (e *emptyRenderer) Objects() []fyne.CanvasObject { return []fyne.CanvasObject{} }
 
 func StartGUI() {
+    EnsureEnvironment() 
     a := app.NewWithID("com.fuzzer.app")
     a.Settings().SetTheme(&myTheme{Theme: theme.DefaultTheme()})
     w := a.NewWindow("Fuzzer GUI")
@@ -45,7 +47,7 @@ func StartGUI() {
 
     // State variables
     var cancelFunc context.CancelFunc
-    var resultsList []string
+    var resultsList = new([]engine.ScanResult)
     var mu sync.Mutex
 
     // UI Components
@@ -127,55 +129,68 @@ Connection: keep-alive`
         }, w)
     })
     pathRow := container.NewBorder(nil, nil, selectButton, nil, pathEntry)
+    
+    
 
     list := widget.NewList(
-		func() int { return len(resultsList) },
-		func() fyne.CanvasObject { 
-                // We use the custom compactLink from your original code
-                return &compactLink{widget.NewHyperlink("", nil)} 
-                },
-		func(id widget.ListItemID, obj fyne.CanvasObject) {
-			mu.Lock()
-			text := resultsList[id]
-			mu.Unlock()
-			link := obj.(*compactLink)
-			link.SetText(text)
-            
-                // --- RESTORED LINK CLICK LOGIC ---
-			if idx := strings.Index(text, "http"); idx != -1 {
-				urlPart := text[idx:]
-				if spaceIdx := strings.Index(urlPart, " "); spaceIdx != -1 {
-					urlPart = urlPart[:spaceIdx]
+	func() int { 
+		mu.Lock()
+		defer mu.Unlock()
+		return len(*resultsList)
+	},
+	func() fyne.CanvasObject { return &compactLink{widget.NewHyperlink("", nil)} },
+
+	func(id widget.ListItemID, obj fyne.CanvasObject) {
+		mu.Lock()
+		res := (*resultsList)[id]
+		mu.Unlock()
+		   
+		link := obj.(*compactLink)
+		    
+		// 1. Format text
+		text := fmt.Sprintf("Status: %d | URL: %s", res.StatusCode, res.URL)
+		if res.Location != "" {
+			text += fmt.Sprintf(" -> Redirect: %s", res.Location)
+		}
+		link.SetText(text)
+		    
+		// 2. Force the browser open on click
+		targetURL := res.URL
+		if res.Location != "" {
+		    targetURL = res.Location
+		}
+		    
+		// Create the actual URL object
+		parsed, err := url.Parse(targetURL)
+		if err == nil {
+			link.URL = parsed
+			// This is the critical piece: manually setting the OnTapped function
+			link.OnTapped = func() {
+				if *followMode {
+					*followMode = false
 				}
-				if parsed, err := url.Parse(strings.TrimSuffix(urlPart, "/")); err == nil {
-					link.URL = parsed
-                    			link.Refresh() // Ensure the UI updates the link target
+				target := targetURL
+				if !strings.HasPrefix(target, "http") {
+					target = "https://" + target
 				}
+				parsed, _ := url.Parse(target)
+				fyne.CurrentApp().OpenURL(parsed)
 			}
-                // ---------------------------------
-		},
+		}
+		link.Refresh()
+	},	
     )
     
-    var resumeBtn *widget.Button
-    
-    resumeBtn = widget.NewButton("↓", func() {
+    resumeBtn := widget.NewButton("↓", func() {
         *followMode = true
         // Add any logic needed to jump back to bottom if required
+        list.Refresh()
+        list.ScrollToBottom()
     })
         
-    statusLabel := widget.NewLabel("Ready")
-    
-    
-    trap := &mouseTrap{onInteract: func() {
-        if *followMode {
-            *followMode = false
-            resumeBtn.Show()
-        }
-    }}
-    
-    trap.ExtendBaseWidget(trap)
+    statusLabel := widget.NewLabel("Ready")  
 
-    resultsContent := container.NewBorder(nil, resumeBtn, nil, nil, container.NewMax(list, trap))
+    resultsContent := container.NewBorder(nil, resumeBtn, nil, nil, list)
 
     tabs := container.NewAppTabs(
         container.NewTabItem("Configuration", container.NewVBox()),
@@ -183,7 +198,7 @@ Connection: keep-alive`
     )
     
     startButton := widget.NewButton("Start Scan", HandleStartScan(
-        tabs, list, &resultsList, &mu, urlEntry, userHeaderInput,
+        tabs, list, resultsList, &mu, urlEntry, userHeaderInput,
         depthEntry, threadEntry, delayEntry, pathEntry, filterEntry,
         recursiveCheck, &cancelFunc, statusLabel, resumeBtn, followMode,
     ))
@@ -221,3 +236,4 @@ Connection: keep-alive`
     w.SetContent(tabs)
     w.ShowAndRun()
 }
+

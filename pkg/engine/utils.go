@@ -2,16 +2,56 @@ package engine
 
 import (
 	"bufio"
-	"fmt"
 	"net/url"
 	"os"
 	"strings"
 	"sync"
+	"fmt"
+	"os/exec"
+	"regexp"
+	
+	"path/filepath"
+	"runtime"
+	
         fhttp "github.com/bogdanfinn/fhttp"
         "github.com/bogdanfinn/fhttp/cookiejar" 
         tls_client "github.com/bogdanfinn/tls-client"
         "github.com/bogdanfinn/tls-client/profiles"
 )
+
+func EnsureEnvironment() {
+        // 1. Check if the Playwright browser exists
+        // 2. If not, trigger the install command automatically
+        if !browserExists() {
+            fmt.Println("First run detected: Installing browser dependencies...")
+            exec.Command("playwright", "install", "chromium").Run()
+        }
+}
+
+func browserExists() bool {
+    var homeDir string
+    if runtime.GOOS == "windows" {
+        homeDir = os.Getenv("USERPROFILE")
+        // Windows path: %USERPROFILE%\AppData\Local\ms-playwright
+        return checkDir(filepath.Join(homeDir, "AppData", "Local", "ms-playwright"))
+    } else if runtime.GOOS == "darwin" {
+        homeDir = os.Getenv("HOME")
+        // macOS path: ~/Library/Caches/ms-playwright
+        return checkDir(filepath.Join(homeDir, "Library", "Caches", "ms-playwright"))
+    } else {
+        homeDir = os.Getenv("HOME")
+        // Linux path: ~/.cache/ms-playwright
+        return checkDir(filepath.Join(homeDir, ".cache", "ms-playwright"))
+    }
+}
+
+func checkDir(path string) bool {
+    info, err := os.Stat(path)
+    if os.IsNotExist(err) {
+        return false
+    }
+    return info.IsDir()
+}
 
 var GlobalJar, _ = cookiejar.New(nil)
 
@@ -20,6 +60,13 @@ var (
 	pauseMu   sync.Mutex
 	pauseChan = make(chan struct{})
 )
+
+func extractURLs(s string) []string {
+    // This regex looks for strings starting with http or https 
+    // and continues until it hits a space or an end-of-string.
+    re := regexp.MustCompile(`https?://[^\s>]+`)
+    return re.FindAllString(s, -1)
+}
 
 func SetPause(p bool) {
 	pauseMu.Lock()
@@ -44,28 +91,30 @@ func ReadLines(path string) ([]string, error) {
 }
 
 func ResolveURL(base, loc string) string {
-	if strings.HasPrefix(loc, "http") { return loc }
-	if strings.HasPrefix(loc, "//") { return "https:" + loc }
-	parsedBase, _ := url.Parse(base)
-	cleanLoc := strings.TrimLeft(loc, "/")
-	return fmt.Sprintf("%s://%s/%s", parsedBase.Scheme, parsedBase.Host, cleanLoc)
+    if strings.HasPrefix(loc, "http") { return loc }
+    
+    u, err := url.Parse(base)
+    if err != nil { return loc }
+    
+    // ResolveReference handles relative paths (../, ./, etc) automatically
+    rel, err := url.Parse(loc)
+    if err != nil { return loc }
+    
+    return u.ResolveReference(rel).String()
 }
 
 func GetOrderedHeaders(template string) []HeaderLine {
     var ordered []HeaderLine
-    lines := strings.Split(strings.ReplaceAll(template, "\r", ""), "\n")
-    
-    for _, line := range lines {
-        if strings.Contains(line, ":") && !strings.Contains(line, "HTTP/") {
-            parts := strings.SplitN(line, ":", 2)
+    scanner := bufio.NewScanner(strings.NewReader(template))
+    for scanner.Scan() {
+        line := scanner.Text()
+        if idx := strings.Index(line, ":"); idx != -1 {
             ordered = append(ordered, HeaderLine{
-                Key:   strings.TrimSpace(parts[0]),
-                Value: strings.TrimSpace(parts[1]),
+                Key:   strings.TrimSpace(line[:idx]),
+                Value: strings.TrimSpace(line[idx+1:]),
             })
         }
     }
-    // Print the local variable!
-    fmt.Printf("DEBUG: Successfully parsed %d headers\n", len(ordered))
     return ordered
 }
 
@@ -95,7 +144,6 @@ func performHandshake(client tls_client.HttpClient, host string) {
     defer resp.Body.Close()
 
     cookies := resp.Cookies()
-    fmt.Printf("DEBUG: Captured %d cookies from server: %+v\n", len(cookies), cookies)
 
     // Use our stored globalJar reference
     if GlobalJar != nil && len(cookies) > 0 {
@@ -104,7 +152,6 @@ func performHandshake(client tls_client.HttpClient, host string) {
         // Just call it! Do not assign it to a variable or check its return value.
         GlobalJar.SetCookies(parsedURL, cookies) 
     
-        fmt.Printf("DEBUG: Handshake successfully synced %d cookies\n", len(cookies))
     }
 }
 
@@ -123,10 +170,7 @@ func getBaseURL(rawURL string) string {
 }
 
 func CreateBrowserClient() tls_client.HttpClient {
-    // Fix: cookiejar.New returns (Jar, error)
-    if GlobalJar == nil {
-        GlobalJar, _ = cookiejar.New(nil)
-    }
+    // Fix: cookiejar.New returns (Jar, error
     
     options := []tls_client.HttpClientOption{
         tls_client.WithTimeoutSeconds(30),
@@ -138,7 +182,10 @@ func CreateBrowserClient() tls_client.HttpClient {
     // Fix: NewHttpClient takes variadic arguments, not a slice directly 
     // depending on the library version, or it might need a specific call.
     // If it expects HttpClientOption, pass them directly.
-    client, _ := tls_client.NewHttpClient(tls_client.NewNoopLogger(), options...)
+    client, err := tls_client.NewHttpClient(tls_client.NewNoopLogger(), options...)
+    if err != nil {
+        return nil
+    }
     return client
 }
 
@@ -159,4 +206,5 @@ func InjectCookies(jar *cookiejar.Jar, targetURL string, playCookies []map[strin
     }
     jar.SetCookies(u, cookies)
 }
+
 

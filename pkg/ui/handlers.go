@@ -24,7 +24,7 @@ var followMode = new(bool)
 func HandleStartScan(
 	tabs *container.AppTabs, 
 	list *widget.List,
-	resultsList *[]string,
+	resultsList *[]engine.ScanResult,
 	resultsMu *sync.Mutex,
 	urlEntry *widget.Entry,
 	userHeaderInput *widget.Entry,
@@ -50,7 +50,7 @@ func HandleStartScan(
 		ctx, *cancelFuncPtr = context.WithCancel(context.Background())
 
 		resultsMu.Lock()
-		*resultsList = []string{}
+		*resultsList = []engine.ScanResult{}
 		resultsMu.Unlock()
 		list.Refresh()
 
@@ -91,8 +91,13 @@ func HandleStartScan(
 				continue
 			    }
 			    
+			    displayStr := fmt.Sprintf("Status: %d | URL: %s", res.StatusCode, res.URL)
+			    if res.Location != "" {
+				    displayStr += fmt.Sprintf(" -> Redirect: %s", res.Location)
+    			    }
+    			    
 			    resultsMu.Lock()
-			    *resultsList = append(*resultsList, fmt.Sprintf("Status: %d | URL: %s", res.StatusCode, res.URL))
+			    *resultsList = append(*resultsList, res)
 			    resultsMu.Unlock()
 
 			    // Inside your resChan loop

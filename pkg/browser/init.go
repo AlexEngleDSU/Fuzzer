@@ -22,7 +22,6 @@ func InitializeSession(targetURL string) (*WAFSession, error) {
 	// 2. Launch Browser
 	browser, err := pw.Chromium.Launch(playwright.BrowserTypeLaunchOptions{
 		Headless: playwright.Bool(true),
-		ExecutablePath: playwright.String("/home/kali/.cache/ms-playwright/chromium-1200/chrome-linux64/chrome"),
 		Args: []string{
 	        "--no-sandbox",        // Critical for running as root in Kali
 	        "--disable-setuid-sandbox",

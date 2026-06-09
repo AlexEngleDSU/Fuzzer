@@ -2,13 +2,13 @@ package engine
 
 import (
 	"context"
-	"fmt"
 	"io"
+	"net/url"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
-	"strconv"
-	"net/url"
+
 	fhttp "github.com/bogdanfinn/fhttp"
 )
 
@@ -16,11 +16,10 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 	results := make(chan ScanResult, 500)
 	browserClient := CreateBrowserClient()
 
-	// Initial setup
 	performHandshake(browserClient, host)
 	badContentLength := get404Length(browserClient, urlTemplate)
 	headers := GetOrderedHeaders(headerTemplate)
-	
+
 	filterMap := make(map[int]bool)
 	for _, codeStr := range strings.Split(filterCodes, ",") {
 		if code, err := strconv.Atoi(strings.TrimSpace(codeStr)); err == nil {
@@ -31,108 +30,104 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 	go func() {
 		defer close(results)
 		queue := []string{urlTemplate}
+		globalSeen := sync.Map{}
 		
-		lastRedirectURL := &sync.Map{}
-		lastRedirectURL.Store("latest", getBaseURL(urlTemplate))
+		jobs := make(chan string, 1000)
+		semaphore := make(chan struct{}, workerCount)
+		var wg sync.WaitGroup
+		
+		// Define these here so they are accessible to the worker scope
+		var nextGen []string
+		var mu sync.Mutex
 
-		for depth := 0; depth <= maxDepth; depth++ {
-			if len(queue) == 0 { break }
+		for w := 1; w <= workerCount; w++ {
+			go func() {
+				for target := range jobs {
+					PauseMu.Lock()
+					if Paused {
+						pChan := PauseChan
+						PauseMu.Unlock()
+						<-pChan
+					} else {
+						PauseMu.Unlock()
+					}
 
-			results <- ScanResult{}
-
-			nextGen := []string{}
-			var mu sync.Mutex
-			var globalSeen sync.Map
-			var wg sync.WaitGroup
-			jobs := make(chan string, len(queue)*len(wordlist))		
-			
-			semaphore := make(chan struct{}, workerCount)
-			
-			interval := delay
-			if interval <= 0 {
-			    interval = time.Millisecond * 10 // Fallback to a safe minimum if delay is 0
-			}
-			throttle := time.NewTicker(interval)
-			defer throttle.Stop()
-			
-			for w := 1; w <= workerCount; w++ {
-				go func() {
-					for target := range jobs {
-						// Resume/Pause check
-						PauseMu.Lock()
-						if Paused {
-							pChan := PauseChan
-							PauseMu.Unlock()
-							<-pChan
-						} else {
-							PauseMu.Unlock()
-						}
-
-						<-throttle.C
-
+					select {
+					case <-time.After(delay):
+					case <-ctx.Done():
 						semaphore <- struct{}{}
+						wg.Done()
+						continue
+					}
 
-						if _, loaded := globalSeen.LoadOrStore(target, true); loaded { continue }
+					semaphore <- struct{}{}
+					if _, loaded := globalSeen.LoadOrStore(target, true); loaded {
+						<-semaphore
+						wg.Done()
+						continue
+					}
 
-						req, err := fhttp.NewRequest("GET", target, nil)
-						if err != nil { continue }
-						
-						u, _ := url.Parse(target)
-						cookies := GlobalJar.Cookies(u)
-						if len(cookies) == 0 {
-						    fmt.Printf("DEBUG: No cookies found for host: %s\n", u.Host)
+					req, err := fhttp.NewRequest("GET", target, nil)
+					if err != nil {
+						<-semaphore
+						wg.Done()
+						continue
+					}
+
+					u, _ := url.Parse(target)
+					for _, c := range GlobalJar.Cookies(u) {
+						req.Header.Add("Cookie", c.Name+"="+c.Value)
+					}
+					for _, h := range headers {
+						if strings.EqualFold(h.Key, "Host") {
+							req.Host = h.Value
+							continue
 						}
-						// Reconstruct headers
-						req.Header = fhttp.Header{}
-						
-						if len(cookies) > 0 {
-							cookieString := ""
-							for _, c := range cookies {
-								cookieString += c.Name + "=" + c.Value + "; "
-							}
-							req.Header.Add("Cookie", cookieString)
-						}
-						for _, h := range headers {
-							if strings.EqualFold(h.Key, "Host") { req.Host = h.Value; continue }
-							req.Header.Add(h.Key, h.Value)
-						}
-					
-						resp, err := browserClient.Do(req)
-						if err != nil || resp == nil { continue }
-						
-						body, err := io.ReadAll(resp.Body)
+						req.Header.Add(h.Key, h.Value)
+					}
+
+					resp, err := browserClient.Do(req)
+					if err == nil && resp != nil {
+						body, _ := io.ReadAll(resp.Body)
 						resp.Body.Close()
-						if err != nil { continue }
 
 						status := resp.StatusCode
 						if !filterMap[status] && !(status == 200 && int64(len(body)) == badContentLength) {
-							results <- ScanResult{URL: target, StatusCode: status, ContentLength: int64(len(body))}
+							results <- ScanResult{
+								URL:	target,
+								StatusCode:    status,
+								ContentLength: int64(len(body)),
+								Location:      resp.Header.Get("Location"),
+							}
 
-							if recursive && (status >= 300 && status < 400) {
-								loc := resp.Header.Get("Location")
-								if loc != "" {
-								    resolved := ResolveURL(target, loc)
-								    // CRITICAL: Ensure the new URL is prepared for the next FUZZ iteration
-								    // If it doesn't end in /FUZZ, you might need to append it
-								    if !strings.Contains(resolved, "FUZZ") {
-									if !strings.HasSuffix(resolved, "/") {
-									    resolved += "/"
+							if status >= 300 && status < 400 {
+								if recursive {
+									loc := resp.Header.Get("Location")
+									if loc != "" {
+										resolved := ResolveURL(target, loc)
+										if !strings.Contains(resolved, "FUZZ") {
+											if !strings.HasSuffix(resolved, "/") { resolved += "/" }
+											resolved += "FUZZ"
+										}
+										mu.Lock()
+										nextGen = append(nextGen, resolved)
+										mu.Unlock()
 									}
-									resolved += "FUZZ"
-								    }
-
-								    mu.Lock()
-								    nextGen = append(nextGen, resolved)
-								    mu.Unlock()
 								}
 							}
 						}
-						<-semaphore
-						wg.Done()
+					<-semaphore
+					wg.Done()
 					}
-				}()
-			}
-
+				}
+			}()
+		}
+		for depth := 0; depth <= maxDepth; depth++ {
+			if len(queue) == 0 { break }
+		
+			mu.Lock()
+			nextGen = []string{}
+			mu.Unlock()
 			for _, base := range queue {
 				for _, word := range wordlist {
 					wg.Add(1)
@@ -140,13 +135,10 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 				}
 			}
 			wg.Wait()
-			close(jobs)
-			
-			if delay > 0 {
-				time.Sleep(delay)
-			}
 			queue = nextGen
 		}
+		close(jobs)
 	}()
 	return results
 }
+
