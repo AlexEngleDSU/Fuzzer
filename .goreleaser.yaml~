@@ -6,15 +6,16 @@ builds:
 archives:
   - format: tar.gz
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
-    # Windows specific override for zip format
     format_overrides:
       - goos: windows
         format: zip
-    # Files are now defined in a flat list
     files:
       - src: 'dist/fuzzer-ubuntu-latest/fuzzer'
         dst: fuzzer
+        goos: linux
       - src: 'dist/fuzzer-macos-latest/fuzzer'
         dst: fuzzer
+        goos: darwin
       - src: 'dist/fuzzer-windows-latest/fuzzer.exe'
         dst: fuzzer.exe
+        goos: windows

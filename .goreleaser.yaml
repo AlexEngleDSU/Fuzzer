@@ -4,18 +4,32 @@ builds:
     skip: true
 
 archives:
-  - format: tar.gz
+  # Linux Archive
+  - id: linux-archive
+    format: tar.gz
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
-    format_overrides:
-      - goos: windows
-        format: zip
     files:
       - src: 'dist/fuzzer-ubuntu-latest/fuzzer'
         dst: fuzzer
-        goos: linux
+    # Only create this archive for Linux
+    if: '{{ eq .Os "linux" }}'
+
+  # macOS Archive
+  - id: macos-archive
+    format: tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    files:
       - src: 'dist/fuzzer-macos-latest/fuzzer'
         dst: fuzzer
-        goos: darwin
+    # Only create this archive for Darwin (macOS)
+    if: '{{ eq .Os "darwin" }}'
+
+  # Windows Archive
+  - id: windows-archive
+    format: zip
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    files:
       - src: 'dist/fuzzer-windows-latest/fuzzer.exe'
         dst: fuzzer.exe
-        goos: windows
+    # Only create this archive for Windows
+    if: '{{ eq .Os "windows" }}'
