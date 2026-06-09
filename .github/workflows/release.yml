@@ -45,6 +45,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: fuzzer-${{ runner.os }}
-          path: |
+          path: dist
             fuzzer
             fuzzer.exe
+          merge-multiple: true
