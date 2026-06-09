@@ -34,11 +34,13 @@ jobs:
       - name: Build Binary
         shell: bash
         run: |
-          mkdir -p bin
+	  mkdir -p bin
+          # -ldflags="-s -w" removes symbol tables and debug info
+          # This makes the binary smaller and often builds slightly faster
           if [ "${{ runner.os }}" == "Windows" ]; then
-            go build -o bin/fuzzer.exe .
+            go build -ldflags="-s -w" -o bin/fuzzer.exe .
           else
-            go build -o bin/fuzzer .
+            go build -ldflags="-s -w" -o bin/fuzzer .
           fi
 
       - name: Upload Artifacts
@@ -60,6 +62,6 @@ jobs:
       - uses: goreleaser/goreleaser-action@v6
         with:
           version: latest
-          args: release --clean --skip-build
+          args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

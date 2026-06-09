@@ -1,4 +1,4 @@
-version: 2
+\version: 2
 builds: []
 
 archives:
@@ -8,9 +8,9 @@ archives:
         format: zip
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     files:
-      - src: 'dist/fuzzer' # No longer needs the long path
+      - src: 'dist/fuzzer-ubuntu-latest/fuzzer'
         goos: linux
-      - src: 'dist/fuzzer' # No longer needs the long path
+      - src: 'dist/fuzzer-macos-latest/fuzzer'
         goos: darwin
-      - src: 'dist/fuzzer.exe' # No longer needs the long path
+      - src: 'dist/fuzzer-windows-latest/fuzzer.exe'
         goos: windows

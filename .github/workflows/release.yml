@@ -2,62 +2,32 @@ name: release
 
 on:
   push:
-    tags:
-      - 'v*'
+    tags: ['v*']
 
 permissions:
   contents: write
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-    runs-on: ${{ matrix.os }}
+  goreleaser:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+        with: { fetch-depth: 0 }
 
       - name: Set up Go
         uses: actions/setup-go@v5
-        with:
-          go-version-file: 'go.mod'
+        with: { go-version-file: 'go.mod' }
 
-      - name: Install System Dependencies (Linux)
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libgl1-mesa-dev xorg-dev
-
-      - name: Build Binary
-        shell: bash
+      - name: Build Binaries
         run: |
           mkdir -p bin
-          if [ "${{ runner.os }}" == "Windows" ]; then
-            go build -o bin/fuzzer.exe .
-          else
-            go build -o bin/fuzzer .
-          fi
+          GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o bin/fuzzer-windows.exe .
+          GOOS=linux   GOARCH=amd64 go build -ldflags="-s -w" -o bin/fuzzer-linux .
+          GOOS=darwin  GOARCH=amd64 go build -ldflags="-s -w" -o bin/fuzzer-darwin .
 
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: fuzzer-${{ runner.os }} # This creates fuzzer-Linux, fuzzer-Windows, etc.
-          path: bin/
-
-  release:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
-      - name: Download Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: dist # This puts everything into the dist folder
-      - uses: goreleaser/goreleaser-action@v6
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v6
         with:
           version: latest
           args: release --clean
