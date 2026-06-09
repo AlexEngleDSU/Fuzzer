@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 	"net/url"
+	"path/filepath"
 	//"image/color"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
@@ -114,6 +115,11 @@ Priority: u=0, i
 
     pathEntry := &SelectableEntry{}
     pathEntry.ExtendBaseWidget(pathEntry)
+    
+    lastFile := engine.GetLastFilePath()
+    if lastFile != "" {
+        pathEntry.SetText(lastFile)
+    }
 
     filterEntry := &SelectableEntry{}
     filterEntry.ExtendBaseWidget(filterEntry)
@@ -122,12 +128,12 @@ Priority: u=0, i
     // Select Wordlist Button (Missing in previous snippet)
     selectButton := widget.NewButton("Select Wordlist", func() {
         d := dialog.File().Title("Select Wordlist")
-        lastDir := engine.GetInitialPath()
+        lastDir := filepath.Dir(lastFile)
         if lastDir != "" { d.SetStartDir(lastDir) }
         filename, err := d.Load()
         if err == nil {
         	pathEntry.SetText(filename)
-        	engine.SavePath(filename)
+        	engine.SaveLastFilePath(filename)
         }
     })
     pathRow := container.NewBorder(nil, nil, selectButton, nil, pathEntry)

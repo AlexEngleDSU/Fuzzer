@@ -10,8 +10,7 @@ import (
 	"runtime"
 	"strings"
 	"sync"
-	
-	"fyne.io/fyne/v2"
+	"encoding/json"
 
 	fhttp "github.com/bogdanfinn/fhttp"
 	"github.com/bogdanfinn/fhttp/cookiejar"
@@ -29,13 +28,49 @@ var (
 	pauseChan = make(chan struct{})
 )
 
-func SavePath(path string) {
-	dir := filepath.Dir(path)
-	fyne.CurrentApp().Preferences().SetString("last_wordlist_dir", dir)
+type Config struct {
+    LastWordlist string `json:"last_wordlist"`
+    LastDir      string `json:"last_dir"`
+}
+
+func SaveLastFilePath(path string) {
+    config := Config{
+        LastWordlist: path,
+        LastDir:      filepath.Dir(path),
+    }
+    data, _ := json.MarshalIndent(config, "", "  ")
+    os.WriteFile(GetConfigPath(), data, 0644)
+}
+
+func GetLastFilePath() string {
+    data, err := os.ReadFile(GetConfigPath())
+    if err != nil {
+        return ""
+    }
+    var config Config
+    json.Unmarshal(data, &config)
+    return config.LastWordlist
 }
 
 func GetInitialPath() string {
-	return fyne.CurrentApp().Preferences().String("last_wordlist_dir")
+    data, err := os.ReadFile(GetConfigPath())
+    if err != nil {
+        return ""
+    }
+    var config Config
+    json.Unmarshal(data, &config)
+    return config.LastDir
+}
+
+func GetConfigPath() string { // Capitalized to be exported
+	configDir, err := os.UserConfigDir()
+	if err != nil {
+		home, _ := os.UserHomeDir()
+		configDir = filepath.Join(home, ".config")
+	}
+	appDir := filepath.Join(configDir, "fuzzer")
+	os.MkdirAll(appDir, 0700)
+	return filepath.Join(appDir, "config.json")
 }
 
 func GetBrowserPath() string {
