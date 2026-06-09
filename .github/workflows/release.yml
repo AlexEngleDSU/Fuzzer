@@ -3,28 +3,42 @@ name: goreleaser
 on:
   push:
     tags:
-      - '*' # This triggers a release every time you push a git tag
+      - 'v*'
 
 permissions:
   contents: write
 
 jobs:
-  goreleaser:
-    runs-on: ubuntu-latest
+  build:
+    strategy:
+      matrix:
+        # Define the OS platforms you want to support
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.26'
-      - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v6
+          go-version-file: 'go.mod'
+
+      - name: Build Binary
+        shell: bash
+        run: |
+          if [ "${{ matrix.os }}" == "windows-latest" ]; then
+            go build -o fuzzer.exe .
+          else
+            go build -o fuzzer .
+          fi
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
         with:
-          distribution: goreleaser
-          version: '~> v2'
-          args: release --clean
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: fuzzer-${{ matrix.os }}
+          path: |
+            fuzzer
+            fuzzer.exe
