@@ -9,8 +9,11 @@ archives:
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     files:
       - src: 'dist/fuzzer-ubuntu-latest/fuzzer'
+        dst: fuzzer
         goos: linux
-      - src: 'dist/fuzzer-macos-latest/fuzzer' # This covers macOS
+      - src: 'dist/fuzzer-macos-latest/fuzzer'
+        dst: fuzzer
         goos: darwin
       - src: 'dist/fuzzer-windows-latest/fuzzer.exe'
+        dst: fuzzer.exe
         goos: windows

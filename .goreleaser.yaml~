@@ -1,6 +1,5 @@
 version: 2
-version: 2
-builds: [] # Skip build, we are providing pre-compiled binaries
+builds: []
 
 archives:
   - format: tar.gz
@@ -11,7 +10,7 @@ archives:
     files:
       - src: 'dist/fuzzer-ubuntu-latest/fuzzer'
         goos: linux
-      - src: 'dist/fuzzer-macos-latest/fuzzer'
+      - src: 'dist/fuzzer-macos-latest/fuzzer' # This covers macOS
         goos: darwin
       - src: 'dist/fuzzer-windows-latest/fuzzer.exe'
         goos: windows
