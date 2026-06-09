@@ -25,8 +25,16 @@ jobs:
           if [[ "${{ runner.os }}" == "Linux" ]]; then
             sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev xorg-dev
           fi
+          
+      - name: Disable Windows Defender for build folder
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          $path = Join-Path $env:GITHUB_WORKSPACE "bin"
+          Add-MpPreference -ExclusionPath $path
 
       - name: Build
+        shell: bash
         env:
           CGO_ENABLED: 1
         run: |

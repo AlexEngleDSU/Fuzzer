@@ -25,6 +25,13 @@ jobs:
           if [[ "${{ runner.os }}" == "Linux" ]]; then
             sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev xorg-dev
           fi
+          
+      - name: Disable Windows Defender for build folder
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          $path = Join-Path $env:GITHUB_WORKSPACE "bin"
+          Add-MpPreference -ExclusionPath $path
 
       - name: Build
         shell: bash
@@ -55,8 +62,6 @@ jobs:
       - uses: softprops/action-gh-release@v2
         with:
           files: |
-            dist/fuzzer-windows-latest/fuzzer.exe
-            dist/fuzzer-ubuntu-latest/fuzzer
-            dist/fuzzer-macos-latest/fuzzer
+            dist/**/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
