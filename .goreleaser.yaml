@@ -1,30 +1,29 @@
 version: 2
 builds:
   - id: fuzzer
-    # Force the build step to effectively do nothing
-    command: /bin/true
-    # Tell GoReleaser not to try and build for multiple OSs
-    goos:
-      - linux 
-    goarch:
-      - amd64
+    skip: true
 
 archives:
-  - id: fuzzer-archive
+  # Linux Archive
+  - id: linux-archive
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
-    formats:
-      - tar.gz
-    format_overrides:
-      - goos: windows
-        formats:
-          - zip
+    formats: [tar.gz]
     files:
       - src: 'dist/fuzzer-ubuntu-latest/fuzzer'
         dst: fuzzer
-        goos: linux
+
+  # macOS Archive
+  - id: darwin-archive
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    formats: [tar.gz]
+    files:
       - src: 'dist/fuzzer-macos-latest/fuzzer'
         dst: fuzzer
-        goos: darwin
+
+  # Windows Archive
+  - id: windows-archive
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    formats: [zip]
+    files:
       - src: 'dist/fuzzer-windows-latest/fuzzer.exe'
         dst: fuzzer.exe
-        goos: windows
