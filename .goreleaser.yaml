@@ -11,8 +11,8 @@ archives:
     files:
       - src: 'dist/fuzzer-ubuntu-latest/fuzzer'
         dst: fuzzer
-    # Only create this archive for Linux
-    if: '{{ eq .Os "linux" }}'
+    # GoReleaser will naturally skip this if the file isn't present
+    # for the current target OS build process.
 
   # macOS Archive
   - id: macos-archive
@@ -21,8 +21,6 @@ archives:
     files:
       - src: 'dist/fuzzer-macos-latest/fuzzer'
         dst: fuzzer
-    # Only create this archive for Darwin (macOS)
-    if: '{{ eq .Os "darwin" }}'
 
   # Windows Archive
   - id: windows-archive
@@ -31,5 +29,3 @@ archives:
     files:
       - src: 'dist/fuzzer-windows-latest/fuzzer.exe'
         dst: fuzzer.exe
-    # Only create this archive for Windows
-    if: '{{ eq .Os "windows" }}'
