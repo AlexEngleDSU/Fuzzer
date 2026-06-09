@@ -28,9 +28,8 @@ jobs:
       - name: Build
         shell: bash
         run: |
-          mkdir -p bin
-          # Set the output name based on OS explicitly
-          if [[ "${{ runner.os }}" == "Windows" ]]; then
+	  mkdir -p bin
+          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
             go build -ldflags="-s -w" -o bin/fuzzer.exe .
           else
             go build -ldflags="-s -w" -o bin/fuzzer .
@@ -50,6 +49,8 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           path: dist
+      - name: Debug: List what is in dist
+        run: ls -R dist/
       - uses: goreleaser/goreleaser-action@v6
         with:
           version: latest
