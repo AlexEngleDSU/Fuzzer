@@ -1,5 +1,4 @@
 name: release
-
 on:
   push:
     tags: ['v*']
@@ -8,26 +7,46 @@ permissions:
   contents: write
 
 jobs:
-  goreleaser:
-    runs-on: ubuntu-latest
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+          cache: true # This makes builds much faster by reusing dependencies
 
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with: { go-version-file: 'go.mod' }
+      - name: Install Dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgl1-mesa-dev xorg-dev
 
-      - name: Build Binaries
+      - name: Build
+        shell: bash
         run: |
           mkdir -p bin
-          GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o bin/fuzzer-windows.exe .
-          GOOS=linux   GOARCH=amd64 go build -ldflags="-s -w" -o bin/fuzzer-linux .
-          GOOS=darwin  GOARCH=amd64 go build -ldflags="-s -w" -o bin/fuzzer-darwin .
+          # Use -ldflags to shrink the binary size
+          go build -ldflags="-s -w" -o bin/fuzzer${{ runner.os == 'windows-latest' && '.exe' || '' }} .
 
-      - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v6
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: fuzzer-${{ matrix.os }}
+          path: bin/
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+      - uses: goreleaser/goreleaser-action@v6
         with:
           version: latest
           args: release --clean

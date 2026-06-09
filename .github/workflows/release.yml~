@@ -2,64 +2,32 @@ name: release
 
 on:
   push:
-    tags:
-      - 'v*'
+    tags: ['v*']
 
 permissions:
   contents: write
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-    runs-on: ${{ matrix.os }}
+  goreleaser:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+        with: { fetch-depth: 0 }
 
       - name: Set up Go
         uses: actions/setup-go@v5
-        with:
-          go-version-file: 'go.mod'
+        with: { go-version-file: 'go.mod' }
 
-      - name: Install System Dependencies (Linux)
-        if: runner.os == 'Linux'
+      - name: Build Binaries
         run: |
-          sudo apt-get update
-          sudo apt-get install -y libgl1-mesa-dev xorg-dev
+          mkdir -p bin
+          GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o bin/fuzzer-windows.exe .
+          GOOS=linux   GOARCH=amd64 go build -ldflags="-s -w" -o bin/fuzzer-linux .
+          GOOS=darwin  GOARCH=amd64 go build -ldflags="-s -w" -o bin/fuzzer-darwin .
 
-      - name: Build Binary
-        shell: bash
-        run: |
-	  mkdir -p bin
-          # -ldflags="-s -w" removes symbol tables and debug info
-          # This makes the binary smaller and often builds slightly faster
-          if [ "${{ runner.os }}" == "Windows" ]; then
-            go build -ldflags="-s -w" -o bin/fuzzer.exe .
-          else
-            go build -ldflags="-s -w" -o bin/fuzzer .
-          fi
-
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: fuzzer-${{ runner.os }} # This creates fuzzer-Linux, fuzzer-Windows, etc.
-          path: bin/
-
-  release:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
-      - name: Download Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: dist # This puts everything into the dist folder
-      - uses: goreleaser/goreleaser-action@v6
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v6
         with:
           version: latest
           args: release --clean
