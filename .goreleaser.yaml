@@ -1,5 +1,7 @@
 version: 2
-builds: []
+builds:
+  - id: fuzzer
+    skip: true
 
 archives:
   - format: tar.gz
