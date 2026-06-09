@@ -3,14 +3,16 @@ builds: []
 
 archives:
   - format: tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    # Windows specific override for zip format
     format_overrides:
       - goos: windows
         format: zip
-    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    # Files are now defined in a flat list
     files:
       - src: 'dist/fuzzer-ubuntu-latest/fuzzer'
-        goos: linux
+        dst: fuzzer
       - src: 'dist/fuzzer-macos-latest/fuzzer'
-        goos: darwin
+        dst: fuzzer
       - src: 'dist/fuzzer-windows-latest/fuzzer.exe'
-        goos: windows
+        dst: fuzzer.exe
