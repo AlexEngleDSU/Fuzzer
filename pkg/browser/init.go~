@@ -10,6 +10,12 @@ type WAFSession struct {
 	Headers map[string]string
 }
 
+func InstallOnlyChromium() error {
+    return playwright.Install(playwright.InstallOptions{
+        Browsers: []string{"chromium"},
+    })
+}
+
 func InitializeSession(targetURL string) (*WAFSession, error) {
 	// 1. Run Playwright
 	pw, err := playwright.Run(&playwright.RunOptions{ // Add the & here

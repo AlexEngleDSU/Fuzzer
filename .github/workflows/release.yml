@@ -1,50 +1,43 @@
 name: release
-
 on:
   push:
-    tags:
-      - 'v*'
+    tags: ['v*']
 
 permissions:
   contents: write
 
 jobs:
+  # 1. Build everything manually
   build:
     strategy:
       matrix:
-        # Build natively on Linux, Windows, and macOS
         os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with: { go-version-file: 'go.mod' }
+      - run: go build -o fuzzer . # Your custom build command
+      - uses: actions/upload-artifact@v4
         with:
-          fetch-depth: 0
+          name: fuzzer-${{ matrix.os }}
+          path: fuzzer*
 
-      - name: Set up Go
-        uses: actions/setup-go@v5
+  # 2. Collect and publish using GoReleaser
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/download-artifact@v4
         with:
-          go-version-file: 'go.mod'
-
-      - name: Install System Dependencies (Linux)
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libgl1-mesa-dev xorg-dev
-
-      - name: Build Binary
-        shell: bash
-        run: |
-          if [ "${{ runner.os }}" == "Windows" ]; then
-            go build -o fuzzer.exe .
-          else
-            go build -o fuzzer .
-          fi
-
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
+          path: dist # Download artifacts into the dist folder
+      - uses: goreleaser/goreleaser-action@v6
         with:
-          name: fuzzer-${{ runner.os }}
-          path: |
-            fuzzer
-            fuzzer.exe
+          version: latest
+          # --skip-build is the magic flag here: it tells GoReleaser 
+          # "don't build anything, just package what is in /dist"
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

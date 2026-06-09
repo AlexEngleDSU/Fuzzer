@@ -38,8 +38,15 @@ import (
 //func (e *emptyRenderer) Refresh() {}
 //func (e *emptyRenderer) Objects() []fyne.CanvasObject { return []fyne.CanvasObject{} }
 
+
+
 func StartGUI() {
-    engine.EnsureEnvironment() 
+
+    if !engine.BrowserExists() {
+    	fmt.Println("Browser not found, running setup...")
+    	engine.EnsureEnvironment()
+    }
+     
     a := app.NewWithID("com.fuzzer.app")
     a.Settings().SetTheme(&myTheme{Theme: theme.DefaultTheme()})
     w := a.NewWindow("Fuzzer GUI")

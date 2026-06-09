@@ -7,7 +7,6 @@ import (
 	"strings"
 	"sync"
 	"fmt"
-	"os/exec"
 	"regexp"
 	
 	"path/filepath"
@@ -17,35 +16,54 @@ import (
         "github.com/bogdanfinn/fhttp/cookiejar" 
         tls_client "github.com/bogdanfinn/tls-client"
         "github.com/bogdanfinn/tls-client/profiles"
+        "github.com/playwright-community/playwright-go"
 )
 
-func EnsureEnvironment() {
-        // 1. Check if the Playwright browser exists
-        // 2. If not, trigger the install command automatically
-        if !browserExists() {
-            fmt.Println("First run detected: Installing browser dependencies...")
-            exec.Command("playwright", "install", "chromium").Run()
-        }
-}
-
-func browserExists() bool {
-    var homeDir string
-    if runtime.GOOS == "windows" {
-        homeDir = os.Getenv("USERPROFILE")
-        // Windows path: %USERPROFILE%\AppData\Local\ms-playwright
-        return checkDir(filepath.Join(homeDir, "AppData", "Local", "ms-playwright"))
-    } else if runtime.GOOS == "darwin" {
-        homeDir = os.Getenv("HOME")
-        // macOS path: ~/Library/Caches/ms-playwright
-        return checkDir(filepath.Join(homeDir, "Library", "Caches", "ms-playwright"))
-    } else {
-        homeDir = os.Getenv("HOME")
-        // Linux path: ~/.cache/ms-playwright
-        return checkDir(filepath.Join(homeDir, ".cache", "ms-playwright"))
+func GetBrowserPath() string {
+    home, err := os.UserHomeDir()
+    if err != nil {
+        return ""
+    }
+    switch runtime.GOOS {
+    case "windows":
+        return filepath.Join(home, "AppData", "Local", "ms-playwright")
+    case "darwin":
+        return filepath.Join(home, "Library", "Caches", "ms-playwright")
+    default:
+        return filepath.Join(home, ".cache", "ms-playwright")
     }
 }
 
-func checkDir(path string) bool {
+func EnsureEnvironment() {
+    browserPath := GetBrowserPath()
+    
+    // Check if the directory exists
+    if _, err := os.Stat(browserPath); os.IsNotExist(err) {
+        fmt.Println("First run detected: Installing browser dependencies...")
+        
+        // Use the environment variable to force ONLY Chromium
+        os.Setenv("PLAYWRIGHT_BROWSERS_PATH", browserPath)
+        
+        
+        // This simple call works in all versions of the Go library
+        err := playwright.Install() 
+        
+        if err != nil {
+            fmt.Printf("Error: %v\n", err)
+            return
+        }
+
+        // Cleanup: Only keep Chromium to save space
+        // This avoids the 'dummy file' hack and keeps your install clean
+        os.RemoveAll(filepath.Join(browserPath, "firefox"))
+        os.RemoveAll(filepath.Join(browserPath, "webkit"))
+        
+        fmt.Println("Browser dependencies installed and optimized.")
+    }
+}
+
+func BrowserExists() bool {
+    path := GetBrowserPath()
     info, err := os.Stat(path)
     if os.IsNotExist(err) {
         return false
