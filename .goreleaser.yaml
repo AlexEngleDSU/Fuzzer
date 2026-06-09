@@ -1,24 +1,16 @@
 version: 2
+builds: []
 
-# Since you are building natively in GitHub Actions, 
-# you don't need GoReleaser to build the binaries.
-# It will just package the ones you built.
-builds: [] 
-
-# Tell GoReleaser to look for the files produced by your matrix build
 archives:
   - format: tar.gz
     format_overrides:
       - goos: windows
         format: zip
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
-
-checksum:
-  name_template: 'checksums.txt'
-
-changelog:
-  sort: asc
-  filters:
-    exclude:
-      - '^docs:'
-      - '^test:'
+    files:
+      - src: 'dist/fuzzer-ubuntu-latest/fuzzer'
+        goos: linux
+      - src: 'dist/fuzzer-macos-latest/fuzzer' # This covers macOS
+        goos: darwin
+      - src: 'dist/fuzzer-windows-latest/fuzzer.exe'
+        goos: windows

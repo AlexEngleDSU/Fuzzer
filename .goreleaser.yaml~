@@ -1,11 +1,17 @@
 version: 2
-builds: [] # Keep this empty, we are skipping builds!
+version: 2
+builds: [] # Skip build, we are providing pre-compiled binaries
 
-# Tell GoReleaser to find the binaries you downloaded from the artifacts
-# Note: You may need to adjust the path if the download-artifact step 
-# creates nested folders.
 archives:
   - format: tar.gz
+    format_overrides:
+      - goos: windows
+        format: zip
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     files:
-      - src: 'dist/fuzzer-*/*' # Adjust pattern to match your artifact structure
+      - src: 'dist/fuzzer-ubuntu-latest/fuzzer'
+        goos: linux
+      - src: 'dist/fuzzer-macos-latest/fuzzer'
+        goos: darwin
+      - src: 'dist/fuzzer-windows-latest/fuzzer.exe'
+        goos: windows
