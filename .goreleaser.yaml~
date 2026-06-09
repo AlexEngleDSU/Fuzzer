@@ -8,12 +8,9 @@ archives:
         format: zip
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     files:
-      - src: 'dist/fuzzer-ubuntu-latest/fuzzer'
-        dst: fuzzer
+      - src: 'dist/fuzzer' # No longer needs the long path
         goos: linux
-      - src: 'dist/fuzzer-macos-latest/fuzzer'
-        dst: fuzzer
+      - src: 'dist/fuzzer' # No longer needs the long path
         goos: darwin
-      - src: 'dist/fuzzer-windows-latest/fuzzer.exe'
-        dst: fuzzer.exe
+      - src: 'dist/fuzzer.exe' # No longer needs the long path
         goos: windows

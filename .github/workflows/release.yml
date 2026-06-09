@@ -12,7 +12,6 @@ jobs:
   build:
     strategy:
       matrix:
-        # Build natively on Linux, Windows, and macOS
         os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
@@ -35,17 +34,32 @@ jobs:
       - name: Build Binary
         shell: bash
         run: |
+          mkdir -p bin
           if [ "${{ runner.os }}" == "Windows" ]; then
-            go build -o fuzzer.exe .
+            go build -o bin/fuzzer.exe .
           else
-            go build -o fuzzer .
+            go build -o bin/fuzzer .
           fi
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: fuzzer-${{ runner.os }}
-          path: dist
-            fuzzer
-            fuzzer.exe
-          merge-multiple: true
+          name: fuzzer-${{ runner.os }} # This creates fuzzer-Linux, fuzzer-Windows, etc.
+          path: bin/
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist # This puts everything into the dist folder
+      - uses: goreleaser/goreleaser-action@v6
+        with:
+          version: latest
+          args: release --clean --skip-build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
