@@ -62,8 +62,6 @@ jobs:
       - uses: softprops/action-gh-release@v2
         with:
           files: |
-            dist/fuzzer-windows-latest/fuzzer.exe
-            dist/fuzzer-ubuntu-latest/fuzzer
-            dist/fuzzer-macos-latest/fuzzer
+            dist/**/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

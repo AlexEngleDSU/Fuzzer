@@ -15,6 +15,7 @@ import (
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
+	"github.com/sqweek/dialog"
 	"github.com/AlexEngleDSU/Fuzzer/pkg/engine"
 )
 
@@ -129,11 +130,14 @@ Connection: keep-alive`
 
     // Select Wordlist Button (Missing in previous snippet)
     selectButton := widget.NewButton("Select Wordlist", func() {
-        dialog.ShowFileOpen(func(reader fyne.URIReadCloser, err error) {
-            if err == nil && reader != nil {
-                pathEntry.SetText(reader.URI().Path())
-            }
-        }, w)
+        // 1. Call the native file dialog (synchronous)
+        filename, err := dialog.File().Title("Select Wordlist").Load()
+    
+        // 2. Handle the result
+        if err == nil {
+            // filename is the absolute path string
+            pathEntry.SetText(filename)
+        }
     })
     pathRow := container.NewBorder(nil, nil, selectButton, nil, pathEntry)
     
