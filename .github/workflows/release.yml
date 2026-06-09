@@ -49,7 +49,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           path: dist
-      - name: Debug: List what is in dist
+      - name: List what is in dist
         run: ls -R dist/
       - uses: goreleaser/goreleaser-action@v6
         with:
