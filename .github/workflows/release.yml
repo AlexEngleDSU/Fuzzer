@@ -28,7 +28,7 @@ jobs:
       - name: Build
         shell: bash
         run: |
-	mkdir -p bin
+          mkdir -p bin
           if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
             go build -ldflags="-s -w" -o bin/fuzzer.exe .
           else
