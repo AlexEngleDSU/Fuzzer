@@ -9,7 +9,7 @@ archives:
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     formats: [tar.gz]
     files:
-      - src: 'dist/fuzzer-ubuntu-latest/fuzzer'
+      - src: 'dist/*/*'
         dst: fuzzer
 
   # macOS Archive
@@ -17,7 +17,7 @@ archives:
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     formats: [tar.gz]
     files:
-      - src: 'dist/fuzzer-macos-latest/fuzzer'
+      - src: 'dist/*/*'
         dst: fuzzer
 
   # Windows Archive
@@ -25,5 +25,5 @@ archives:
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     formats: [zip]
     files:
-      - src: 'dist/fuzzer-windows-latest/fuzzer.exe'
+      - src: 'dist/*/*'
         dst: fuzzer.exe

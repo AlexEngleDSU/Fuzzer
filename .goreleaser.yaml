@@ -1,29 +1,4 @@
 version: 2
+# We skip builds and uploads because the GitHub Action handles them
 builds:
-  - id: fuzzer
-    skip: true
-
-archives:
-  # Linux Archive
-  - id: linux-archive
-    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
-    formats: [tar.gz]
-    files:
-      - src: 'dist/*/*'
-        dst: fuzzer
-
-  # macOS Archive
-  - id: darwin-archive
-    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
-    formats: [tar.gz]
-    files:
-      - src: 'dist/*/*'
-        dst: fuzzer
-
-  # Windows Archive
-  - id: windows-archive
-    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
-    formats: [zip]
-    files:
-      - src: 'dist/*/*'
-        dst: fuzzer.exe
+  - skip: true

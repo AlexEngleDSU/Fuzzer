@@ -17,16 +17,19 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version-file: 'go.mod'
-          cache: true # This makes builds much faster by reusing dependencies
+          cache: true
 
       - name: Install Dependencies
-        if: runner.os == 'Linux'
         run: |
-          sudo apt-get update
-          sudo apt-get install -y libgl1-mesa-dev xorg-dev
+          if [[ "${{ runner.os }}" == "Linux" ]]; then
+            sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev xorg-dev
+          elif [[ "${{ runner.os }}" == "macOS" ]]; then
+            brew install libglvnd
+          fi
 
       - name: Build
-        shell: bash
+        env:
+          CGO_ENABLED: 1
         run: |
           mkdir -p bin
           if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
@@ -35,8 +38,7 @@ jobs:
             go build -ldflags="-s -w" -o bin/fuzzer .
           fi
 
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: fuzzer-${{ matrix.os }}
           path: bin/
@@ -49,18 +51,12 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           path: dist
-      - name: List what is in dist
-        run: ls -R dist/
-      - uses: goreleaser/goreleaser-action@v6
-        with:
-          version: latest
-          args: release --clean
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Upload Binaries to Release
-        uses: softprops/action-gh-release@v2
+
+      - uses: softprops/action-gh-release@v2
         with:
           files: |
             dist/fuzzer-windows-latest/fuzzer.exe
             dist/fuzzer-ubuntu-latest/fuzzer
             dist/fuzzer-macos-latest/fuzzer
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
