@@ -1,10 +1,9 @@
 version: 2
-before:
-  hooks:
-    - go mod tidy
+
+# This tells GoReleaser how to build your binaries
 builds:
   - id: fuzzer
-    main: ./cmd/fuzzer/main.go
+    main: ./main.go
     binary: fuzzer
     goos:
       - linux
@@ -13,18 +12,21 @@ builds:
     goarch:
       - amd64
       - arm64
+
+# Defines how your files are compressed for distribution
 archives:
   - format: tar.gz
-    name_template: >-
-      {{ .ProjectName }}_
-      {{- title .Os }}_
-      {{- if eq .Arch "amd64" }}x86_64
-      {{- else if eq .Arch "386" }}i386
-      {{- else }}{{ .Arch }}{{ end }}
+    # Use zip for Windows so users don't need external tools to extract
+    format_overrides:
+      - goos: windows
+        format: zip
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+
+# Automatically generates a file to verify the integrity of your downloads
 checksum:
   name_template: 'checksums.txt'
-snapshot:
-  name_template: "{{ incpatch .Version }}-snapshot"
+
+# Provides a clean release history
 changelog:
   sort: asc
   filters:
