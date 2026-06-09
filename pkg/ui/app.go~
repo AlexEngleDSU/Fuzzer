@@ -2,7 +2,6 @@ package ui
 
 import (
 	"context"
-	"sync"
 	"fmt"
 	"strings"
 	"net/url"
@@ -11,7 +10,6 @@ import (
 	"fyne.io/fyne/v2/app"
 	//"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
-	fyneDialog"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
@@ -43,6 +41,8 @@ import (
 
 func StartGUI() {
 
+    state := &engine.ScanState{}
+
     if !engine.BrowserExists() {
     	fmt.Println("Browser not found, running setup...")
     	engine.EnsureEnvironment()
@@ -55,8 +55,6 @@ func StartGUI() {
 
     // State variables
     var cancelFunc context.CancelFunc
-    var resultsList = new([]engine.ScanResult)
-    var mu sync.Mutex
 
     // UI Components
     urlEntry := widget.NewEntry()
@@ -78,28 +76,21 @@ Accept-Encoding: gzip, deflate, br
 Accept-Language: en-US,en;q=0.9
 Referer: %s
 Priority: u=0, i
-Connection: keep-alive`
+`
     
     urlEntry.OnChanged = func(newURL string) {
 	    // 1. Prepare Referer: Trim /FUZZ and ensure it ends with a trailing slash
 	    baseReferer := strings.TrimSuffix(newURL, "/FUZZ")
-	    if !strings.HasSuffix(baseReferer, "/") {
-		baseReferer += "/"
-	    }
+	    if !strings.HasSuffix(baseReferer, "/") { baseReferer += "/" }
 
 	    // 2. Parse the URL
 	    u, err := url.Parse(newURL)
-	    if err != nil {
-		return
-	    }
+	    if err != nil { return }
 
 	    // 3. Prepare GET Path: Take the full path, remove the /FUZZ suffix
-	    // If the path was /FUZZ, this makes it /
 	    path := u.Path
 	    path = strings.TrimSuffix(path, "/FUZZ")
-	    if path == "" {
-		path = "/"
-	    }
+	    if path == "" { path = "/" }
 
 	    // 4. Fill the template: [GET Path, Host, Referer]
 	    userHeaderInput.SetText(fmt.Sprintf(headerTemplate, u.Host, baseReferer))
@@ -130,13 +121,13 @@ Connection: keep-alive`
 
     // Select Wordlist Button (Missing in previous snippet)
     selectButton := widget.NewButton("Select Wordlist", func() {
-        // 1. Call the native file dialog (synchronous)
-        filename, err := dialog.File().Title("Select Wordlist").Load()
-    
-        // 2. Handle the result
+        d := dialog.File().Title("Select Wordlist")
+        lastDir := engine.GetInitialPath()
+        if lastDir != "" { d.SetStartDir(lastDir) }
+        filename, err := d.Load()
         if err == nil {
-            // filename is the absolute path string
-            pathEntry.SetText(filename)
+        	pathEntry.SetText(filename)
+        	engine.SavePath(filename)
         }
     })
     pathRow := container.NewBorder(nil, nil, selectButton, nil, pathEntry)
@@ -145,45 +136,39 @@ Connection: keep-alive`
 
     list := widget.NewList(
 	func() int { 
-		mu.Lock()
-		defer mu.Unlock()
-		return len(*resultsList)
+		state.Mu.RLock()
+		state.Mu.RUnlock()
+		return len(state.Results)
 	},
 	func() fyne.CanvasObject { return &compactLink{widget.NewHyperlink("", nil)} },
-
 	func(id widget.ListItemID, obj fyne.CanvasObject) {
-		mu.Lock()
-		res := (*resultsList)[id]
-		mu.Unlock()
+		state.Mu.RLock()
+		if id >= len(state.Results) {
+			state.Mu.RUnlock()
+			return
+		}
+		res := state.Results[id]
+		state.Mu.RUnlock()
 		   
 		link := obj.(*compactLink)
 		    
 		// 1. Format text
 		text := fmt.Sprintf("Status: %d | URL: %s", res.StatusCode, res.URL)
-		if res.Location != "" {
-			text += fmt.Sprintf(" -> Redirect: %s", res.Location)
-		}
+		if res.Location != "" { text += fmt.Sprintf(" -> Redirect: %s", res.Location) }
 		link.SetText(text)
 		    
 		// 2. Force the browser open on click
 		targetURL := res.URL
-		if res.Location != "" {
-		    targetURL = res.Location
-		}
+		if res.Location != "" { targetURL = res.Location }
 		    
 		// Create the actual URL object
 		parsed, err := url.Parse(targetURL)
 		if err == nil {
 			link.URL = parsed
-			// This is the critical piece: manually setting the OnTapped function
 			link.OnTapped = func() {
-				if *followMode {
-					*followMode = false
-				}
+				if *followMode { *followMode = false }
 				target := targetURL
-				if !strings.HasPrefix(target, "http") {
-					target = "https://" + target
-				}
+				if !strings.HasPrefix(target, "http") { target = "https://" + target }
 				parsed, _ := url.Parse(target)
 				fyne.CurrentApp().OpenURL(parsed)
 			}
@@ -200,8 +185,13 @@ Connection: keep-alive`
     })
         
     statusLabel := widget.NewLabel("Ready")  
+    
+    bottomControls := container.NewVBox(
+    	resumeBtn,
+    	statusLabel,
+    )
 
-    resultsContent := container.NewBorder(nil, resumeBtn, nil, nil, list)
+    resultsContent := container.NewBorder(nil, statusLabel, nil, nil, list)
 
     tabs := container.NewAppTabs(
         container.NewTabItem("Configuration", container.NewVBox()),
@@ -209,7 +199,7 @@ Connection: keep-alive`
     )
     
     startButton := widget.NewButton("Start Scan", HandleStartScan(
-        tabs, list, resultsList, &mu, urlEntry, userHeaderInput,
+        tabs, list, state, urlEntry, userHeaderInput,
         depthEntry, threadEntry, delayEntry, pathEntry, filterEntry,
         recursiveCheck, &cancelFunc, statusLabel, resumeBtn, followMode,
     ))

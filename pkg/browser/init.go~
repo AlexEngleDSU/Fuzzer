@@ -10,17 +10,9 @@ type WAFSession struct {
 	Headers map[string]string
 }
 
-func InstallOnlyChromium() error {
-    return playwright.Install(playwright.InstallOptions{
-        Browsers: []string{"chromium"},
-    })
-}
-
 func InitializeSession(targetURL string) (*WAFSession, error) {
 	// 1. Run Playwright
-	pw, err := playwright.Run(&playwright.RunOptions{ // Add the & here
-    		Verbose: true,
-	})
+	pw, err := playwright.Run(&playwright.RunOptions{ Verbose: true, })
 	if err != nil {
 		return nil, fmt.Errorf("failed to start playwright: %w", err)
 	}
@@ -85,7 +77,6 @@ func InitializeSession(targetURL string) (*WAFSession, error) {
 			"domain": c.Domain,
 		})
 	}
-	fmt.Printf("DEBUG: Captured formatted cookies: %#v\n", formattedCookies)
 
 	// 6. Cleanup
 	browser.Close()

@@ -2,76 +2,26 @@ package engine
 
 import (
 	"bufio"
+	"fmt"
 	"net/url"
 	"os"
+	"path/filepath"
+	"regexp"
+	"runtime"
 	"strings"
 	"sync"
-	"fmt"
-	"regexp"
 	
-	"path/filepath"
-	"runtime"
-	
-        fhttp "github.com/bogdanfinn/fhttp"
-        "github.com/bogdanfinn/fhttp/cookiejar" 
-        tls_client "github.com/bogdanfinn/tls-client"
-        "github.com/bogdanfinn/tls-client/profiles"
-        "github.com/playwright-community/playwright-go"
+	"fyne.io/fyne/v2"
+
+	fhttp "github.com/bogdanfinn/fhttp"
+	"github.com/bogdanfinn/fhttp/cookiejar"
+	tls_client "github.com/bogdanfinn/tls-client"
+	"github.com/bogdanfinn/tls-client/profiles"
+	"github.com/playwright-community/playwright-go"
 )
 
-func GetBrowserPath() string {
-    home, err := os.UserHomeDir()
-    if err != nil {
-        return ""
-    }
-    switch runtime.GOOS {
-    case "windows":
-        return filepath.Join(home, "AppData", "Local", "ms-playwright")
-    case "darwin":
-        return filepath.Join(home, "Library", "Caches", "ms-playwright")
-    default:
-        return filepath.Join(home, ".cache", "ms-playwright")
-    }
-}
-
-func EnsureEnvironment() {
-    browserPath := GetBrowserPath()
-    
-    // Check if the directory exists
-    if _, err := os.Stat(browserPath); os.IsNotExist(err) {
-        fmt.Println("First run detected: Installing browser dependencies...")
-        
-        // Use the environment variable to force ONLY Chromium
-        os.Setenv("PLAYWRIGHT_BROWSERS_PATH", browserPath)
-        
-        
-        // This simple call works in all versions of the Go library
-        err := playwright.Install() 
-        
-        if err != nil {
-            fmt.Printf("Error: %v\n", err)
-            return
-        }
-
-        // Cleanup: Only keep Chromium to save space
-        // This avoids the 'dummy file' hack and keeps your install clean
-        os.RemoveAll(filepath.Join(browserPath, "firefox"))
-        os.RemoveAll(filepath.Join(browserPath, "webkit"))
-        
-        fmt.Println("Browser dependencies installed and optimized.")
-    }
-}
-
-func BrowserExists() bool {
-    path := GetBrowserPath()
-    info, err := os.Stat(path)
-    if os.IsNotExist(err) {
-        return false
-    }
-    return info.IsDir()
-}
-
-var GlobalJar, _ = cookiejar.New(nil)
+// GlobalJar initialized with options to prevent compilation errors
+var GlobalJar, _ = cookiejar.New(&cookiejar.Options{PublicSuffixList: nil})
 
 var (
 	paused    bool
@@ -79,11 +29,58 @@ var (
 	pauseChan = make(chan struct{})
 )
 
+func SavePath(path string) {
+	dir := filepath.Dir(path)
+	fyne.CurrentApp().Preferences().SetString("last_wordlist_dir", dir)
+}
+
+func GetInitialPath() string {
+	return fyne.CurrentApp().Preferences().String("last_wordlist_dir")
+}
+
+func GetBrowserPath() string {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return ""
+	}
+	switch runtime.GOOS {
+	case "windows":
+		return filepath.Join(home, "AppData", "Local", "ms-playwright")
+	case "darwin":
+		return filepath.Join(home, "Library", "Caches", "ms-playwright")
+	default:
+		return filepath.Join(home, ".cache", "ms-playwright")
+	}
+}
+
+func EnsureEnvironment() {
+	browserPath := GetBrowserPath()
+	if _, err := os.Stat(browserPath); os.IsNotExist(err) {
+		fmt.Println("First run detected: Installing browser dependencies...")
+		os.Setenv("PLAYWRIGHT_BROWSERS_PATH", browserPath)
+		err := playwright.Install()
+		if err != nil {
+			fmt.Printf("Error: %v\n", err)
+			return
+		}
+		os.RemoveAll(filepath.Join(browserPath, "firefox"))
+		os.RemoveAll(filepath.Join(browserPath, "webkit"))
+		fmt.Println("Browser dependencies installed and optimized.")
+	}
+}
+
+func BrowserExists() bool {
+	path := GetBrowserPath()
+	info, err := os.Stat(path)
+	if os.IsNotExist(err) {
+		return false
+	}
+	return info.IsDir()
+}
+
 func extractURLs(s string) []string {
-    // This regex looks for strings starting with http or https 
-    // and continues until it hits a space or an end-of-string.
-    re := regexp.MustCompile(`https?://[^\s>]+`)
-    return re.FindAllString(s, -1)
+	re := regexp.MustCompile(`https?://[^\s>]+`)
+	return re.FindAllString(s, -1)
 }
 
 func SetPause(p bool) {
@@ -100,129 +97,87 @@ func SetPause(p bool) {
 
 func ReadLines(path string) ([]string, error) {
 	file, err := os.Open(path)
-	if err != nil { return nil, err }
+	if err != nil {
+		return nil, err
+	}
 	defer file.Close()
 	var lines []string
 	scanner := bufio.NewScanner(file)
-	for scanner.Scan() { lines = append(lines, scanner.Text()) }
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
 	return lines, scanner.Err()
 }
 
 func ResolveURL(base, loc string) string {
-    if strings.HasPrefix(loc, "http") { return loc }
-    
-    u, err := url.Parse(base)
-    if err != nil { return loc }
-    
-    // ResolveReference handles relative paths (../, ./, etc) automatically
-    rel, err := url.Parse(loc)
-    if err != nil { return loc }
-    
-    return u.ResolveReference(rel).String()
+	if strings.HasPrefix(loc, "http") {
+		return loc
+	}
+	u, err := url.Parse(base)
+	if err != nil {
+		return loc
+	}
+	rel, err := url.Parse(loc)
+	if err != nil {
+		return loc
+	}
+	return u.ResolveReference(rel).String()
 }
 
 func GetOrderedHeaders(template string) []HeaderLine {
-    var ordered []HeaderLine
-    scanner := bufio.NewScanner(strings.NewReader(template))
-    for scanner.Scan() {
-        line := scanner.Text()
-        if idx := strings.Index(line, ":"); idx != -1 {
-            ordered = append(ordered, HeaderLine{
-                Key:   strings.TrimSpace(line[:idx]),
-                Value: strings.TrimSpace(line[idx+1:]),
-            })
-        }
-    }
-    return ordered
+	var ordered []HeaderLine
+	scanner := bufio.NewScanner(strings.NewReader(template))
+	for scanner.Scan() {
+		line := scanner.Text()
+		if idx := strings.Index(line, ":"); idx != -1 {
+			ordered = append(ordered, HeaderLine{
+				Key:   strings.TrimSpace(line[:idx]),
+				Value: strings.TrimSpace(line[idx+1:]),
+			})
+		}
+	}
+	return ordered
 }
 
 func get404Length(client tls_client.HttpClient, baseURL string) int64 {
-    req, _ := fhttp.NewRequest("GET", baseURL + "/a-random-string-that-does-not-exist-123", nil)
-    
-    // 2. Use the 'client' argument passed to the function
-    resp, err := client.Do(req)
-    if err != nil {
-        return -1
-    }
-    defer resp.Body.Close()
-    return resp.ContentLength
-}
-
-func performHandshake(client tls_client.HttpClient, host string) {
-    targetURL := host
-    if !strings.HasPrefix(targetURL, "http") {
-        targetURL = "https://" + targetURL
-    }
-
-    req, err := fhttp.NewRequest("GET", targetURL, nil)
-    if err != nil { return }
-
-    resp, err := client.Do(req)
-    if err != nil { return }
-    defer resp.Body.Close()
-
-    cookies := resp.Cookies()
-
-    // Use our stored globalJar reference
-    if GlobalJar != nil && len(cookies) > 0 {
-        parsedURL, _ := url.Parse(targetURL)
-    
-        // Just call it! Do not assign it to a variable or check its return value.
-        GlobalJar.SetCookies(parsedURL, cookies) 
-    
-    }
-}
-
-func getBaseURL(rawURL string) string {
-    u, err := url.Parse(rawURL)
-    if err != nil {
-        return "/"
-    }
-    // Reconstruct the directory base: Scheme + Host + Path up to last slash
-    base := u.Scheme + "://" + u.Host + u.Path
-    lastSlash := strings.LastIndex(base, "/")
-    if lastSlash != -1 {
-        return base[:lastSlash+1]
-    }
-    return base + "/"
+	req, _ := fhttp.NewRequest("GET", baseURL+"/a-random-string-that-does-not-exist-123", nil)
+	resp, err := client.Do(req)
+	if err != nil {
+		return -1
+	}
+	defer resp.Body.Close()
+	return resp.ContentLength
 }
 
 func CreateBrowserClient() tls_client.HttpClient {
-    // Fix: cookiejar.New returns (Jar, error
-    
-    options := []tls_client.HttpClientOption{
-        tls_client.WithTimeoutSeconds(30),
-        tls_client.WithClientProfile(profiles.Chrome_146),
-        tls_client.WithCookieJar(GlobalJar),
-        tls_client.WithNotFollowRedirects(),
-    }
-
-    // Fix: NewHttpClient takes variadic arguments, not a slice directly 
-    // depending on the library version, or it might need a specific call.
-    // If it expects HttpClientOption, pass them directly.
-    client, err := tls_client.NewHttpClient(tls_client.NewNoopLogger(), options...)
-    if err != nil {
-        return nil
-    }
-    return client
+	options := []tls_client.HttpClientOption{
+		tls_client.WithTimeoutSeconds(30),
+		tls_client.WithClientProfile(profiles.Chrome_146),
+		tls_client.WithCookieJar(GlobalJar),
+		tls_client.WithNotFollowRedirects(),
+	}
+	client, err := tls_client.NewHttpClient(tls_client.NewNoopLogger(), options...)
+	if err != nil {
+		return nil
+	}
+	return client
 }
 
 func InjectCookies(jar *cookiejar.Jar, targetURL string, playCookies []map[string]interface{}) {
-    u, _ := url.Parse(targetURL)
-    var cookies []*fhttp.Cookie
+	u, _ := url.Parse(targetURL)
+	var cookies []*fhttp.Cookie
 
-    for _, pc := range playCookies {
-        c := &fhttp.Cookie{
-            Name:  pc["name"].(string),
-            Value: pc["value"].(string),
-            Domain: u.Host,
-            Path:   "/",
-            Secure:   true,
-            HttpOnly: true,
-        }
-        cookies = append(cookies, c)
-    }
-    jar.SetCookies(u, cookies)
+	for _, pc := range playCookies {
+		c := &fhttp.Cookie{
+			Name:     pc["name"].(string),
+			Value:    pc["value"].(string),
+			Domain:   u.Host,
+			Path:     "/",
+			Secure:   true,
+			HttpOnly: true,
+		}
+		cookies = append(cookies, c)
+	}
+	jar.SetCookies(u, cookies)	
 }
-
 

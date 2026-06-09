@@ -3,32 +3,30 @@ package engine
 import (
 	"context"
 	"io"
-	"net/url"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
-
+	"fmt"
 	fhttp "github.com/bogdanfinn/fhttp"
 )
 
 func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate string, wordlist []string, workerCount int, filterCodes string, recursive bool, maxDepth int, delay time.Duration) <-chan ScanResult {
+
 	results := make(chan ScanResult, 500)
 	browserClient := CreateBrowserClient()
-
-	performHandshake(browserClient, host)
 	badContentLength := get404Length(browserClient, urlTemplate)
-	headers := GetOrderedHeaders(headerTemplate)
+	baseHeaders := fmt.Sprintf(headerTemplate, host, host)
+	headers := GetOrderedHeaders(baseHeaders)
 
 	filterMap := make(map[int]bool)
 	for _, codeStr := range strings.Split(filterCodes, ",") {
-		if code, err := strconv.Atoi(strings.TrimSpace(codeStr)); err == nil {
-			filterMap[code] = true
-		}
+		if code, err := strconv.Atoi(strings.TrimSpace(codeStr)); err == nil { filterMap[code] = true }
 	}
 
 	go func() {
 		defer close(results)
+		
 		queue := []string{urlTemplate}
 		globalSeen := sync.Map{}
 		
@@ -40,6 +38,7 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 		var nextGen []string
 		var mu sync.Mutex
 
+
 		for w := 1; w <= workerCount; w++ {
 			go func() {
 				for target := range jobs {
@@ -48,9 +47,7 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 						pChan := PauseChan
 						PauseMu.Unlock()
 						<-pChan
-					} else {
-						PauseMu.Unlock()
-					}
+					} else { PauseMu.Unlock() }
 
 					select {
 					case <-time.After(delay):
@@ -74,10 +71,6 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 						continue
 					}
 
-					u, _ := url.Parse(target)
-					for _, c := range GlobalJar.Cookies(u) {
-						req.Header.Add("Cookie", c.Name+"="+c.Value)
-					}
 					for _, h := range headers {
 						if strings.EqualFold(h.Key, "Host") {
 							req.Host = h.Value
@@ -85,19 +78,23 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 						}
 						req.Header.Add(h.Key, h.Value)
 					}
-
+		
 					resp, err := browserClient.Do(req)
+					if err != nil { continue }
+					
 					if err == nil && resp != nil {
 						body, _ := io.ReadAll(resp.Body)
 						resp.Body.Close()
-
+						respCookies := resp.Cookies()
 						status := resp.StatusCode
 						if !filterMap[status] && !(status == 200 && int64(len(body)) == badContentLength) {
+							
 							results <- ScanResult{
 								URL:	target,
 								StatusCode:    status,
 								ContentLength: int64(len(body)),
 								Location:      resp.Header.Get("Location"),
+								Cookies:       respCookies,
 							}
 
 							if status >= 300 && status < 400 {
@@ -116,9 +113,9 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 								}
 							}
 						}
-					<-semaphore
-					wg.Done()
 					}
+				<-semaphore
+				wg.Done()
 				}
 			}()
 		}

@@ -11,21 +11,18 @@ type WAFSession struct {
 }
 
 func InitializeSession(targetURL string) (*WAFSession, error) {
-	// 1. Run Playwright
-	pw, err := playwright.Run(&playwright.RunOptions{ // Add the & here
-    		Verbose: true,
-	})
+	
+	pw, err := playwright.Run(&playwright.RunOptions{ Verbose: true, })
 	if err != nil {
 		return nil, fmt.Errorf("failed to start playwright: %w", err)
 	}
 
-	// 2. Launch Browser
 	browser, err := pw.Chromium.Launch(playwright.BrowserTypeLaunchOptions{
 		Headless: playwright.Bool(true),
 		Args: []string{
-	        "--no-sandbox",        // Critical for running as root in Kali
+	        "--no-sandbox",        
 	        "--disable-setuid-sandbox",
-	        "--disable-dev-shm-usage", // Fixes crashes in low-memory container environments
+	        "--disable-dev-shm-usage", 
     		},
 	})
 	if err != nil {
@@ -72,16 +69,13 @@ func InitializeSession(targetURL string) (*WAFSession, error) {
 
 	var formattedCookies []map[string]interface{}
 	for _, c := range rawCookies {
-		
 		formattedCookies = append(formattedCookies, map[string]interface{}{
 			"name":   c.Name,
 			"value":  c.Value,
 			"domain": c.Domain,
 		})
 	}
-	fmt.Printf("DEBUG: Captured formatted cookies: %#v\n", formattedCookies)
 
-	// 6. Cleanup
 	browser.Close()
 	pw.Stop()
 
