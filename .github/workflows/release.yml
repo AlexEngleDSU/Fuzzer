@@ -29,8 +29,12 @@ jobs:
         shell: bash
         run: |
           mkdir -p bin
-          # Use -ldflags to shrink the binary size
-          go build -ldflags="-s -w" -o bin/fuzzer${{ runner.os == 'windows-latest' && '.exe' || '' }} .
+          # Set the output name based on OS explicitly
+          if [[ "${{ runner.os }}" == "Windows" ]]; then
+            go build -ldflags="-s -w" -o bin/fuzzer.exe .
+          else
+            go build -ldflags="-s -w" -o bin/fuzzer .
+          fi
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
