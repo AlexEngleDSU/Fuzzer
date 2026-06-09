@@ -1,4 +1,4 @@
-name: goreleaser
+name: release
 
 on:
   push:
@@ -12,7 +12,7 @@ jobs:
   build:
     strategy:
       matrix:
-        # Define the OS platforms you want to support
+        # Build natively on Linux, Windows, and macOS
         os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
@@ -26,10 +26,16 @@ jobs:
         with:
           go-version-file: 'go.mod'
 
+      - name: Install System Dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgl1-mesa-dev xorg-dev
+
       - name: Build Binary
         shell: bash
         run: |
-          if [ "${{ matrix.os }}" == "windows-latest" ]; then
+          if [ "${{ runner.os }}" == "Windows" ]; then
             go build -o fuzzer.exe .
           else
             go build -o fuzzer .
@@ -38,7 +44,7 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: fuzzer-${{ matrix.os }}
+          name: fuzzer-${{ runner.os }}
           path: |
             fuzzer
             fuzzer.exe
