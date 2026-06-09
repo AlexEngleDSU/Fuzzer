@@ -27,6 +27,7 @@ jobs:
           fi
 
       - name: Build
+        shell: bash
         env:
           CGO_ENABLED: 1
         run: |
