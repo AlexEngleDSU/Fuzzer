@@ -1,11 +1,24 @@
 version: 2
-builds: [] # Keep this empty, we are skipping builds!
 
-# Tell GoReleaser to find the binaries you downloaded from the artifacts
-# Note: You may need to adjust the path if the download-artifact step 
-# creates nested folders.
+# Since you are building natively in GitHub Actions, 
+# you don't need GoReleaser to build the binaries.
+# It will just package the ones you built.
+builds: [] 
+
+# Tell GoReleaser to look for the files produced by your matrix build
 archives:
   - format: tar.gz
+    format_overrides:
+      - goos: windows
+        format: zip
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
-    files:
-      - src: 'dist/fuzzer-*/*' # Adjust pattern to match your artifact structure
+
+checksum:
+  name_template: 'checksums.txt'
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'

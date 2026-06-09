@@ -1,40 +1,11 @@
 version: 2
+builds: [] # Keep this empty, we are skipping builds!
 
-# This tells GoReleaser how to build your binaries
-builds:
-  - id: fuzzer
-    main: ./main.go
-    binary: fuzzer
-    hooks:
-      pre:
-      	- go install github.com/fyne-io/fyne-cross@latest
-      build: 
-        - cmd: fyne-cross {{ .Os }} -arch={{ .Arch }} -output=fuzzer .
-    goos:
-      - linux
-      - windows
-      - darwin
-    goarch:
-      - amd64
-      - arm64
-
-# Defines how your files are compressed for distribution
+# Tell GoReleaser to find the binaries you downloaded from the artifacts
+# Note: You may need to adjust the path if the download-artifact step 
+# creates nested folders.
 archives:
   - format: tar.gz
-    # Use zip for Windows so users don't need external tools to extract
-    format_overrides:
-      - goos: windows
-        format: zip
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
-
-# Automatically generates a file to verify the integrity of your downloads
-checksum:
-  name_template: 'checksums.txt'
-
-# Provides a clean release history
-changelog:
-  sort: asc
-  filters:
-    exclude:
-      - '^docs:'
-      - '^test:'
+    files:
+      - src: 'dist/fuzzer-*/*' # Adjust pattern to match your artifact structure

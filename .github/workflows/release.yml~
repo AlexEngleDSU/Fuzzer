@@ -1,44 +1,43 @@
-name: goreleaser
-
+name: release
 on:
   push:
-    tags:
-      - 'v*'
+    tags: ['v*']
 
 permissions:
   contents: write
 
 jobs:
+  # 1. Build everything manually
   build:
     strategy:
       matrix:
-        # Define the OS platforms you want to support
         os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version-file: 'go.mod'
-
-      - name: Build Binary
-        shell: bash
-        run: |
-          if [ "${{ matrix.os }}" == "windows-latest" ]; then
-            go build -o fuzzer.exe .
-          else
-            go build -o fuzzer .
-          fi
-
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with: { go-version-file: 'go.mod' }
+      - run: go build -o fuzzer . # Your custom build command
+      - uses: actions/upload-artifact@v4
         with:
           name: fuzzer-${{ matrix.os }}
-          path: |
-            fuzzer
-            fuzzer.exe
+          path: fuzzer*
+
+  # 2. Collect and publish using GoReleaser
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist # Download artifacts into the dist folder
+      - uses: goreleaser/goreleaser-action@v6
+        with:
+          version: latest
+          # --skip-build is the magic flag here: it tells GoReleaser 
+          # "don't build anything, just package what is in /dist"
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
