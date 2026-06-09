@@ -2,3 +2,4 @@ version: 2
 # We skip builds and uploads because the GitHub Action handles them
 builds:
   - skip: true
+
