@@ -44,9 +44,7 @@ func SaveLastFilePath(path string) {
 
 func GetLastFilePath() string {
     data, err := os.ReadFile(GetConfigPath())
-    if err != nil {
-        return ""
-    }
+    if err != nil { return "" }
     var config Config
     json.Unmarshal(data, &config)
     return config.LastWordlist
@@ -54,9 +52,7 @@ func GetLastFilePath() string {
 
 func GetInitialPath() string {
     data, err := os.ReadFile(GetConfigPath())
-    if err != nil {
-        return ""
-    }
+    if err != nil { return "" }
     var config Config
     json.Unmarshal(data, &config)
     return config.LastDir
@@ -71,24 +67,6 @@ func GetConfigPath() string { // Capitalized to be exported
 	appDir := filepath.Join(configDir, "fuzzer")
 	os.MkdirAll(appDir, 0700)
 	return filepath.Join(appDir, "config.json")
-}
-
-func SaveLastFilePath(path string) {
-    config := Config{LastWordlist: path}
-    data, _ := json.MarshalIndent(config, "", "  ")
-    
-    os.WriteFile(GetConfigPath(), data, 0644)
-}
-
-func GetLastFilePath() string {
-    data, err := os.ReadFile(GetConfigPath())
-    if err != nil {
-        return ""
-    }
-    
-    var config Config
-    json.Unmarshal(data, &config)
-    return config.LastWordlist
 }
 
 func GetBrowserPath() string {
@@ -232,5 +210,13 @@ func InjectCookies(jar *cookiejar.Jar, targetURL string, playCookies []map[strin
 		cookies = append(cookies, c)
 	}
 	jar.SetCookies(u, cookies)	
+}
+
+func getCookieHeaderString(cookies []*fhttp.Cookie) string {
+    var parts []string
+    for _, c := range cookies {
+        parts = append(parts, fmt.Sprintf("%s=%s", c.Name, c.Value))
+    }
+    return strings.Join(parts, "; ")
 }
 

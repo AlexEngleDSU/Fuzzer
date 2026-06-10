@@ -15,14 +15,13 @@ A high-performance, concurrent web fuzzer with a clean, high-density graphical i
 To build and run this project from source, ensure you have:
 1.  **Go:** Version 1.20 or later.
 2.  **System Dependencies:** Fyne requires specific C libraries to interact with your system's graphics.
-    * **Debian/Ubuntu/Kali:**
+* **Debian/Ubuntu/Kali:**
         ```bash
         sudo apt-get update
         sudo apt-get install libgl1-mesa-dev libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev libxxf86vm-dev libxkbcommon-dev
         ```
-    * *Windows/macOS: No additional libraries are typically required.*
+* **Windows/macOS: No additional libraries are typically required.**
 ## Installation & Build
-1.  **Clone the repository:**
     ```bash
     git clone https://github.com/AlexEngleDSU/fuzzer.git
     cd fuzzer
@@ -43,7 +42,7 @@ To build and run this project from source, ensure you have:
 
 ## Contributing
 
-Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
 
 1.  Fork the Project
 2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)

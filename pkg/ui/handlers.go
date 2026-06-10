@@ -1,104 +1,84 @@
 package ui
-
 import (
 	"context"
 	"fmt"
 	"strconv"
 	"time"
-
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/widget"
-	"fyne.io/fyne/v2/container"
 	"github.com/AlexEngleDSU/Fuzzer/pkg/engine"
 	"github.com/AlexEngleDSU/Fuzzer/pkg/browser"
 )
-
-type AppState struct {
-	Window fyne.Window
-	Tabs   container.AppTabs // Requires the widget import above
-}
-
-var followMode = new(bool) 
-
-func HandleStartScan(
-	tabs *container.AppTabs, 
-	list *widget.List,
-	state *engine.ScanState,
-	urlEntry *widget.Entry,
-	userHeaderInput *widget.Entry,
-	depthEntry *SelectableEntry,
-	threadEntry *SelectableEntry,
-	delayEntry *SelectableEntry,
-	pathEntry *SelectableEntry,
-	filterEntry *SelectableEntry,
-	recursiveCheck *widget.Check,
-	cancelFuncPtr *context.CancelFunc,
-	statusLabel *widget.Label,
-	resumeBtn *widget.Button,
-	followModePtr *bool,
+func (ctrl *AppController) HandleStartScan(
+    urlEntry *widget.Entry,
+    userHeaderInput *widget.Entry,
+    recursiveCheck *widget.Check,
+    depthEntry *SelectableEntry,
+    threadEntry *SelectableEntry,
+    delayEntry *SelectableEntry,
+    pathEntry *SelectableEntry,
+    filterEntry *SelectableEntry,
+    
 ) func() {
 	return func() {
-		fyne.Do(func() { statusLabel.SetText("Scanner initializing...") })
-		
-		*followMode = true
-		
-		if *cancelFuncPtr != nil { (*cancelFuncPtr)() }
-		
-		var ctx context.Context
-		ctx, *cancelFuncPtr = context.WithCancel(context.Background())
-
-		state.Mu.Lock()
-		state.Results = []engine.ScanResult{}
-		state.Mu.Unlock()
-		list.Refresh()
-
+		fyne.Do(func() { ctrl.StatusLabel.SetText("Scanner initializing...") })
+		*ctrl.FollowMode = true
+		if ctrl.CancelFunc != nil { ctrl.CancelFunc() }
+		ctx, cancel := context.WithCancel(context.Background())
+		ctrl.CancelFunc = cancel
+		ctrl.State.Mu.Lock()
+		ctrl.State.Results = []engine.ScanResult{}
+		ctrl.State.Mu.Unlock()
+		ctrl.ResultsList.Refresh()
 		depth, _ := strconv.Atoi(depthEntry.Text)
 		wordlist, _ := engine.ReadLines(pathEntry.Text)
 		threads, _ := strconv.Atoi(threadEntry.Text)
 		delayS, _ := strconv.Atoi(delayEntry.Text)
-
 		go func() {
-			fyne.Do(func() { statusLabel.SetText("Launching browser...") })
+			fyne.Do(func() { ctrl.StatusLabel.SetText("Launching browser...") })
 			session, err := browser.InitializeSession(urlEntry.Text)
-			    
 			if err != nil {
 				// This will print the EXACT error to your terminal
 				fmt.Printf("CRITICAL BROWSER ERROR: %v\n", err)
-				statusLabel.SetText("Browser Error! Check terminal.")
+				ctrl.StatusLabel.SetText("Browser Error! Check terminal.")
 				return
 			} 
                 	if session != nil && len(session.Cookies) > 0 {
 			        engine.InjectCookies(engine.GlobalJar, urlEntry.Text, session.Cookies)
-			        fyne.Do(func() { statusLabel.SetText("WAF Solved - Cookies Injected - Starting Scan!") })
-			} else {
-				statusLabel.SetText("Warning: No cookies found, scanning anyway...")
-			        statusLabel.SetText("Challenge passed (no cookies).")
-    			}
+			        fyne.Do(func() { ctrl.StatusLabel.SetText("WAF Solved - Cookies Injected") })
+			} else { ctrl.StatusLabel.SetText("Warning: No cookies found, scanning anyway...") }
 			resChan := engine.ConcurrentScan(
 				ctx, 
 				extractHost(urlEntry.Text), 
 				urlEntry.Text, 
 				userHeaderInput.Text, 
-				wordlist, threads, 
+				wordlist, 
+				threads, 
 				filterEntry.Text,
 				recursiveCheck.Checked, 
 				depth, 
 				time.Duration(delayS)*time.Second,
 			)
+			fyne.Do(func() { ctrl.StatusLabel.SetText("Starting Scan!") })
+			time.Sleep(1 * time.Second)
+			fyne.Do(func() { ctrl.StatusLabel.Hide() })
+        		
 			for res := range resChan {
 			    if filterEntry.Text != "" && strconv.Itoa(res.StatusCode) == filterEntry.Text { continue }
-			    
 			    displayStr := fmt.Sprintf("Status: %d | URL: %s", res.StatusCode, res.URL)
 			    if res.Location != "" { displayStr += fmt.Sprintf(" -> Redirect: %s", res.Location)}
-
-			    state.Add(res)
-			    fyne.Do(func() { list.Refresh() })
+			    ctrl.State.Add(res)
+			    fyne.Do(func() { 
+			    	ctrl.ResultsList.Refresh() 
+			    	if *ctrl.FollowMode {
+			            ctrl.ResultsList.ScrollToBottom()
+        			}	
+	     	    	    })
 			}
 		}()
-
 		fyne.Do(func() {
-			tabs.SelectIndex(1)
-			tabs.Refresh()
+			ctrl.Tabs.SelectIndex(1)
+			ctrl.Tabs.Refresh()
 		})
 	}
 }

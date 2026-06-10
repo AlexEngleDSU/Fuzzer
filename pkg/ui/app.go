@@ -1,7 +1,6 @@
 package ui
 
 import (
-	"context"
 	"fmt"
 	"strings"
 	"net/url"
@@ -12,54 +11,33 @@ import (
 	//"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/theme"
+	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
 	"github.com/sqweek/dialog"
 	"github.com/AlexEngleDSU/Fuzzer/pkg/engine"
 )
-
-//type mouseTrap struct {
-//	widget.BaseWidget
-//	onInteract func()
-//}
-
-//func (m *mouseTrap) Tapped(e *fyne.PointEvent) { m.onInteract() }
-//func (m *mouseTrap) Dragged(e *fyne.DragEvent) { m.onInteract() }
-
-//func (m *mouseTrap) CreateRenderer() fyne.WidgetRenderer {
-//    return &emptyRenderer{}
-//}
-
-//type emptyRenderer struct{}
-
-//func (e *emptyRenderer) Destroy() {}
-//func (e *emptyRenderer) Layout(fyne.Size) {}
-//func (e *emptyRenderer) MinSize() fyne.Size { return fyne.NewSize(0, 0) }
-//func (e *emptyRenderer) Refresh() {}
-//func (e *emptyRenderer) Objects() []fyne.CanvasObject { return []fyne.CanvasObject{} }
-
-
-
 func StartGUI() {
-
-    state := &engine.ScanState{}
-
-    if !engine.BrowserExists() {
-    	fmt.Println("Browser not found, running setup...")
-    	engine.EnsureEnvironment()
+    ctrl := AppController {
+    	State:	&engine.ScanState{},
+    	FollowMode: new(bool),
     }
-     
+    bg := canvas.NewRectangle(theme.ButtonColor())
+    statusLabel := widget.NewLabel("Status: Ready")
+    ctrl.StatusLabel = statusLabel
+    statusWithBackground := container.NewStack(bg, ctrl.StatusLabel)
+    *ctrl.FollowMode = true
+    if !engine.BrowserExists() {
+    	ctrl.StatusLabel = widget.NewLabel("Browser not found, running setup...")
+    	engine.EnsureEnvironment()
+    	ctrl.StatusLabel.SetText("Setup complete.")
+    }
     a := app.NewWithID("com.fuzzer.app")
     a.Settings().SetTheme(&myTheme{Theme: theme.DefaultTheme()})
-    w := a.NewWindow("Fuzzer GUI")
-    w.Resize(fyne.NewSize(700, 500))
-
-    // State variables
-    var cancelFunc context.CancelFunc
-
-    // UI Components
+	
     urlEntry := widget.NewEntry()
     urlEntry.SetPlaceHolder("https://example.com/FUZZ")
+    urlEntry.FocusGained()
     userHeaderInput := widget.NewMultiLineEntry()
     userHeaderInput.ExtendBaseWidget(userHeaderInput)
     headerTemplate := `Host: %s
@@ -76,9 +54,9 @@ Sec-Fetch-Dest: document
 Accept-Encoding: gzip, deflate, br
 Accept-Language: en-US,en;q=0.9
 Referer: %s
+Cookie: %s
 Priority: u=0, i
 `
-    
     urlEntry.OnChanged = func(newURL string) {
 	    // 1. Prepare Referer: Trim /FUZZ and ensure it ends with a trailing slash
 	    baseReferer := strings.TrimSuffix(newURL, "/FUZZ")
@@ -112,20 +90,15 @@ Priority: u=0, i
     delayEntry.ExtendBaseWidget(delayEntry)
     delayEntry.SetText("1")
     delayContainer := container.New(layout.NewGridWrapLayout(fyne.NewSize(100, 40)), delayEntry)
-
+    
+    lastFile := engine.GetLastFilePath()
     pathEntry := &SelectableEntry{}
     pathEntry.ExtendBaseWidget(pathEntry)
     
-    lastFile := engine.GetLastFilePath()
     if lastFile != "" {
         pathEntry.SetText(lastFile)
     }
-
-    filterEntry := &SelectableEntry{}
-    filterEntry.ExtendBaseWidget(filterEntry)
-    filterContainer := container.New(layout.NewGridWrapLayout(fyne.NewSize(140, 40)), filterEntry)
-
-    // Select Wordlist Button (Missing in previous snippet)
+    
     selectButton := widget.NewButton("Select Wordlist", func() {
         d := dialog.File().Title("Select Wordlist")
         lastDir := filepath.Dir(lastFile)
@@ -134,45 +107,42 @@ Priority: u=0, i
         if err == nil {
         	pathEntry.SetText(filename)
         	engine.SaveLastFilePath(filename)
-        }
+      }
     })
-    pathRow := container.NewBorder(nil, nil, selectButton, nil, pathEntry)
+    filterEntry := &SelectableEntry{}
+    filterEntry.ExtendBaseWidget(filterEntry)
+    filterContainer := container.New(layout.NewGridWrapLayout(fyne.NewSize(140, 40)), filterEntry)
     
     
-
     list := widget.NewList(
 	func() int { 
-		state.Mu.RLock()
-		state.Mu.RUnlock()
-		return len(state.Results)
+		ctrl.State.Mu.RLock()
+		defer ctrl.State.Mu.RUnlock()
+		return len(ctrl.State.Results)
 	},
 	func() fyne.CanvasObject { return &compactLink{widget.NewHyperlink("", nil)} },
 	func(id widget.ListItemID, obj fyne.CanvasObject) {
-		state.Mu.RLock()
-		if id >= len(state.Results) {
-			state.Mu.RUnlock()
+		ctrl.State.Mu.RLock()
+		if id >= len(ctrl.State.Results) {
+			ctrl.State.Mu.RUnlock()
 			return
 		}
-		res := state.Results[id]
-		state.Mu.RUnlock()
-		   
+		res := ctrl.State.Results[id]
+		ctrl.State.Mu.RUnlock()
 		link := obj.(*compactLink)
-		    
 		// 1. Format text
 		text := fmt.Sprintf("Status: %d | URL: %s", res.StatusCode, res.URL)
 		if res.Location != "" { text += fmt.Sprintf(" -> Redirect: %s", res.Location) }
 		link.SetText(text)
-		    
 		// 2. Force the browser open on click
 		targetURL := res.URL
-		if res.Location != "" { targetURL = res.Location }
-		    
+		if res.Location != "" { targetURL = res.Location }	    
 		// Create the actual URL object
 		parsed, err := url.Parse(targetURL)
 		if err == nil {
 			link.URL = parsed
 			link.OnTapped = func() {
-				if *followMode { *followMode = false }
+				if *ctrl.FollowMode { *ctrl.FollowMode = false }
 				target := targetURL
 				if !strings.HasPrefix(target, "http") { target = "https://" + target }
 				parsed, _ := url.Parse(target)
@@ -183,38 +153,43 @@ Priority: u=0, i
 	},	
     )
     
-    resumeBtn := widget.NewButton("↓", func() {
-        *followMode = true
-        // Add any logic needed to jump back to bottom if required
-        list.Refresh()
-        list.ScrollToBottom()
-    })
-        
-    statusLabel := widget.NewLabel("Ready")  
     
-    bottomControls := container.NewVBox(
+    ctrl.ResultsList = list
+    resumeBtn := widget.NewButton("↓", func() {
+        *ctrl.FollowMode = true
+        ctrl.ResultsList.ScrollToBottom()
+        ctrl.ResultsList.Refresh()
+    })
+    
+    resultsContent := container.NewBorder(
+    	statusWithBackground, 
     	resumeBtn,
-    	statusLabel,
+    	nil,
+    	nil,
+    	ctrl.ResultsList,
     )
-
-    resultsContent := container.NewBorder(nil, bottomControls, nil, nil, list)
-
-    tabs := container.NewAppTabs(
+    ctrl.Tabs = container.NewAppTabs(
         container.NewTabItem("Configuration", container.NewVBox()),
         container.NewTabItem("Results", resultsContent),
     )
-    
-    startButton := widget.NewButton("Start Scan", HandleStartScan(
-        tabs, list, state, urlEntry, userHeaderInput,
-        depthEntry, threadEntry, delayEntry, pathEntry, filterEntry,
-        recursiveCheck, &cancelFunc, statusLabel, resumeBtn, followMode,
+    startButton := widget.NewButton(
+        "Start Scan", 
+        ctrl.HandleStartScan(
+            urlEntry, 
+            userHeaderInput,
+	    recursiveCheck,
+            depthEntry, 
+            threadEntry, 
+            delayEntry, 
+            pathEntry, 
+            filterEntry,
+
     ))
-    
     list.OnSelected = func(id widget.ListItemID) {
-    	*followMode = false // User clicked an item; they want to look at it.
+    	*ctrl.FollowMode = false
     	resumeBtn.Show()
     }
-
+    
     // Fix: Assemble the layout here correctly
     topControls := container.NewVBox(
         urlEntry,
@@ -225,11 +200,10 @@ Priority: u=0, i
             widget.NewLabel("Threads:"), threadContainer,
             widget.NewLabel("Delay:"), delayContainer,
         ),
-        pathRow,
+        container.NewBorder(nil,nil,selectButton, nil, pathEntry),
         startButton,
         widget.NewLabel("Initial Request:"),
     )
-
     // 2. Use Border to pin controls to the Top, and expand userHeaderInput to fill the Center
     configContent := container.NewBorder(
         topControls, // Top
@@ -238,9 +212,11 @@ Priority: u=0, i
         nil,         // Right
         userHeaderInput, // Center (This will stretch to the bottom)
     )
-    tabs.Items[0].Content = configContent
-
-    w.SetContent(tabs)
+    ctrl.Tabs.Items[0].Content = configContent
+    w := a.NewWindow("Fuzzer GUI")
+    w.Resize(fyne.NewSize(690, 500))
+    w.SetContent(ctrl.Tabs)
+    w.Canvas().Focus(urlEntry)
     w.ShowAndRun()
 }
 

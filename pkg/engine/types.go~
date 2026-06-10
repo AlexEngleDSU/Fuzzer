@@ -1,16 +1,18 @@
 package engine
-
 import (
 	"sync"
 	fhttp "github.com/bogdanfinn/fhttp"
 )
+type WAFSession struct {
+	Cookies []map[string]interface{}
+	Headers map[string]string
+}
 
 type ScanState struct {
-    Results []ScanResults
+    Results []ScanResult
     Mu      sync.RWMutex
 }
 
-// Add a method to ensure thread safety
 func (s *ScanState) Add(res ScanResult) {
     s.Mu.Lock()
     defer s.Mu.Unlock()
@@ -31,8 +33,4 @@ type HeaderLine struct {
 	Value string
 }
 
-var (
-	Paused    bool
-	PauseMu   sync.Mutex
-	PauseChan = make(chan struct{})
-)
+

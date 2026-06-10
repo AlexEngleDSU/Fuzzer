@@ -44,9 +44,7 @@ func SaveLastFilePath(path string) {
 
 func GetLastFilePath() string {
     data, err := os.ReadFile(GetConfigPath())
-    if err != nil {
-        return ""
-    }
+    if err != nil { return "" }
     var config Config
     json.Unmarshal(data, &config)
     return config.LastWordlist
@@ -54,9 +52,7 @@ func GetLastFilePath() string {
 
 func GetInitialPath() string {
     data, err := os.ReadFile(GetConfigPath())
-    if err != nil {
-        return ""
-    }
+    if err != nil { return "" }
     var config Config
     json.Unmarshal(data, &config)
     return config.LastDir
@@ -214,5 +210,13 @@ func InjectCookies(jar *cookiejar.Jar, targetURL string, playCookies []map[strin
 		cookies = append(cookies, c)
 	}
 	jar.SetCookies(u, cookies)	
+}
+
+func GetCookieHeaderString(cookies []*fhttp.Cookie) string {
+    var parts []string
+    for _, c := range cookies {
+        parts = append(parts, fmt.Sprintf("%s=%s", c.Name, c.Value))
+    }
+    return strings.Join(parts, "; ")
 }
 

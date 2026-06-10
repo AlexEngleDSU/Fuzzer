@@ -1,5 +1,4 @@
 package engine
-
 import (
 	"context"
 	"io"
@@ -8,38 +7,25 @@ import (
 	"sync"
 	"time"
 	"fmt"
-
 	fhttp "github.com/bogdanfinn/fhttp"
 )
-
 func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate string, wordlist []string, workerCount int, filterCodes string, recursive bool, maxDepth int, delay time.Duration) <-chan ScanResult {
-
 	results := make(chan ScanResult, 500)
 	browserClient := CreateBrowserClient()
-	badContentLength := get404Length(browserClient, urlTemplate)
 	baseHeaders := fmt.Sprintf(headerTemplate, host, host)
 	headers := GetOrderedHeaders(baseHeaders)
-
+	badContentLength := get404Length(browserClient, urlTemplate)
 	filterMap := make(map[int]bool)
 	for _, codeStr := range strings.Split(filterCodes, ",") {
 		if code, err := strconv.Atoi(strings.TrimSpace(codeStr)); err == nil { filterMap[code] = true }
 	}
-
 	go func() {
 		defer close(results)
-		
-		queue := []string{urlTemplate}
-		globalSeen := sync.Map{}
-		
-		jobs := make(chan string, 1000)
-		semaphore := make(chan struct{}, workerCount)
+		jobs := make(chan string, 1000)		
 		var wg sync.WaitGroup
-		
-		// Define these here so they are accessible to the worker scope
+		globalSeen := sync.Map{}
 		var nextGen []string
 		var mu sync.Mutex
-
-
 		for w := 1; w <= workerCount; w++ {
 			go func() {
 				for target := range jobs {
@@ -49,29 +35,25 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 						PauseMu.Unlock()
 						<-pChan
 					} else { PauseMu.Unlock() }
-
-					select {
-					case <-time.After(delay):
-					case <-ctx.Done():
-						semaphore <- struct{}{}
+					if delay > 0 {
+					    select {
+					    case <-time.After(delay):
+						// Wait finished, proceed
+					    case <-ctx.Done():
+						// Cancelled, exit worker
 						wg.Done()
-						continue
+						return // exit the worker goroutine
+					    }
 					}
-
-					semaphore <- struct{}{}
 					if _, loaded := globalSeen.LoadOrStore(target, true); loaded {
-						<-semaphore
 						wg.Done()
 						continue
 					}
-
 					req, err := fhttp.NewRequest("GET", target, nil)
 					if err != nil {
-						<-semaphore
 						wg.Done()
 						continue
 					}
-
 					for _, h := range headers {
 						if strings.EqualFold(h.Key, "Host") {
 							req.Host = h.Value
@@ -79,17 +61,14 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 						}
 						req.Header.Add(h.Key, h.Value)
 					}
-		
 					resp, err := browserClient.Do(req)
 					if err != nil { continue }
-					
 					if err == nil && resp != nil {
 						body, _ := io.ReadAll(resp.Body)
 						resp.Body.Close()
 						respCookies := resp.Cookies()
 						status := resp.StatusCode
 						if !filterMap[status] && !(status == 200 && int64(len(body)) == badContentLength) {
-							
 							results <- ScanResult{
 								URL:	target,
 								StatusCode:    status,
@@ -97,7 +76,6 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 								Location:      resp.Header.Get("Location"),
 								Cookies:       respCookies,
 							}
-
 							if status >= 300 && status < 400 {
 								if recursive {
 									loc := resp.Header.Get("Location")
@@ -115,21 +93,24 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 							}
 						}
 					}
-				<-semaphore
 				wg.Done()
 				}
 			}()
 		}
+		queue := []string{urlTemplate}
 		for depth := 0; depth <= maxDepth; depth++ {
 			if len(queue) == 0 { break }
-		
-			mu.Lock()
-			nextGen = []string{}
-			mu.Unlock()
+			nextGen := make([]string, 0)
 			for _, base := range queue {
 				for _, word := range wordlist {
+					target := strings.ReplaceAll(base, "FUZZ", word)
 					wg.Add(1)
-					jobs <- strings.ReplaceAll(base, "FUZZ", word)
+					select {
+					case jobs <- target:
+					case <-ctx.Done():
+						wg.Done()
+						return
+					}
 				}
 			}
 			wg.Wait()
