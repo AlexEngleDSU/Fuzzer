@@ -9,4 +9,4 @@ Future: Discovery
 	- Implement passive discovery to extract new endpoints from html response bodys
 	- Develop intellegent wordlist generation based on site path structure
 	- Create a report generator to export successfull findings to local files
-	
+	- add CLI version and integration.

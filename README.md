@@ -23,22 +23,13 @@ To build and run this project from source, ensure you have:
     * *Windows/macOS: No additional libraries are typically required.*
 ## Installation & Build
 1.  **Clone the repository:**
-    ```
+    ```bash
     git clone https://github.com/AlexEngleDSU/fuzzer.git
     cd fuzzer
-    ```
-2.  **Tidy dependencies:**
-    ```
     go mod tidy
-    ```
-3.  **Build the application:**
-    ```bash
     make install
     # or
     go build -o fuzzer ./cmd/fuzzer/main.go
-    ```
-4.  **Run:**
-    ```bash
     ./fuzzer
     ```
 * **Note for Linux Users:** Fyne requires standard desktop development headers. If you encounter build errors, ensure your pkg-config is configured and that you have the required graphics development libraries installed as shown above.
