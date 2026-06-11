@@ -33,4 +33,9 @@ type HeaderLine struct {
 	Value string
 }
 
+var (
+	Paused    bool
+	PauseMu   sync.Mutex
+	PauseChan = make(chan struct{})
+)
 

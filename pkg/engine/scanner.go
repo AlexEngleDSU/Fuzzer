@@ -9,6 +9,12 @@ import (
 	"fmt"
 	fhttp "github.com/bogdanfinn/fhttp"
 )
+
+type Job struct {
+	URL   string
+	Depth int
+}
+
 func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate string, wordlist []string, workerCount int, filterCodes string, recursive bool, maxDepth int, delay time.Duration, onStatusUpdate func(string),) <-chan ScanResult {
 	results := make(chan ScanResult, 500)
 	browserClient := CreateBrowserClient()
@@ -26,14 +32,14 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 	onStatusUpdate("")
 	go func() {
 		defer close(results)
-		jobs := make(chan string, 1000)		
-		discovery := make(chan string, 100)
+		jobs := make(chan Job, 1000)		
+		discovery := make(chan Job, 1000)
 		var wg sync.WaitGroup
 		globalSeen := sync.Map{}
 		for w := 1; w <= workerCount; w++ {
 			go func() {
-				for target := range jobs {
-					func(target string) {
+				for job := range jobs {
+					func(j Job) {
 						defer wg.Done()
 						PauseMu.Lock()
 						if Paused {
@@ -47,10 +53,10 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 								case <- ctx.Done(): return
 							}
 						}
-						if _, loaded := globalSeen.LoadOrStore(target, true); loaded {
+						if _, loaded := globalSeen.LoadOrStore(j.URL, true); loaded {
 							return
 						}
-						req, err := fhttp.NewRequest("GET", target, nil)
+						req, err := fhttp.NewRequest("GET", j.URL, nil)
 						if err != nil {
 							return
 						}
@@ -71,39 +77,40 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 						status := resp.StatusCode
 						if !filterMap[status] && !(status == 200 && int64(len(body)) == badContentLength) {
 							results <- ScanResult{
-								URL:	target,
+								URL:	j.URL,
 								StatusCode:    status,
 								ContentLength: int64(len(body)),
 								Location:      resp.Header.Get("Location"),
 								Cookies:       respCookies,
+								Depth:         j.Depth,
 							}
 							if recursive && status >= 300 && status < 400 {
 								loc := resp.Header.Get("Location")
-								resolved := ResolveURL(target, loc)
+								resolved := ResolveURL(j.URL, loc)
 								if !strings.Contains(resolved, "FUZZ") {
 									if !strings.HasSuffix(resolved, "/") { resolved += "/" }
 									resolved += "FUZZ"
 								}
-								discovery <- resolved
+								discovery <- Job{URL: resolved, Depth: j.Depth + 1}
 							}
 						}
-					} (target)
+					} (job)
 				}
 			}()
 		}
-		queue := []string{urlTemplate}
+		queue := []Job{{URL: urlTemplate, Depth: 0}}
 		for depth := 0; depth <= maxDepth; depth++ {
 			onStatusUpdate(fmt.Sprintf("Scanning depth %d...", depth))
 			for _, base := range queue {
 				for _, word := range wordlist {
-					target := strings.ReplaceAll(base, "FUZZ", word)
+					target := strings.ReplaceAll(base.URL, "FUZZ", word)
 					wg.Add(1)
-					jobs <- target
+					jobs <- Job{URL: target, Depth: base.Depth}
 				}
 			}
 			wg.Wait()
 			
-			newQueue := []string{}
+			newQueue := []Job{}
 			
 			for len(discovery) > 0 {
 				d := <- discovery

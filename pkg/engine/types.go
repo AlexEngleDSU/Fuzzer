@@ -26,6 +26,7 @@ type ScanResult struct {
 	Message           string
 	ContentLength     int64
 	Cookies           []*fhttp.Cookie
+	Depth		  int
 }
 
 type HeaderLine struct {

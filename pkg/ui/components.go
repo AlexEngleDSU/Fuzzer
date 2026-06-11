@@ -1,5 +1,4 @@
 package ui
-
 import (
 	"fmt"
 	"net/url"
@@ -11,7 +10,6 @@ import (
 	"fyne.io/fyne/v2/theme"
 	"github.com/AlexEngleDSU/Fuzzer/pkg/engine"
 )
-
 // HeaderTemplate defines the structure of your HTTP headers
 const HeaderTemplate = `Host: %s
 Sec-Ch-Ua: "Not-A.Brand";v="24", "Chromium";v="146"
@@ -29,7 +27,6 @@ Accept-Language: en-US,en;q=0.9
 Referer: %s
 Priority: u=0, i
 `
-
 func NewFuzzerUI() *FuzzerUI {
 	ui := &FuzzerUI{
 		URLEntry:         widget.NewEntry(),
@@ -43,7 +40,6 @@ func NewFuzzerUI() *FuzzerUI {
 		StartButton:      widget.NewButton("Start Scan", nil),
 		UserHeaderInput:  widget.NewMultiLineEntry(),
 	}
-	
 	lastFile := engine.GetLastFilePath()
         if lastFile != "" {
             ui.PathEntry.SetText(lastFile)
@@ -65,18 +61,15 @@ func NewFuzzerUI() *FuzzerUI {
 	ui.UserHeaderInput.ExtendBaseWidget(ui.UserHeaderInput)
 	return ui
 }
-
 func (f *FuzzerUI) UpdateHeader(host, referer string) {
     // Only two arguments now to match the two %s in your template
     formatted := fmt.Sprintf(HeaderTemplate, host, referer)
     f.UserHeaderInput.SetText(formatted)
 }
-
 func SetupResultsContent(ctrl *AppController) fyne.CanvasObject {
     bg := canvas.NewRectangle(theme.ButtonColor())
     statusLabel := widget.NewLabel("Status: Ready")
     ctrl.StatusLabel = statusLabel
-    
     list := widget.NewList(
 	func() int { 
 		ctrl.State.Mu.RLock()
@@ -94,7 +87,8 @@ func SetupResultsContent(ctrl *AppController) fyne.CanvasObject {
 		ctrl.State.Mu.RUnlock()
 		link := obj.(*compactLink)
 		// 1. Format text
-		text := fmt.Sprintf("Status: %d | URL: %s", res.StatusCode, res.URL)
+		tabs := strings.Repeat("  ", res.Depth)
+		text := fmt.Sprintf("%sStatus: %d | URL: %s", tabs, res.StatusCode, res.URL)
 		if res.Location != "" { text += fmt.Sprintf(" -> Redirect: %s", res.Location) }
 		link.SetText(text)
 		// 2. Force the browser open on click
@@ -115,7 +109,6 @@ func SetupResultsContent(ctrl *AppController) fyne.CanvasObject {
 		link.Refresh()
 	},	
     )
-    
     ctrl.ResultsList = list
     statusWithBackground := container.NewStack(bg, ctrl.StatusLabel)
     resumeBtn := widget.NewButton("↓", func() {
@@ -124,8 +117,7 @@ func SetupResultsContent(ctrl *AppController) fyne.CanvasObject {
         ctrl.ResultsList.Refresh()
     })
     resumeBtn.Show()
-    resumeContainer := container.NewStack(resumeBtn)
-      
+    resumeContainer := container.NewStack(resumeBtn) 
     resultsContent := container.NewBorder(
         statusWithBackground, 
         resumeContainer,
