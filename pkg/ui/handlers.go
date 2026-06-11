@@ -11,14 +11,13 @@ import (
 )
 func (ctrl *AppController) HandleStartScan(
     urlEntry *widget.Entry,
-    userHeaderInput *widget.Entry,
+    pathEntry *SelectableEntry,
     recursiveCheck *widget.Check,
     depthEntry *SelectableEntry,
     threadEntry *SelectableEntry,
     delayEntry *SelectableEntry,
-    pathEntry *SelectableEntry,
     filterEntry *SelectableEntry,
-    
+    userHeaderInput *widget.Entry,
 ) func() {
 	return func() {
 		fyne.Do(func() { ctrl.StatusLabel.SetText("Scanner initializing...") })
@@ -58,11 +57,20 @@ func (ctrl *AppController) HandleStartScan(
 				recursiveCheck.Checked, 
 				depth, 
 				time.Duration(delayS)*time.Second,
+				func(msg string) {
+					fyne.Do(func() {
+					    if msg == "" {
+						ctrl.StatusLabel.Hide()
+					    } else {
+						ctrl.StatusLabel.SetText(msg)
+						ctrl.StatusLabel.Show()
+					    }
+					})
+		    		},
 			)
 			fyne.Do(func() { ctrl.StatusLabel.SetText("Starting Scan!") })
 			time.Sleep(1 * time.Second)
 			fyne.Do(func() { ctrl.StatusLabel.Hide() })
-        		
 			for res := range resChan {
 			    if filterEntry.Text != "" && strconv.Itoa(res.StatusCode) == filterEntry.Text { continue }
 			    displayStr := fmt.Sprintf("Status: %d | URL: %s", res.StatusCode, res.URL)

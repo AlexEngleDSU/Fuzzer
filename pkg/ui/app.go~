@@ -1,223 +1,107 @@
 package ui
 
 import (
-	"fmt"
-	"strings"
 	"net/url"
 	"path/filepath"
-	//"image/color"
+	"strings"
+
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
-	//"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
-	"fyne.io/fyne/v2/theme"
-	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/layout"
+	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
-	"github.com/sqweek/dialog"
 	"github.com/AlexEngleDSU/Fuzzer/pkg/engine"
+	"github.com/AlexEngleDSU/Fuzzer/pkg/screen"
+	"github.com/sqweek/dialog"
 )
+
 func StartGUI() {
-    ctrl := AppController {
-    	State:	&engine.ScanState{},
-    	FollowMode: new(bool),
-    }
-    bg := canvas.NewRectangle(theme.ButtonColor())
-    statusLabel := widget.NewLabel("Status: Ready")
-    ctrl.StatusLabel = statusLabel
-    statusWithBackground := container.NewStack(bg, ctrl.StatusLabel)
-    *ctrl.FollowMode = true
-    if !engine.BrowserExists() {
-    	ctrl.StatusLabel = widget.NewLabel("Browser not found, running setup...")
-    	engine.EnsureEnvironment()
-    	ctrl.StatusLabel.SetText("Setup complete.")
-    }
-    a := app.NewWithID("com.fuzzer.app")
-    a.Settings().SetTheme(&myTheme{Theme: theme.DefaultTheme()})
+	ctrl := AppController{
+		State:      &engine.ScanState{},
+		FollowMode: new(bool),
+	}
 	
-    urlEntry := widget.NewEntry()
-    urlEntry.SetPlaceHolder("https://example.com/FUZZ")
-    urlEntry.FocusGained()
-    userHeaderInput := widget.NewMultiLineEntry()
-    userHeaderInput.ExtendBaseWidget(userHeaderInput)
-    headerTemplate := `Host: %s
-Sec-Ch-Ua: "Not-A.Brand";v="24", "Chromium";v="146"
-Sec-Ch-Ua-Mobile: ?0
-Sec-Ch-Ua-Platform: "Linux"
-Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
-Sec-Fetch-Site: none
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-Referer: %s
-Cookie: %s
-Priority: u=0, i
-`
-    cookieStr := engine.GetCookieHeaderString(session.Cookies)
-    urlEntry.OnChanged = func(newURL string) {
-	    // 1. Prepare Referer: Trim /FUZZ and ensure it ends with a trailing slash
-	    baseReferer := strings.TrimSuffix(newURL, "/FUZZ")
-	    if !strings.HasSuffix(baseReferer, "/") { baseReferer += "/" }
+	ctrl.ResultsList = widget.NewList(
+            func() int { return 0 }, // Placeholder for now
+            func() fyne.CanvasObject { return widget.NewLabel("Template") },
+            func(id widget.ListItemID, obj fyne.CanvasObject) {},
+        )   
 
-	    // 2. Parse the URL
-	    u, err := url.Parse(newURL)
-	    if err != nil { return }
+	// Environment setup
+	if !engine.BrowserExists() {
+		engine.EnsureEnvironment()
+	}
+	*ctrl.FollowMode = true
 
-	    // 3. Prepare GET Path: Take the full path, remove the /FUZZ suffix
-	    path := u.Path
-	    path = strings.TrimSuffix(path, "/FUZZ")
-	    if path == "" { path = "/" }
+	a := app.NewWithID("com.fuzzer.app")
+	a.Settings().SetTheme(&myTheme{Theme: theme.DefaultTheme()})
+	w := a.NewWindow("Fuzzer GUI")
 
-	    // 4. Fill the template: [GET Path, Host, Referer]
-	    userHeaderInput.SetText(fmt.Sprintf(headerTemplate, u.Host, baseReferer, cookieStr))
-    }
-    
-    recursiveCheck := widget.NewCheck("", nil)
-    
-    depthEntry := &SelectableEntry{}
-    depthEntry.ExtendBaseWidget(depthEntry)
-    depthEntry.SetText("3")
+	// 1. Initialize the UI components from the struct
+	myUI := NewFuzzerUI()
 
-    threadEntry := &SelectableEntry{}
-    threadEntry.ExtendBaseWidget(threadEntry)
-    threadEntry.SetText("3")
-    threadContainer := container.New(layout.NewGridWrapLayout(fyne.NewSize(50, 40)), threadEntry)
+	// 2. Logic for URL changes
+	myUI.URLEntry.OnChanged = func(newURL string) {
+		baseReferer := strings.TrimSuffix(newURL, "/FUZZ")
+		if !strings.HasSuffix(baseReferer, "/") { baseReferer += "/" }
+		
+		u, err := url.Parse(newURL)
+		if err != nil { return }
+	
+		myUI.UpdateHeader(u.Host, baseReferer)
+	}
 
-    delayEntry := &SelectableEntry{}
-    delayEntry.ExtendBaseWidget(delayEntry)
-    delayEntry.SetText("1")
-    delayContainer := container.New(layout.NewGridWrapLayout(fyne.NewSize(100, 40)), delayEntry)
-    
-    lastFile := engine.GetLastFilePath()
-    pathEntry := &SelectableEntry{}
-    pathEntry.ExtendBaseWidget(pathEntry)
-    
-    if lastFile != "" {
-        pathEntry.SetText(lastFile)
-    }
-    
-    selectButton := widget.NewButton("Select Wordlist", func() {
-        d := dialog.File().Title("Select Wordlist")
-        lastDir := filepath.Dir(lastFile)
-        if lastDir != "" { d.SetStartDir(lastDir) }
-        filename, err := d.Load()
-        if err == nil {
-        	pathEntry.SetText(filename)
-        	engine.SaveLastFilePath(filename)
-      }
-    })
-    filterEntry := &SelectableEntry{}
-    filterEntry.ExtendBaseWidget(filterEntry)
-    filterContainer := container.New(layout.NewGridWrapLayout(fyne.NewSize(140, 40)), filterEntry)
-    
-    
-    list := widget.NewList(
-	func() int { 
-		ctrl.State.Mu.RLock()
-		defer ctrl.State.Mu.RUnlock()
-		return len(ctrl.State.Results)
-	},
-	func() fyne.CanvasObject { return &compactLink{widget.NewHyperlink("", nil)} },
-	func(id widget.ListItemID, obj fyne.CanvasObject) {
-		ctrl.State.Mu.RLock()
-		if id >= len(ctrl.State.Results) {
-			ctrl.State.Mu.RUnlock()
-			return
+	// 3. Setup File Selection
+	selectButton := widget.NewButton("Select Wordlist", func() {
+		d := dialog.File().Title("Select Wordlist")
+		lastFile := engine.GetLastFilePath()
+		if lastDir := filepath.Dir(lastFile); lastDir != "" { d.SetStartDir(lastDir) }
+		if filename, err := d.Load(); err == nil {
+			myUI.PathEntry.SetText(filename)
+			engine.SaveLastFilePath(filename)
 		}
-		res := ctrl.State.Results[id]
-		ctrl.State.Mu.RUnlock()
-		link := obj.(*compactLink)
-		// 1. Format text
-		text := fmt.Sprintf("Status: %d | URL: %s", res.StatusCode, res.URL)
-		if res.Location != "" { text += fmt.Sprintf(" -> Redirect: %s", res.Location) }
-		link.SetText(text)
-		// 2. Force the browser open on click
-		targetURL := res.URL
-		if res.Location != "" { targetURL = res.Location }	    
-		// Create the actual URL object
-		parsed, err := url.Parse(targetURL)
-		if err == nil {
-			link.URL = parsed
-			link.OnTapped = func() {
-				if *ctrl.FollowMode { *ctrl.FollowMode = false }
-				target := targetURL
-				if !strings.HasPrefix(target, "http") { target = "https://" + target }
-				parsed, _ := url.Parse(target)
-				fyne.CurrentApp().OpenURL(parsed)
-			}
-		}
-		link.Refresh()
-	},	
-    )
-    
-    
-    ctrl.ResultsList = list
-    resumeBtn := widget.NewButton("↓", func() {
-        *ctrl.FollowMode = true
-        ctrl.ResultsList.ScrollToBottom()
-        ctrl.ResultsList.Refresh()
-    })
-    
-    resultsContent := container.NewBorder(
-    	statusWithBackground, 
-    	resumeBtn,
-    	nil,
-    	nil,
-    	ctrl.ResultsList,
-    )
-    ctrl.Tabs = container.NewAppTabs(
-        container.NewTabItem("Configuration", container.NewVBox()),
-        container.NewTabItem("Results", resultsContent),
-    )
-    startButton := widget.NewButton(
-        "Start Scan", 
-        ctrl.HandleStartScan(
-            urlEntry, 
-            userHeaderInput,
-	    recursiveCheck,
-            depthEntry, 
-            threadEntry, 
-            delayEntry, 
-            pathEntry, 
-            filterEntry,
+	})
+	
+	myUI.StartButton.OnTapped = ctrl.HandleStartScan(
+            myUI.URLEntry, 
+            myUI.PathEntry,
+            myUI.RecursiveCheck,
+            myUI.DepthEntry, 
+            myUI.ThreadEntry, 
+            myUI.DelayEntry, 
+            myUI.FilterCodesEntry,
+            myUI.UserHeaderInput,
+        )
+	
 
-    ))
-    list.OnSelected = func(id widget.ListItemID) {
-    	*ctrl.FollowMode = false
-    	resumeBtn.Show()
-    }
-    
-    // Fix: Assemble the layout here correctly
-    topControls := container.NewVBox(
-        urlEntry,
-        container.NewHBox(
-            widget.NewLabel("Rec:"), recursiveCheck,
-            widget.NewLabel("Depth:"), depthEntry,
-            widget.NewLabel("Filter:"), filterContainer,
-            widget.NewLabel("Threads:"), threadContainer,
-            widget.NewLabel("Delay:"), delayContainer,
-        ),
-        container.NewBorder(nil,nil,selectButton, nil, pathEntry),
-        startButton,
-        widget.NewLabel("Initial Request:"),
-    )
-    // 2. Use Border to pin controls to the Top, and expand userHeaderInput to fill the Center
-    configContent := container.NewBorder(
-        topControls, // Top
-        nil,         // Bottom
-        nil,         // Left
-        nil,         // Right
-        userHeaderInput, // Center (This will stretch to the bottom)
-    )
-    ctrl.Tabs.Items[0].Content = configContent
-    w := a.NewWindow("Fuzzer GUI")
-    w.Resize(fyne.NewSize(690, 500))
-    w.SetContent(ctrl.Tabs)
-    w.Canvas().Focus(urlEntry)
-    w.ShowAndRun()
+	// 4. Layout
+	topControls := container.NewVBox(
+		myUI.URLEntry,
+		container.NewBorder(nil, nil, selectButton, nil, myUI.PathEntry),
+		container.NewHBox(
+			widget.NewLabel("Recursion:"), myUI.RecursiveCheck,
+			widget.NewLabel("Depth:"), myUI.DepthEntry,
+			widget.NewLabel("Filter codes:"), container.New(layout.NewGridWrapLayout(fyne.NewSize(150,40)), myUI.FilterCodesEntry),
+			widget.NewLabel("Match Codes:"), container.New(layout.NewGridWrapLayout(fyne.NewSize(150,40)), myUI.MatchCodesEntry),
+			widget.NewLabel("Threads:"), container.New(layout.NewGridWrapLayout(fyne.NewSize(50, 40)), myUI.ThreadEntry),
+			widget.NewLabel("Delay:"), container.New(layout.NewGridWrapLayout(fyne.NewSize(100, 40)), myUI.DelayEntry),
+		),
+		myUI.StartButton,
+		widget.NewLabel("Initial Request"),
+	)
+
+	// Tab Content
+	configContent := container.NewBorder(topControls, nil, nil, nil, myUI.UserHeaderInput)
+	
+	ctrl.Tabs = container.NewAppTabs(
+		container.NewTabItem("Configuration", configContent),
+		container.NewTabItem("Results", SetupResultsContent(&ctrl)),
+		container.NewTabItem("Output", container.NewHBox(widget.NewLabel("NOT IMPLEMENTED YET!!!"))),
+	)
+	width, height := screen.GetPrimaryScreenSize()
+	w.Resize(fyne.NewSize(width-10, height-100))
+	w.CenterOnScreen()
+	w.SetContent(ctrl.Tabs)
+	w.ShowAndRun()
 }
-

@@ -11,7 +11,6 @@ import (
 	"strings"
 	"sync"
 	"encoding/json"
-
 	fhttp "github.com/bogdanfinn/fhttp"
 	"github.com/bogdanfinn/fhttp/cookiejar"
 	tls_client "github.com/bogdanfinn/tls-client"
@@ -188,9 +187,7 @@ func CreateBrowserClient() tls_client.HttpClient {
 		tls_client.WithNotFollowRedirects(),
 	}
 	client, err := tls_client.NewHttpClient(tls_client.NewNoopLogger(), options...)
-	if err != nil {
-		return nil
-	}
+	if err != nil { return nil }
 	return client
 }
 
@@ -212,11 +209,4 @@ func InjectCookies(jar *cookiejar.Jar, targetURL string, playCookies []map[strin
 	jar.SetCookies(u, cookies)	
 }
 
-func GetCookieHeaderString(cookies []*fhttp.Cookie) string {
-    var parts []string
-    for _, c := range cookies {
-        parts = append(parts, fmt.Sprintf("%s=%s", c.Name, c.Value))
-    }
-    return strings.Join(parts, "; ")
-}
 

@@ -10,6 +10,19 @@ import (
 	"github.com/AlexEngleDSU/Fuzzer/pkg/engine"
 )
 
+type FuzzerUI struct {
+	URLEntry         *widget.Entry
+	PathEntry        *SelectableEntry
+	RecursiveCheck   *widget.Check
+	DepthEntry       *SelectableEntry
+	ThreadEntry      *SelectableEntry
+	DelayEntry       *SelectableEntry
+	FilterCodesEntry *SelectableEntry
+	MatchCodesEntry  *SelectableEntry
+	StartButton      *widget.Button
+	UserHeaderInput  *widget.Entry
+}
+
 type SelectableEntry struct {
 	widget.Entry
 	isFocused bool
