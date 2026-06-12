@@ -10,20 +10,22 @@ import (
 	fhttp "github.com/bogdanfinn/fhttp"
 )
 
-type Job struct {
-	URL   string
-	Depth int
-}
 
 func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate string, wordlist []string, workerCount int, filterCodes string, recursive bool, maxDepth int, delay time.Duration, onStatusUpdate func(string),) <-chan ScanResult {
 	results := make(chan ScanResult, 500)
+	jobs := make(chan Job, 1000)
+	discovery := make(chan Job, 1000)
+	filterMap := make(map[int]bool)
+	
+	queue := []Job{{URL: urlTemplate, Depth: 0}}
+	
 	browserClient := CreateBrowserClient()
 	baseHeaders := fmt.Sprintf(headerTemplate, host, host)
 	headers := GetOrderedHeaders(baseHeaders)
 	badContentLength := get404Length(browserClient, urlTemplate)
 	onStatusUpdate("Starting Scan!")
     	time.Sleep(1 * time.Second)
-	filterMap := make(map[int]bool)
+	
 	for _, codeStr := range strings.Split(filterCodes, ",") {
 		if code, err := strconv.Atoi(strings.TrimSpace(codeStr)); err == nil { filterMap[code] = true }
 	}
@@ -32,10 +34,12 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 	onStatusUpdate("")
 	go func() {
 		defer close(results)
-		jobs := make(chan Job, 1000)		
-		discovery := make(chan Job, 1000)
+		defer close(jobs)
+		defer close(discovery)		
+		
 		var wg sync.WaitGroup
 		globalSeen := sync.Map{}
+		
 		for w := 1; w <= workerCount; w++ {
 			go func() {
 				for job := range jobs {
@@ -84,13 +88,10 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 								Cookies:       respCookies,
 								Depth:         j.Depth,
 							}
+							onStatusUpdate(fmt.Sprintf("--- Starting Depth %d | Processing %d seeds ---", j.Depth, len(queue)))
 							if recursive && status >= 300 && status < 400 {
-								loc := resp.Header.Get("Location")
-								resolved := ResolveURL(j.URL, loc)
-								if !strings.Contains(resolved, "FUZZ") {
-									if !strings.HasSuffix(resolved, "/") { resolved += "/" }
-									resolved += "FUZZ"
-								}
+								resolved := ResolveURL(j.URL, resp.Header.Get("Location"))
+								onStatusUpdate(fmt.Sprintf("Discovered new path at depth %d: %s", j.Depth + 1, resolved))
 								discovery <- Job{URL: resolved, Depth: j.Depth + 1}
 							}
 						}
@@ -98,7 +99,6 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 				}
 			}()
 		}
-		queue := []Job{{URL: urlTemplate, Depth: 0}}
 		for depth := 0; depth <= maxDepth; depth++ {
 			onStatusUpdate(fmt.Sprintf("Scanning depth %d...", depth))
 			for _, base := range queue {
@@ -111,17 +111,19 @@ func ConcurrentScan(ctx context.Context, host, urlTemplate, headerTemplate strin
 			wg.Wait()
 			
 			newQueue := []Job{}
-			
 			for len(discovery) > 0 {
-				d := <- discovery
-				if _, seen := globalSeen.LoadOrStore(d, true); !seen {
+				d := <-discovery
+				if !strings.Contains(d.URL, "FUZZ") {
+					if !strings.HasSuffix(d.URL, "/") { d.URL += "/" }
+					d.URL += "FUZZ"
+				}
+				if _, seen := globalSeen.LoadOrStore(d, true); !seen && d.Depth <= maxDepth {
 					newQueue = append(newQueue, d)
 				}
 			}
 			queue = newQueue
 			if len(queue) == 0 { break }
 		}
-		close(jobs)
 	}()
 	return results
 }

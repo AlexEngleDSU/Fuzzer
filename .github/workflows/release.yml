@@ -39,12 +39,14 @@ jobs:
           CGO_ENABLED: 1
         run: |
           mkdir -p bin
+          EXT=""
           if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
-            go build -ldflags="-s -w" -o bin/fuzzer.exe .
-          else
-            go build -ldflags="-s -w" -o bin/fuzzer .
+            EXT=".exe"
           fi
-
+          # Build CLI
+          go build -ldflags="-s -w" -o bin/fuzzerCLI-${{ matrix.os }}${EXT} ./cmd/fuzzerCLI
+          # Build UI
+          go build -ldflags="-s -w" -o bin/fuzzerUI-${{ matrix.os }}${EXT} ./cmd/fuzzerUI
       - uses: actions/upload-artifact@v4
         with:
           name: fuzzer-${{ matrix.os }}

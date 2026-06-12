@@ -1,5 +1,7 @@
-BINARY_NAME=fuzzer
-INSTALL_PATH=/usr/local/bin/$(BINARY_NAME)
+BIN_UI = fuzzerUI
+BIN_CLI = fuzzerCLI
+
+INSTALL_PATH=/usr/local/bin
 
 .PHONY: all tidy build install clean
 
@@ -11,13 +13,14 @@ tidy:
 
 # Standard build command
 build:
-	go build -o fuzzer .
-
+	go build -o $(BIN_UI) ./cmd/fuzzerUI
+	go build -o $(BIN_CLI) ./cmd/fuzzerCLI
+	
 # Install requires a build (which now runs tidy first)
 install: build
-	sudo cp $(BINARY_NAME) $(INSTALL_PATH)
-	sudo chmod +x $(INSTALL_PATH)
-	@echo "Installed to $(INSTALL_PATH)"
+	sudo cp $(BIN_UI) $(BIN_CLI) $(INSTALL_PATH)/
+	sudo chmod +x $(INSTALL_PATH)/$(BIN_UI) $(INSTALL_PATH)/$(BIN_CLI)
+	@echo "Installed $(BIN_UI) and $(BIN_CLI) to $(INSTALL_PATH)"
 
 clean:
-	rm -f $(BINARY_NAME)
+	rm -f $(BIN_UI) $(BIN_CLI)

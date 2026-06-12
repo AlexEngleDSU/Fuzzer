@@ -4,11 +4,22 @@ import (
 	"fmt"
 	"strconv"
 	"time"
+	"net/url"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/widget"
 	"github.com/AlexEngleDSU/Fuzzer/pkg/engine"
 	"github.com/AlexEngleDSU/Fuzzer/pkg/browser"
 )
+
+func extractHost(rawURL string) string {
+	u, err := url.Parse(rawURL)
+	if err != nil {
+		return rawURL
+	}
+	return u.Host
+}
+
+
 func (ctrl *AppController) HandleStartScan(
     urlEntry *widget.Entry,
     pathEntry *SelectableEntry,
@@ -58,11 +69,15 @@ func (ctrl *AppController) HandleStartScan(
 				depth, 
 				time.Duration(delayS)*time.Second,
 				func(msg string) {
-					fyne.Do(func() { 
-					    ctrl.StatusLabel.SetText(msg) 
-					    if msg == "" { ctrl.StatusLabel.Hide() } else { ctrl.StatusLabel.Show() }
+					fyne.Do(func() {
+					    if msg == "" {
+						ctrl.StatusLabel.Hide()
+					    } else {
+						ctrl.StatusLabel.SetText(msg)
+						ctrl.StatusLabel.Show()
+					    }
 					})
-				 },
+		    		},
 			)
 			fyne.Do(func() { ctrl.StatusLabel.SetText("Starting Scan!") })
 			time.Sleep(1 * time.Second)

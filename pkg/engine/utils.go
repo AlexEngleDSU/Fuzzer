@@ -18,6 +18,11 @@ import (
 	"github.com/playwright-community/playwright-go"
 )
 
+type Job struct {
+	URL   string
+	Depth int
+}
+
 // GlobalJar initialized with options to prevent compilation errors
 var GlobalJar, _ = cookiejar.New(&cookiejar.Options{PublicSuffixList: nil})
 

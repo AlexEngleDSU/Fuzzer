@@ -10,8 +10,6 @@ import (
 	"runtime"
 	"strings"
 	"sync"
-	"fyne.io/fyne/v2"
-	"time"
 	"encoding/json"
 	fhttp "github.com/bogdanfinn/fhttp"
 	"github.com/bogdanfinn/fhttp/cookiejar"
@@ -19,6 +17,7 @@ import (
 	"github.com/bogdanfinn/tls-client/profiles"
 	"github.com/playwright-community/playwright-go"
 )
+
 
 // GlobalJar initialized with options to prevent compilation errors
 var GlobalJar, _ = cookiejar.New(&cookiejar.Options{PublicSuffixList: nil})

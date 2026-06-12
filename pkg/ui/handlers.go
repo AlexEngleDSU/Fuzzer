@@ -4,11 +4,21 @@ import (
 	"fmt"
 	"strconv"
 	"time"
+	"net/url"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/widget"
 	"github.com/AlexEngleDSU/Fuzzer/pkg/engine"
 	"github.com/AlexEngleDSU/Fuzzer/pkg/browser"
 )
+
+func extractHost(rawURL string) string {
+	u, err := url.Parse(rawURL)
+	if err != nil {
+		return rawURL
+	}
+	return u.Host
+}
+
 func (ctrl *AppController) HandleStartScan(
     urlEntry *widget.Entry,
     pathEntry *SelectableEntry,
