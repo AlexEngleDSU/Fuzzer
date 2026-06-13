@@ -1,12 +1,31 @@
-Critical: Stability
-	- explicit error handling before accessing response properties
-	- Manual cookieJar updates following handshake process
+
 Features: WAF Bypass
 	- Create auto-refresh logic to trigger new handshake on 403 status codes
-	- Integrate headless browser automation to handle JavaScript base challenges
-	- Add cli flags for dynamic proxy configuration + TLS profile selection
 Future: Discovery
 	- Implement passive discovery to extract new endpoints from html response bodys
 	- Develop intellegent wordlist generation based on site path structure
 	- Create a report generator to export successfull findings to local files
-	- add CLI version and integration.
+appUI and CLI Check:
+	- Headless browser implimented?
+	- Other needed tags?
+		- Filter length
+		- Filter wordcount
+		- match status code
+		- match length
+		- match wordcount
+	
+Fuzzer Pipeline Features
+Roadmap for Fuzzer Pipeline Expansion:
+
+Subdomain Finder:
+      - Implement DNS resolution using net.LookupHost.
+      - Use a worker pool pattern to handle concurrent DNS lookups.
+      - Integrate with current engine to pass valid hostnames.
+Crawler:    
+      - Static crawling for JS/CSS/hidden endpoint discovery.
+      - Future: Headless crawling for dynamic SPA endpoints.
+Pipeline Orchestration:    
+      - Implement a Data Collector interface for standardized result types.
+      - Build a pipeline manager to coordinate flow (Subdomain -> Fuzzer -> Crawler).
+      - Use fixed worker pools to prevent resource exhaustion and manage concurrency budget.
+      - Add capability to re-prioritize high-value targets.
