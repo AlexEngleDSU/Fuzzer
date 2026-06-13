@@ -38,18 +38,20 @@ jobs:
         env:
           CGO_ENABLED: 1
         run: |
-          mkdir -p bin
+          # Create a specific folder for this OS
+          mkdir -p bin/fuzzer-${{ runner.os }}
+          
           EXT=""
           if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
             EXT=".exe"
           fi
           # Build the single consolidated binary
-          go build -ldflags="-s -w" -o bin/fuzzer-${{ matrix.os }}${EXT} ./cmd/fuzzer
+          go build -ldflags="-s -w" -o bin/fuzzer-${{ runner.os }}/fuzzer${EXT} ./cmd/fuzzer
 
       - uses: actions/upload-artifact@v4
         with:
           name: fuzzer-${{ matrix.os }}
-          path: bin/
+          path: bin/fuzzer-${{ runner.os }}/
 
   release:
     needs: build

@@ -25,7 +25,7 @@ jobs:
           if [[ "${{ runner.os }}" == "Linux" ]]; then
             sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev xorg-dev libgtk-3-dev
           fi
-          
+
       - name: Disable Windows Defender for build folder
         if: runner.os == 'Windows'
         shell: powershell
@@ -38,13 +38,16 @@ jobs:
         env:
           CGO_ENABLED: 1
         run: |
-          mkdir -p bin
+          # Create a specific folder for this OS
+          mkdir -p bin/fuzzer-${{ runner.os }}
+          
           EXT=""
           if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
             EXT=".exe"
           fi
-          # Build single fuzzer binary
-          go build -ldflags="-s -w" -o bin/fuzzer-${{ matrix.os }}${EXT} ./cmd/fuzzer
+          # Build the single consolidated binary
+          go build -ldflags="-s -w" -o bin/fuzzer-${{ runner.os }}/fuzzer${EXT} ./cmd/fuzzer
+
       - uses: actions/upload-artifact@v4
         with:
           name: fuzzer-${{ matrix.os }}
