@@ -1,0 +1,79 @@
+package cli
+
+import (
+    "context"
+    "flag"
+    "fmt"
+    "time"
+    "os"
+    "bufio"
+    "net/url"
+    "github.com/AlexEngleDSU/Fuzzer/pkg/engine"
+    "github.com/AlexEngleDSU/Fuzzer/pkg/appUI"
+)
+
+func loadWordlist(path string) ([]string, error) {
+    file, err := os.Open(path)
+    if err != nil {
+        return nil, err
+    }
+    defer file.Close()
+
+    var lines []string
+    scanner := bufio.NewScanner(file)
+    for scanner.Scan() {
+        lines = append(lines, scanner.Text())
+    }
+    return lines, scanner.Err()
+}
+
+func Run(args []string) {
+    fs := flag.NewFlagSet("cli", flag.ExitOnError)
+    
+    urlInput := fs.String("u", "", "Target URL")
+    wordlistPath := fs.String("w", "", "Path to wordlist file")
+    threads := fs.Int("t", 10, "threads")
+    filter := fs.String("f", "", "Filter")
+    depth := fs.Int("r", 0, "recursion depth")
+    delay := fs.Int("d", 1, "delay time")
+    verbose := fs.Bool("v", false, "Enable verbose output")
+    fs.Parse(args)
+    
+    wordlist, err := loadWordlist(*wordlistPath)
+    if err != nil {
+    	fmt.Printf("Error loading wordlist: %v\n", err)
+    	return
+    }
+    
+    u, err := url.Parse(*urlInput)
+    if err != nil {
+    	fmt.Println("Invalid URL")
+    	return
+    }
+    host := u.Host
+
+    // CLI-specific status handler
+    onStatus := func(msg string) {
+    	if *verbose {
+    		fmt.Printf("[STATUS] %s\n", msg)
+    	}
+    }
+
+    results := engine.ConcurrentScan(
+    	context.Background(),
+    	host, // host
+    	*urlInput, //urlTemplate
+    	appUI.HeaderTemplate, // headerTemplate
+    	wordlist, // wordlist (load from file in a real app)
+    	*threads,
+    	*filter,
+    	true,
+    	*depth,
+    	time.Duration(*delay) * time.Second,
+    	onStatus,
+    )
+
+    for res := range results {
+        fmt.Printf("[%d] %s\n", res.StatusCode, res.URL)
+    }
+}

@@ -43,10 +43,9 @@ jobs:
           if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
             EXT=".exe"
           fi
-          # Build CLI
-          go build -ldflags="-s -w" -o bin/fuzzerCLI-${{ matrix.os }}${EXT} ./cmd/fuzzerCLI
-          # Build UI
-          go build -ldflags="-s -w" -o bin/fuzzerUI-${{ matrix.os }}${EXT} ./cmd/fuzzerUI
+          # Build the single consolidated binary
+          go build -ldflags="-s -w" -o bin/fuzzer-${{ matrix.os }}${EXT} ./cmd/fuzzer
+
       - uses: actions/upload-artifact@v4
         with:
           name: fuzzer-${{ matrix.os }}

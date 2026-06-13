@@ -1,0 +1,65 @@
+package appUI
+
+import (
+	"context"
+	"image/color"
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/theme"
+	"fyne.io/fyne/v2/widget"
+	"fyne.io/fyne/v2/container"
+	"github.com/AlexEngleDSU/Fuzzer/pkg/engine"
+)
+
+type FuzzerUI struct {
+	URLEntry         *widget.Entry
+	PathEntry        *SelectableEntry
+	RecursiveCheck   *widget.Check
+	DepthEntry       *SelectableEntry
+	ThreadEntry      *SelectableEntry
+	DelayEntry       *SelectableEntry
+	FilterCodesEntry *SelectableEntry
+	MatchCodesEntry  *SelectableEntry
+	StartButton      *widget.Button
+	UserHeaderInput  *widget.Entry
+}
+
+type SelectableEntry struct {
+	widget.Entry
+	isFocused bool
+}
+
+type SelectableButton struct {
+	widget.Button
+	isFocused bool
+}
+
+func (m *SelectableEntry) FocusGained() {
+    m.Entry.FocusGained()
+    m.isFocused = true
+    m.Refresh()
+
+    if m.Text != "" { m.TypedShortcut(&fyne.ShortcutSelectAll{}) }
+}
+
+type compactLink struct{ *widget.Hyperlink }
+
+func (c *compactLink) MinSize() fyne.Size { return fyne.NewSize(c.Hyperlink.MinSize().Width, 25) }
+
+type myTheme struct{ fyne.Theme }
+
+func (m myTheme) Color(n fyne.ThemeColorName, v fyne.ThemeVariant) color.Color {
+	if n == theme.ColorNameForeground || n == theme.ColorNameHyperlink { return color.White }
+	return m.Theme.Color(n, v)
+}
+
+type AppController struct {
+    State          *engine.ScanState
+    CancelFunc     context.CancelFunc
+    FollowMode     *bool
+    
+    // UI elements that need to be updated by logic
+    StatusLabel    *widget.Label
+    ResultsList    *widget.List
+    Tabs	   *container.AppTabs
+}
+

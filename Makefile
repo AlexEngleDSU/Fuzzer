@@ -1,7 +1,7 @@
-BIN_UI = fuzzerUI
-BIN_CLI = fuzzerCLI
+# Name of the single consolidated binary
+BIN_NAME = fuzzer
 
-INSTALL_PATH=/usr/local/bin
+INSTALL_PATH = /usr/local/bin
 
 .PHONY: all tidy build install clean
 
@@ -11,16 +11,16 @@ all: tidy build
 tidy:
 	go mod tidy
 
-# Standard build command
+# Build the single binary from the new router location
 build:
-	go build -o $(BIN_UI) ./cmd/fuzzerUI
-	go build -o $(BIN_CLI) ./cmd/fuzzerCLI
-	
-# Install requires a build (which now runs tidy first)
-install: build
-	sudo cp $(BIN_UI) $(BIN_CLI) $(INSTALL_PATH)/
-	sudo chmod +x $(INSTALL_PATH)/$(BIN_UI) $(INSTALL_PATH)/$(BIN_CLI)
-	@echo "Installed $(BIN_UI) and $(BIN_CLI) to $(INSTALL_PATH)"
+	go build -o $(BIN_NAME) ./cmd/fuzzer
 
+# Install the single binary
+install: build
+	sudo cp $(BIN_NAME) $(INSTALL_PATH)/
+	sudo chmod +x $(INSTALL_PATH)/$(BIN_NAME)
+	@echo "Installed $(BIN_NAME) to $(INSTALL_PATH)"
+
+# Clean the single binary
 clean:
-	rm -f $(BIN_UI) $(BIN_CLI)
+	rm -f $(BIN_NAME)
