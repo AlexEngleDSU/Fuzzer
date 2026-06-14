@@ -35,6 +35,7 @@ func NewFuzzerUI() *FuzzerUI {
 		DepthEntry:       &SelectableEntry{},
 		ThreadEntry:      &SelectableEntry{},
 		DelayEntry:       &SelectableEntry{},
+		TimeoutEntry:     &SelectableEntry{},
 		FilterCodesEntry: &SelectableEntry{},
 		MatchCodesEntry:  &SelectableEntry{},
 		StartButton:      widget.NewButton("Start Scan", nil),
@@ -49,6 +50,7 @@ func NewFuzzerUI() *FuzzerUI {
 	ui.DepthEntry.SetText("3")
 	ui.ThreadEntry.SetText("3")
 	ui.DelayEntry.SetText("1")
+	ui.TimeoutEntry.SetText("0")
 	ui.FilterCodesEntry.SetText("404")
 	ui.MatchCodesEntry.SetPlaceHolder("Ex: 200")
 	// Extend widgets
@@ -56,6 +58,7 @@ func NewFuzzerUI() *FuzzerUI {
 	ui.DepthEntry.ExtendBaseWidget(ui.DepthEntry)
 	ui.ThreadEntry.ExtendBaseWidget(ui.ThreadEntry)
 	ui.DelayEntry.ExtendBaseWidget(ui.DelayEntry)
+	ui.TimeoutEntry.ExtendBaseWidget(ui.DelayEntry)
 	ui.FilterCodesEntry.ExtendBaseWidget(ui.FilterCodesEntry)
 	ui.MatchCodesEntry.ExtendBaseWidget(ui.MatchCodesEntry)
 	ui.UserHeaderInput.ExtendBaseWidget(ui.UserHeaderInput)

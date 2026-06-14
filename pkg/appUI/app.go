@@ -57,23 +57,28 @@ func StartGUI() {
             myUI.RecursiveCheck,
             myUI.DepthEntry, 
             myUI.ThreadEntry, 
-            myUI.DelayEntry, 
+            myUI.DelayEntry,
+            myUI.TimeoutEntry, 
             myUI.MatchCodesEntry,
             myUI.FilterCodesEntry,
             myUI.UserHeaderInput,
         )
 	// 4. Layout
 	rightGrid := container.NewHBox(
-		container.New(layout.NewGridLayout(4),
+		container.New(layout.NewGridLayout(6),
 		    widget.NewLabel("Recursion:"), 
 		    container.NewCenter(myUI.RecursiveCheck), 
 		    widget.NewLabel("Depth:"), 
 		    myUI.DepthEntry,
+		    layout.NewSpacer(),
+		    layout.NewSpacer(),
 		    
 		    widget.NewLabel("Threads:"), 
 		    myUI.ThreadEntry, 
 		    widget.NewLabel("Delay:"), 
 		    myUI.DelayEntry,
+		    widget.NewLabel("Timeout:"),
+		    myUI.TimeoutEntry,
 		    
 		    widget.NewLabel("Match Codes:"), 
 		    myUI.MatchCodesEntry, 

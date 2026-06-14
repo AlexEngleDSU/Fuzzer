@@ -57,23 +57,28 @@ func StartGUI() {
             myUI.RecursiveCheck,
             myUI.DepthEntry, 
             myUI.ThreadEntry, 
-            myUI.DelayEntry, 
+            myUI.DelayEntry,
+            myUI.TimeoutEntry, 
             myUI.MatchCodesEntry,
             myUI.FilterCodesEntry,
             myUI.UserHeaderInput,
         )
 	// 4. Layout
 	rightGrid := container.NewHBox(
-		container.New(layout.NewGridLayout(4),
+		container.New(layout.NewGridLayout(5),
 		    widget.NewLabel("Recursion:"), 
 		    container.NewCenter(myUI.RecursiveCheck), 
 		    widget.NewLabel("Depth:"), 
 		    myUI.DepthEntry,
+		    layout.NewSpacer(),
 		    
 		    widget.NewLabel("Threads:"), 
 		    myUI.ThreadEntry, 
 		    widget.NewLabel("Delay:"), 
 		    myUI.DelayEntry,
+		    
+		    widget.NewLabel("Timeout:"),
+		    myUI.TimeoutEntry,
 		    
 		    widget.NewLabel("Match Codes:"), 
 		    myUI.MatchCodesEntry, 
@@ -99,7 +104,7 @@ func StartGUI() {
 	width, height := screen.GetPrimaryScreenSize()
 //	w.Resize(fyne.NewSize(width-10, height-75))
 	width = 700
-	height = 400
+	height = 800
 	w.Resize(fyne.NewSize(width, height))
 	w.CenterOnScreen()
 	w.SetContent(ctrl.Tabs)

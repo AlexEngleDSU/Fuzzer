@@ -26,6 +26,7 @@ func (ctrl *AppController) HandleStartScan(
     depthEntry *SelectableEntry,
     threadEntry *SelectableEntry,
     delayEntry *SelectableEntry,
+    timeoutEntry *SelectableEntry,
     matchCodesEntry *SelectableEntry,
     filterCodesEntry *SelectableEntry,
     userHeaderInput *widget.Entry,
@@ -43,6 +44,14 @@ func (ctrl *AppController) HandleStartScan(
 		wordlist, _ := engine.ReadLines(pathEntry.Text)
 		threads, _ := strconv.Atoi(threadEntry.Text)
 		delayS, _ := strconv.Atoi(delayEntry.Text)
+		
+		timeoutInput := timeoutEntry.Text
+		if timeoutInput == "" {
+			timeoutInput = "5"
+		}
+		timeoutSec, _ := strconv.Atoi(timeoutEntry.Text)
+		timeout := time.Duration(timeoutSec) * time.Second
+		
 		updateStatus := func(msg string) {
 		    fyne.Do(func() {
 		        if ctrl.StatusLabel != nil {
@@ -74,15 +83,16 @@ func (ctrl *AppController) HandleStartScan(
 			resChan := engine.ConcurrentScan(
 				ctx, 
 				extractHost(urlEntry.Text), 
-				urlEntry.Text, 
+				urlEntry.Text,
 				userHeaderInput.Text, 
 				wordlist, 
-				threads, 
-				matchCodesEntry.Text,
-				filterEntry.Text,
 				recursiveCheck.Checked, 
 				depth, 
-				time.Duration(delayS)*time.Second,
+				threads,
+				time.Duration(delayS)*time.Second, 
+				time.Duration(TimeoutEntry)*time.Second,
+				matchCodesEntry.Text,
+				filterCodesEntry.Text, 
 				updateStatus,
 			)
 			fyne.Do(func() { ctrl.StatusLabel.SetText("Starting Scan!") })

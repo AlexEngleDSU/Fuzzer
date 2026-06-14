@@ -17,6 +17,7 @@ type FuzzerUI struct {
 	DepthEntry       *SelectableEntry
 	ThreadEntry      *SelectableEntry
 	DelayEntry       *SelectableEntry
+	TimeoutEntry     *SelectableEntry
 	MatchCodesEntry  *SelectableEntry
 	FilterCodesEntry *SelectableEntry
 	StartButton      *widget.Button

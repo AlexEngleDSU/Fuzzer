@@ -42,13 +42,14 @@ func ConcurrentScan(
 	host, 
 	urlTemplate, 
 	headerTemplate string,
-	wordlist []string, 
-	workerCount int, 
-	matchCodes string, 
-	filterCodes string, 
+	wordlist []string,
 	recursive bool, 
 	maxDepth int, 
-	delay time.Duration, 
+	workerCount int,
+	delay time.Duration,
+	timeout time.Duration,  
+	matchCodes string, 
+	filterCodes string, 
 	onStatusUpdate func(string)) <-chan ScanResult {
 	
 	var wg sync.WaitGroup
@@ -70,7 +71,7 @@ func ConcurrentScan(
 		}
 	}
 
-	browserClient := CreateBrowserClient()
+	browserClient := CreateBrowserClient(timeout)
 	baseHeaders := fmt.Sprintf(headerTemplate, host, host)
 	headers := GetOrderedHeaders(baseHeaders)
 	badContentLength := get404Length(browserClient, urlTemplate)
@@ -146,10 +147,8 @@ func ConcurrentScan(
 					}
 				}
 			}
-
 			// Wait for current burst to process
 			time.Sleep(1 * time.Second)
-
 			// Collect recursive discoveries
 			nextQueue := []Job{}
 			for i := 0; i < len(discovery); i++ {

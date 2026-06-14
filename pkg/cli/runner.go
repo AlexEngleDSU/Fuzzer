@@ -41,11 +41,12 @@ func Run(args []string) {
     
     urlInput := fs.String("u", "", "Target URL")
     wordlistPath := fs.String("w", "", "Path to wordlist file")
-    threads := fs.Int("t", 10, "threads")
-    matchCodes := fs.String("m", "", "Match Status Codes")
-    filterCodes := fs.String("f", "", "Filter Status Codes")
+    threads := fs.Int("T", 10, "threads")
     depth := fs.Int("r", 0, "recursion depth")
     delay := fs.Int("d", 1, "delay time")
+    timeout := fs.Int("t", 0, "timeout")	
+    matchCodes := fs.String("m", "", "Match Status Codes")
+    filterCodes := fs.String("f", "", "Filter Status Codes")
     verbose := fs.Bool("v", false, "Enable verbose output")
     fs.Parse(args)
     
@@ -106,12 +107,13 @@ func Run(args []string) {
     	*urlInput, //urlTemplate
     	formattedHeaders, // headerTemplate
     	wordlist, // wordlist (load from file in a real app)
-    	*threads,
-    	*matchCodes,
-    	*filterCodes,
     	true,
     	*depth,
+    	*threads,
     	time.Duration(*delay) * time.Second,
+    	time.Duration(*timeout) * time.Second,
+    	*matchCodes,
+    	*filterCodes,
     	onStatus,
     )
 

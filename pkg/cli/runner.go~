@@ -42,6 +42,7 @@ func Run(args []string) {
     urlInput := fs.String("u", "", "Target URL")
     wordlistPath := fs.String("w", "", "Path to wordlist file")
     threads := fs.Int("t", 10, "threads")
+    timeout := fs.Int("to", 0, "timeout")
     matchCodes := fs.String("m", "", "Match Status Codes")
     filterCodes := fs.String("f", "", "Filter Status Codes")
     depth := fs.Int("r", 0, "recursion depth")
@@ -106,18 +107,19 @@ func Run(args []string) {
     	*urlInput, //urlTemplate
     	formattedHeaders, // headerTemplate
     	wordlist, // wordlist (load from file in a real app)
-    	*threads,
-    	*matchCodes,
-    	*filterCodes,
     	true,
     	*depth,
+    	*threads,
     	time.Duration(*delay) * time.Second,
+    	time.Duration(*timeout) * time.Second,
+    	*matchCodes,
+    	*filterCodes,
     	onStatus,
     )
 
     for res := range results {
     	if res.StatusCode == 301 || res.StatusCode == 302 { fmt.Printf("[%d] %s -> %s\n", res.StatusCode, res.URL, res.Location) 
-    	} else { fmt.Printf("[%d] <%d> %s\n", res.StatusCode, int64(len(body), res.URL) }
+    	} else { fmt.Printf("[%d] <%d> %s\n", res.StatusCode, res.ContentLength, res.URL) }
     }    
 }
 

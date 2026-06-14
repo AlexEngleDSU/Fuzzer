@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
+	"time"
 	"encoding/json"
 	fhttp "github.com/bogdanfinn/fhttp"
 	tls_client "github.com/bogdanfinn/tls-client"
@@ -145,16 +146,22 @@ func get404Length(client tls_client.HttpClient, baseURL string) int64 {
 	return resp.ContentLength
 }
 
-func CreateBrowserClient() tls_client.HttpClient {
-	options := []tls_client.HttpClientOption{
-		tls_client.WithTimeoutSeconds(30),
-		tls_client.WithClientProfile(profiles.Chrome_146),
-		tls_client.WithCookieJar(GlobalJar),
-		tls_client.WithNotFollowRedirects(),
-	}
-	client, err := tls_client.NewHttpClient(tls_client.NewNoopLogger(), options...)
-	if err != nil { return nil }
-	return client
+func CreateBrowserClient(timeout time.Duration) tls_client.HttpClient {
+    // Convert duration to seconds for the library
+    timeoutSecs := int(timeout.Seconds())
+    
+    options := []tls_client.HttpClientOption{
+        tls_client.WithTimeoutSeconds(timeoutSecs), // Dynamic timeout
+        tls_client.WithClientProfile(profiles.Chrome_146),
+        tls_client.WithCookieJar(GlobalJar),
+        tls_client.WithNotFollowRedirects(),
+    }
+    
+    client, err := tls_client.NewHttpClient(tls_client.NewNoopLogger(), options...)
+    if err != nil { 
+        return nil 
+    }
+    return client
 }
 
 
