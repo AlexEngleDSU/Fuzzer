@@ -50,7 +50,7 @@ func NewFuzzerUI() *FuzzerUI {
 	ui.ThreadEntry.SetText("3")
 	ui.DelayEntry.SetText("1")
 	ui.FilterCodesEntry.SetText("404")
-	ui.MatchCodesEntry.SetText("Not Ready")
+	ui.MatchCodesEntry.SetPlaceHolder("Ex: 200")
 	// Extend widgets
 	ui.PathEntry.ExtendBaseWidget(ui.PathEntry)
 	ui.DepthEntry.ExtendBaseWidget(ui.DepthEntry)
@@ -114,7 +114,7 @@ func SetupResultsContent(ctrl *AppController) fyne.CanvasObject {
     resumeBtn := widget.NewButton("↓", func() {
         *ctrl.FollowMode = true
         ctrl.ResultsList.ScrollToBottom()
-        ctrl.ResultsList.Refresh()
+        fyne.Do(func() { ctrl.ResultsList.Refresh() })
     })
     resumeBtn.Show()
     resumeContainer := container.NewStack(resumeBtn) 

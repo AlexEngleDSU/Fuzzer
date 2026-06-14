@@ -26,36 +26,51 @@ func (ctrl *AppController) HandleStartScan(
     depthEntry *SelectableEntry,
     threadEntry *SelectableEntry,
     delayEntry *SelectableEntry,
-    filterEntry *SelectableEntry,
+    matchCodesEntry *SelectableEntry,
+    filterCodesEntry *SelectableEntry,
     userHeaderInput *widget.Entry,
 ) func() {
 	return func() {
+		ctrl.State.Mu.Lock()
+		ctrl.State.Results = []engine.ScanResult{}
+		ctrl.State.Mu.Unlock()
 		fyne.Do(func() { ctrl.StatusLabel.SetText("Scanner initializing...") })
 		*ctrl.FollowMode = true
 		if ctrl.CancelFunc != nil { ctrl.CancelFunc() }
 		ctx, cancel := context.WithCancel(context.Background())
 		ctrl.CancelFunc = cancel
-		ctrl.State.Mu.Lock()
-		ctrl.State.Results = []engine.ScanResult{}
-		ctrl.State.Mu.Unlock()
-		ctrl.ResultsList.Refresh()
 		depth, _ := strconv.Atoi(depthEntry.Text)
 		wordlist, _ := engine.ReadLines(pathEntry.Text)
 		threads, _ := strconv.Atoi(threadEntry.Text)
 		delayS, _ := strconv.Atoi(delayEntry.Text)
+		updateStatus := func(msg string) {
+		    fyne.Do(func() {
+		        if ctrl.StatusLabel != nil {
+		            ctrl.StatusLabel.SetText(msg)
+		        }
+		    })
+		}
 		go func() {
 			fyne.Do(func() { ctrl.StatusLabel.SetText("Launching browser...") })
 			session, err := browser.InitializeSession(urlEntry.Text)
 			if err != nil {
 				// This will print the EXACT error to your terminal
 				fmt.Printf("CRITICAL BROWSER ERROR: %v\n", err)
-				ctrl.StatusLabel.SetText("Browser Error! Check terminal.")
+				fyne.Do(func() { ctrl.StatusLabel.SetText("Browser Error! Check terminal.") })
 				return
 			} 
-                	if session != nil && len(session.Cookies) > 0 {
-			        engine.InjectCookies(engine.GlobalJar, urlEntry.Text, session.Cookies)
-			        fyne.Do(func() { ctrl.StatusLabel.SetText("WAF Solved - Cookies Injected") })
-			} else { ctrl.StatusLabel.SetText("Warning: No cookies found, scanning anyway...") }
+			if session != nil && len(session.Cookies) > 0 {
+			    // Convert []map[string]interface{} to []browser.Cookie
+			    var cookies []browser.Cookie
+			    for _, c := range session.Cookies {
+				name, _ := c["name"].(string)
+				value, _ := c["value"].(string)
+				cookies = append(cookies, browser.Cookie{Name: name, Value: value})
+			    }
+			    
+			    browser.InjectCookies(engine.GlobalJar, urlEntry.Text, cookies)
+			    fyne.Do(func() { ctrl.StatusLabel.SetText("WAF Solved - Cookies Injected") })
+			} else { fyne.Do(func() { ctrl.StatusLabel.SetText("Warning: No cookies found, scanning anyway...") }) }
 			resChan := engine.ConcurrentScan(
 				ctx, 
 				extractHost(urlEntry.Text), 
@@ -63,36 +78,32 @@ func (ctrl *AppController) HandleStartScan(
 				userHeaderInput.Text, 
 				wordlist, 
 				threads, 
-				filterEntry.Text,
+				matchCodesEntry.Text,
+				filterCodesEntry.Text,
 				recursiveCheck.Checked, 
 				depth, 
 				time.Duration(delayS)*time.Second,
-				func(msg string) {
-					fyne.Do(func() {
-					    if msg == "" {
-						ctrl.StatusLabel.Hide()
-					    } else {
-						ctrl.StatusLabel.SetText(msg)
-						ctrl.StatusLabel.Show()
-					    }
-					})
-		    		},
+				updateStatus,
 			)
 			fyne.Do(func() { ctrl.StatusLabel.SetText("Starting Scan!") })
 			time.Sleep(1 * time.Second)
 			fyne.Do(func() { ctrl.StatusLabel.Hide() })
+			
+			ticker := time.NewTicker(100 * time.Millisecond)
+			defer ticker.Stop()
+			
 			for res := range resChan {
-			    if filterEntry.Text != "" && strconv.Itoa(res.StatusCode) == filterEntry.Text { continue }
-			    displayStr := fmt.Sprintf("Status: %d | URL: %s", res.StatusCode, res.URL)
-			    if res.Location != "" { displayStr += fmt.Sprintf(" -> Redirect: %s", res.Location)}
 			    ctrl.State.Add(res)
-			    fyne.Do(func() { 
-			    	ctrl.ResultsList.Refresh() 
-			    	if *ctrl.FollowMode {
-			            ctrl.ResultsList.ScrollToBottom()
-        			}	
-	     	    	    })
+			    select {
+			    case <-ticker.C:
+				    fyne.Do(func() { 
+				    	ctrl.ResultsList.Refresh() 
+				    	if *ctrl.FollowMode { ctrl.ResultsList.ScrollToBottom() }	
+		     	    	    })
+		     	    default:
+		     	    }
 			}
+			fyne.Do(func() { ctrl.ResultsList.Refresh() })
 		}()
 		fyne.Do(func() {
 			ctrl.Tabs.SelectIndex(1)

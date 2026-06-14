@@ -1,10 +1,15 @@
 package browser
 import (
 	"fmt"
-	"github.com/AlexEngleDSU/Fuzzer/pkg/engine"
 	"github.com/playwright-community/playwright-go"
 )
-func InitializeSession(targetURL string) (*engine.WAFSession, error) {
+
+type WAFSession struct {
+	Cookies []map[string]interface{}
+	Headers map[string]string
+}
+
+func InitializeSession(targetURL string) (*WAFSession, error) {
 	pw, err := playwright.Run(&playwright.RunOptions{ Verbose: true, })
 	if err != nil {	return nil, fmt.Errorf("Error playwright failed: %w", err) }
 	browser, err := pw.Chromium.Launch(playwright.BrowserTypeLaunchOptions{
@@ -39,7 +44,6 @@ func InitializeSession(targetURL string) (*engine.WAFSession, error) {
 		pw.Stop()
 		return nil, fmt.Errorf("failed to navigate to %s: %w", targetURL, err)
 	}
-	page.WaitForLoadState(playwright.PageWaitForLoadStateOptions{ State: playwright.LoadStateNetworkidle, })
 	// 5. Extract Cookies
 	rawCookies, err := context.Cookies()
 	if err != nil {
@@ -57,5 +61,5 @@ func InitializeSession(targetURL string) (*engine.WAFSession, error) {
 	}
 	browser.Close()
 	pw.Stop()
-	return &engine.WAFSession{Cookies: formattedCookies}, nil
+	return &WAFSession{Cookies: formattedCookies}, nil
 }

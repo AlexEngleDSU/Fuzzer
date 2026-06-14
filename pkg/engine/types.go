@@ -3,10 +3,6 @@ import (
 	"sync"
 	fhttp "github.com/bogdanfinn/fhttp"
 )
-type WAFSession struct {
-	Cookies []map[string]interface{}
-	Headers map[string]string
-}
 
 type ScanState struct {
     Results []ScanResult

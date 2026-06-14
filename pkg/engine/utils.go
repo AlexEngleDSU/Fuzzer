@@ -2,20 +2,15 @@ package engine
 
 import (
 	"bufio"
-	"fmt"
 	"net/url"
 	"os"
 	"path/filepath"
-	"regexp"
-	"runtime"
 	"strings"
 	"sync"
 	"encoding/json"
 	fhttp "github.com/bogdanfinn/fhttp"
-	"github.com/bogdanfinn/fhttp/cookiejar"
 	tls_client "github.com/bogdanfinn/tls-client"
 	"github.com/bogdanfinn/tls-client/profiles"
-	"github.com/playwright-community/playwright-go"
 )
 
 type Job struct {
@@ -24,13 +19,36 @@ type Job struct {
 }
 
 // GlobalJar initialized with options to prevent compilation errors
-var GlobalJar, _ = cookiejar.New(&cookiejar.Options{PublicSuffixList: nil})
+var GlobalJar = tls_client.NewCookieJar()
 
-var (
-	paused    bool
-	pauseMu   sync.Mutex
-	pauseChan = make(chan struct{})
-)
+type Pauser struct {
+    mu      sync.Mutex
+    cond    *sync.Cond
+    paused  bool
+}
+
+func NewPauser() *Pauser {
+    p := &Pauser{paused: false}
+    p.cond = sync.NewCond(&p.mu)
+    return p
+}
+
+func (p *Pauser) Wait() {
+    p.mu.Lock()
+    defer p.mu.Unlock()
+    for p.paused {
+        p.cond.Wait()
+    }
+}
+
+func (p *Pauser) SetPause(paused bool) {
+    p.mu.Lock()
+    defer p.mu.Unlock()
+    p.paused = paused
+    if !paused {
+        p.cond.Broadcast() // Wake up all waiting workers
+    }
+}
 
 type Config struct {
     LastWordlist string `json:"last_wordlist"`
@@ -71,63 +89,6 @@ func GetConfigPath() string { // Capitalized to be exported
 	appDir := filepath.Join(configDir, "fuzzer")
 	os.MkdirAll(appDir, 0700)
 	return filepath.Join(appDir, "config.json")
-}
-
-func GetBrowserPath() string {
-	home, err := os.UserHomeDir()
-	if err != nil {
-		return ""
-	}
-	switch runtime.GOOS {
-	case "windows":
-		return filepath.Join(home, "AppData", "Local", "ms-playwright")
-	case "darwin":
-		return filepath.Join(home, "Library", "Caches", "ms-playwright")
-	default:
-		return filepath.Join(home, ".cache", "ms-playwright")
-	}
-}
-
-func EnsureEnvironment() {
-	browserPath := GetBrowserPath()
-	if _, err := os.Stat(browserPath); os.IsNotExist(err) {
-		fmt.Println("First run detected: Installing browser dependencies...")
-		os.Setenv("PLAYWRIGHT_BROWSERS_PATH", browserPath)
-		err := playwright.Install()
-		if err != nil {
-			fmt.Printf("Error: %v\n", err)
-			return
-		}
-		os.RemoveAll(filepath.Join(browserPath, "firefox"))
-		os.RemoveAll(filepath.Join(browserPath, "webkit"))
-		fmt.Println("Browser dependencies installed and optimized.")
-	}
-}
-
-func BrowserExists() bool {
-	path := GetBrowserPath()
-	info, err := os.Stat(path)
-	if os.IsNotExist(err) {
-		return false
-	}
-	return info.IsDir()
-}
-
-func extractURLs(s string) []string {
-	re := regexp.MustCompile(`https?://[^\s>]+`)
-	return re.FindAllString(s, -1)
-}
-
-func SetPause(p bool) {
-	pauseMu.Lock()
-	defer pauseMu.Unlock()
-	if p != paused {
-		paused = p
-		if !paused {
-			close(pauseChan)
-			pauseChan = make(chan struct{})
-		}
-	}
 }
 
 func ReadLines(path string) ([]string, error) {
@@ -196,22 +157,6 @@ func CreateBrowserClient() tls_client.HttpClient {
 	return client
 }
 
-func InjectCookies(jar *cookiejar.Jar, targetURL string, playCookies []map[string]interface{}) {
-	u, _ := url.Parse(targetURL)
-	var cookies []*fhttp.Cookie
 
-	for _, pc := range playCookies {
-		c := &fhttp.Cookie{
-			Name:     pc["name"].(string),
-			Value:    pc["value"].(string),
-			Domain:   u.Host,
-			Path:     "/",
-			Secure:   true,
-			HttpOnly: true,
-		}
-		cookies = append(cookies, c)
-	}
-	jar.SetCookies(u, cookies)	
-}
 
 

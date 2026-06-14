@@ -1,4 +1,4 @@
-package ui
+package appUI
 import (
 	"fmt"
 	"net/url"
@@ -50,7 +50,7 @@ func NewFuzzerUI() *FuzzerUI {
 	ui.ThreadEntry.SetText("3")
 	ui.DelayEntry.SetText("1")
 	ui.FilterCodesEntry.SetText("404")
-	ui.MatchCodesEntry.SetText("Not Ready")
+	ui.MatchCodesEntry.SetPlaceholder("Ex: 200")
 	// Extend widgets
 	ui.PathEntry.ExtendBaseWidget(ui.PathEntry)
 	ui.DepthEntry.ExtendBaseWidget(ui.DepthEntry)
@@ -88,7 +88,7 @@ func SetupResultsContent(ctrl *AppController) fyne.CanvasObject {
 		link := obj.(*compactLink)
 		// 1. Format text
 		tabs := strings.Repeat("  ", res.Depth)
-		text := fmt.Sprintf("Status: %d | URL: %s", tabs, res.StatusCode, res.URL)
+		text := fmt.Sprintf("%sStatus: %d | URL: %s", tabs, res.StatusCode, res.URL)
 		if res.Location != "" { text += fmt.Sprintf(" -> Redirect: %s", res.Location) }
 		link.SetText(text)
 		// 2. Force the browser open on click
@@ -114,7 +114,7 @@ func SetupResultsContent(ctrl *AppController) fyne.CanvasObject {
     resumeBtn := widget.NewButton("↓", func() {
         *ctrl.FollowMode = true
         ctrl.ResultsList.ScrollToBottom()
-        ctrl.ResultsList.Refresh()
+        fyne.Do(func() { ctrl.ResultsList.Refresh() })
     })
     resumeBtn.Show()
     resumeContainer := container.NewStack(resumeBtn) 

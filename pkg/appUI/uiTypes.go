@@ -17,8 +17,8 @@ type FuzzerUI struct {
 	DepthEntry       *SelectableEntry
 	ThreadEntry      *SelectableEntry
 	DelayEntry       *SelectableEntry
-	FilterCodesEntry *SelectableEntry
 	MatchCodesEntry  *SelectableEntry
+	FilterCodesEntry *SelectableEntry
 	StartButton      *widget.Button
 	UserHeaderInput  *widget.Entry
 }
@@ -37,7 +37,6 @@ func (m *SelectableEntry) FocusGained() {
     m.Entry.FocusGained()
     m.isFocused = true
     m.Refresh()
-
     if m.Text != "" { m.TypedShortcut(&fyne.ShortcutSelectAll{}) }
 }
 

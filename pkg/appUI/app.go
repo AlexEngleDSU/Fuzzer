@@ -11,6 +11,7 @@ import (
 	"fyne.io/fyne/v2/widget"
 	"github.com/AlexEngleDSU/Fuzzer/pkg/engine"
 	"github.com/AlexEngleDSU/Fuzzer/pkg/screen"
+	"github.com/AlexEngleDSU/Fuzzer/pkg/browser"
 	"github.com/sqweek/dialog"
 )
 func StartGUI() {
@@ -24,7 +25,7 @@ func StartGUI() {
             func(id widget.ListItemID, obj fyne.CanvasObject) {},
         )   
 	// Environment setup
-	if !engine.BrowserExists() { engine.EnsureEnvironment() }
+	browser.EnsureEnvironment()
 	*ctrl.FollowMode = true
 	a := app.NewWithID("com.fuzzer.app")
 	a.Settings().SetTheme(&myTheme{Theme: theme.DefaultTheme()})
@@ -57,23 +58,36 @@ func StartGUI() {
             myUI.DepthEntry, 
             myUI.ThreadEntry, 
             myUI.DelayEntry, 
+            myUI.MatchCodesEntry,
             myUI.FilterCodesEntry,
             myUI.UserHeaderInput,
         )
 	// 4. Layout
-	topControls := container.NewVBox(
-		myUI.URLEntry,
-		container.NewBorder(nil, nil, selectButton, nil, myUI.PathEntry),
-		container.NewHBox(
-			widget.NewLabel("Recursion:"), myUI.RecursiveCheck,
-			widget.NewLabel("Depth:"), myUI.DepthEntry,
-			widget.NewLabel("Filter codes:"), container.New(layout.NewGridWrapLayout(fyne.NewSize(150,40)), myUI.FilterCodesEntry),
-			widget.NewLabel("Match Codes:"), container.New(layout.NewGridWrapLayout(fyne.NewSize(150,40)), myUI.MatchCodesEntry),
-			widget.NewLabel("Threads:"), container.New(layout.NewGridWrapLayout(fyne.NewSize(50, 40)), myUI.ThreadEntry),
-			widget.NewLabel("Delay:"), container.New(layout.NewGridWrapLayout(fyne.NewSize(100, 40)), myUI.DelayEntry),
+	rightGrid := container.NewHBox(
+		container.New(layout.NewGridLayout(4),
+		    widget.NewLabel("Recursion:"), 
+		    container.NewCenter(myUI.RecursiveCheck), 
+		    widget.NewLabel("Depth:"), 
+		    myUI.DepthEntry,
+		    
+		    widget.NewLabel("Threads:"), 
+		    myUI.ThreadEntry, 
+		    widget.NewLabel("Delay:"), 
+		    myUI.DelayEntry,
+		    
+		    widget.NewLabel("Match Codes:"), 
+		    myUI.MatchCodesEntry, 
+		    widget.NewLabel("Filter Codes:"), 
+		    myUI.FilterCodesEntry,
 		),
-		myUI.StartButton,
-		widget.NewLabel("Initial Request"),
+	)
+		
+	topControls := container.NewVBox(
+	    myUI.URLEntry,
+	    container.NewBorder(nil, nil, selectButton, nil, myUI.PathEntry),
+	    rightGrid,
+	    myUI.StartButton,
+	    widget.NewLabel("Initial Request"),
 	)
 	// Tab Content
 	configContent := container.NewBorder(topControls, nil, nil, nil, myUI.UserHeaderInput)
@@ -83,7 +97,10 @@ func StartGUI() {
 		container.NewTabItem("Output", container.NewHBox(widget.NewLabel("NOT IMPLEMENTED YET!!!"))),
 	)
 	width, height := screen.GetPrimaryScreenSize()
-	w.Resize(fyne.NewSize(width-10, height-75))
+//	w.Resize(fyne.NewSize(width-10, height-75))
+	width = 700
+	height = 800
+	w.Resize(fyne.NewSize(width, height))
 	w.CenterOnScreen()
 	w.SetContent(ctrl.Tabs)
 	w.ShowAndRun()
