@@ -46,7 +46,7 @@ jobs:
             EXT=".exe"
           fi
           # Build the single consolidated binary
-          go build -ldflags="-s -w" -o bin/fuzzer-${{ runner.os }}/fuzzer${EXT} ./cmd/fuzzer
+          go build -ldflags="-s -w" -o bin/fuzzer-${{ runner.os }}/fuzzer${EXT} .
 
       - uses: actions/upload-artifact@v4
         with:
