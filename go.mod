@@ -1,4 +1,4 @@
-module github.com/AlexEngleDSU/Fuzzer
+module github.com/AlexEngleDSU/Fuzzer/cmd/fuzzer
 
 go 1.26
 
