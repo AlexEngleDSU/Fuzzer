@@ -19,6 +19,7 @@ func StartGUI() {
 		State:      &engine.ScanState{},
 		FollowMode: new(bool),
 	}
+
 	ctrl.ResultsList = widget.NewList(
             func() int { return 0 }, // Placeholder for now
             func() fyne.CanvasObject { return widget.NewLabel("Template") },
@@ -26,13 +27,13 @@ func StartGUI() {
         )   
 	// Environment setup
 	browser.EnsureEnvironment()
-	*ctrl.FollowMode = true
 	a := app.NewWithID("com.fuzzer.app")
 	a.Settings().SetTheme(&myTheme{Theme: theme.DefaultTheme()})
 	w := a.NewWindow("Fuzzer GUI")
 
 	// 1. Initialize the UI components from the struct
 	myUI := NewFuzzerUI()
+	
 	// 2. Logic for URL changes
 	myUI.URLEntry.OnChanged = func(newURL string) {
 		baseReferer := strings.TrimSuffix(newURL, "/FUZZ")
@@ -51,7 +52,9 @@ func StartGUI() {
 			engine.SaveLastFilePath(filename)
 		}
 	})
+	
 	myUI.StartButton.OnTapped = ctrl.HandleStartScan(
+	    myUI,
             myUI.URLEntry, 
             myUI.PathEntry,
             myUI.RecursiveCheck,
@@ -64,7 +67,7 @@ func StartGUI() {
             myUI.UserHeaderInput,
         )
 	// 4. Layout
-	rightGrid := container.NewHBox(
+	ScanControlsGrid := container.NewHBox(
 		container.New(layout.NewGridLayout(6),
 		    widget.NewLabel("Recursion:"), 
 		    container.NewCenter(myUI.RecursiveCheck), 
@@ -87,20 +90,41 @@ func StartGUI() {
 		),
 	)
 		
-	topControls := container.NewVBox(
+	ScanControls := container.NewVBox(
 	    myUI.URLEntry,
 	    container.NewBorder(nil, nil, selectButton, nil, myUI.PathEntry),
-	    rightGrid,
+	    ScanControlsGrid,
 	    myUI.StartButton,
 	    widget.NewLabel("Initial Request"),
 	)
 	// Tab Content
-	configContent := container.NewBorder(topControls, nil, nil, nil, myUI.UserHeaderInput)
+	
+	ConfigControls := container.NewVBox(
+	    widget.NewLabel("Scan Mode:"),
+	    myUI.StatefulRadio,
+	    widget.NewSeparator(),
+	    container.NewHBox(widget.NewLabel("Clear CookieJar:"), myUI.ClearJarCheck),
+	    widget.NewLabel("Cookie Allow List (comma-separated):"),
+	     // This will now take up the full width of the VBox
+	)
+	
+	ConfigContent := container.NewBorder(ConfigControls, container.NewVBox(myUI.ScanButton,), nil, nil,  myUI.CookieAllowList)
+	
+	myUI.ScanButton.OnTapped = func() {
+	    ctrl.Tabs.SelectIndex(1)
+	    ctrl.Tabs.Refresh()
+	}
+	
+	
+	ScanContent := container.NewBorder(ScanControls, nil, nil, nil, myUI.UserHeaderInput)
+	
 	ctrl.Tabs = container.NewAppTabs(
-		container.NewTabItem("Configuration", configContent),
+		container.NewTabItem("Config", ConfigContent),
+		container.NewTabItem("Scan", ScanContent),
 		container.NewTabItem("Results", SetupResultsContent(&ctrl)),
 		container.NewTabItem("Output", container.NewHBox(widget.NewLabel("NOT IMPLEMENTED YET!!!"))),
 	)
+	
 	width, height := screen.GetPrimaryScreenSize()
 //	w.Resize(fyne.NewSize(width-10, height-75))
 	width = 700

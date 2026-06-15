@@ -2,6 +2,9 @@ package appUI
 
 import (
 	"context"
+	"time"
+	"strings"
+	"strconv"
 	"image/color"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/theme"
@@ -11,16 +14,48 @@ import (
 )
 
 type FuzzerUI struct {
+	StatefulRadio    *widget.RadioGroup
+	ClearJarCheck    *widget.Check
+	CookieAllowList *widget.Entry
+	ScanButton 	 *widget.Button
+	
 	URLEntry         *widget.Entry
 	PathEntry        *SelectableEntry
+	
 	RecursiveCheck   *widget.Check
 	DepthEntry       *SelectableEntry
+	
 	ThreadEntry      *SelectableEntry
 	DelayEntry       *SelectableEntry
+	TimeoutEntry     *SelectableEntry
+	
 	MatchCodesEntry  *SelectableEntry
 	FilterCodesEntry *SelectableEntry
+	
 	StartButton      *widget.Button
+	
 	UserHeaderInput  *widget.Entry
+}
+
+func (ui *FuzzerUI) GetOptions() engine.ScanOptions {
+    isStateful := false
+    if ui.StatefulRadio != nil { isStateful = (ui.StatefulRadio.Selected == "Stateful") }
+    timeoutVal, err := strconv.Atoi(ui.TimeoutEntry.Text)
+    if err != nil || timeoutVal <= 0 { timeoutVal = 30 }
+    
+    var allowList []string
+    if ui.CookieAllowList.Text != "" {
+        raw := strings.Split(ui.CookieAllowList.Text, ",")
+        for _, v := range raw {
+            allowList = append(allowList, strings.TrimSpace(v))
+        }
+    }
+
+    return engine.ScanOptions{
+        Stateful: isStateful,
+        CookieAllowList: allowList,
+        Timeout:  time.Duration(timeoutVal) * time.Second,
+    }
 }
 
 type SelectableEntry struct {

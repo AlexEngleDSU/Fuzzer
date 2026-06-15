@@ -27,8 +27,15 @@ Accept-Language: en-US,en;q=0.9
 Referer: %s
 Priority: u=0, i
 `
+
 func NewFuzzerUI() *FuzzerUI {
 	ui := &FuzzerUI{
+		// Browser Controls
+		StatefulRadio:    widget.NewRadioGroup([]string{"Non-Stateful", "Stateful"}, nil),
+		ClearJarCheck:    widget.NewCheck("", nil),
+		CookieAllowList:  widget.NewMultiLineEntry(),
+		ScanButton:       widget.NewButton("Initiate Scan", nil),
+		// Scan Controls
 		URLEntry:         widget.NewEntry(),
 		PathEntry:        &SelectableEntry{},
 		RecursiveCheck:   widget.NewCheck("", nil),
@@ -46,6 +53,11 @@ func NewFuzzerUI() *FuzzerUI {
             ui.PathEntry.SetText(lastFile)
         }
 	// Apply defaults
+	
+	// Config Defaults
+	ui.StatefulRadio.SetSelected("Non-Stateful")
+	ui.CookieAllowList.SetPlaceHolder("session_id, user_pref")
+	// Scan Defaults
 	ui.URLEntry.SetPlaceHolder("https://example.com/FUZZ")
 	ui.DepthEntry.SetText("3")
 	ui.ThreadEntry.SetText("3")
@@ -53,21 +65,24 @@ func NewFuzzerUI() *FuzzerUI {
 	ui.TimeoutEntry.SetText("0")
 	ui.FilterCodesEntry.SetText("404")
 	ui.MatchCodesEntry.SetPlaceHolder("Ex: 200")
-	// Extend widgets
-	ui.PathEntry.ExtendBaseWidget(ui.PathEntry)
-	ui.DepthEntry.ExtendBaseWidget(ui.DepthEntry)
-	ui.ThreadEntry.ExtendBaseWidget(ui.ThreadEntry)
-	ui.DelayEntry.ExtendBaseWidget(ui.DelayEntry)
-	ui.FilterCodesEntry.ExtendBaseWidget(ui.FilterCodesEntry)
-	ui.MatchCodesEntry.ExtendBaseWidget(ui.MatchCodesEntry)
-	ui.UserHeaderInput.ExtendBaseWidget(ui.UserHeaderInput)
+		// Extend widgets
+		ui.PathEntry.ExtendBaseWidget(ui.PathEntry)
+		ui.DepthEntry.ExtendBaseWidget(ui.DepthEntry)
+		ui.ThreadEntry.ExtendBaseWidget(ui.ThreadEntry)
+		ui.DelayEntry.ExtendBaseWidget(ui.DelayEntry)
+		ui.TimeoutEntry.ExtendBaseWidget(ui.DelayEntry)
+		ui.FilterCodesEntry.ExtendBaseWidget(ui.FilterCodesEntry)
+		ui.MatchCodesEntry.ExtendBaseWidget(ui.MatchCodesEntry)
+		ui.UserHeaderInput.ExtendBaseWidget(ui.UserHeaderInput)
 	return ui
 }
+
 func (f *FuzzerUI) UpdateHeader(host, referer string) {
     // Only two arguments now to match the two %s in your template
     formatted := fmt.Sprintf(HeaderTemplate, host, referer)
     f.UserHeaderInput.SetText(formatted)
 }
+
 func SetupResultsContent(ctrl *AppController) fyne.CanvasObject {
     bg := canvas.NewRectangle(theme.ButtonColor())
     statusLabel := widget.NewLabel("Status: Ready")

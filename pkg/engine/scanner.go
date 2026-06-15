@@ -26,30 +26,32 @@ func shouldDisplay(status int, filterCodes, matchCodes []int) bool {
         }
         if !found { return false }
     }
-
     // 2. If Filter Codes exist, the status MUST NOT be in the filter list
     for _, code := range filterCodes {
-        if code == status {
-            return false
-        }
+        if code == status { return false }
     }
-
     return true
 }
 
 func ConcurrentScan(
+	opts ScanOptions,
+
 	ctx context.Context, 
 	host, 
 	urlTemplate, 
 	headerTemplate string,
 	wordlist []string,
+	
 	recursive bool, 
 	maxDepth int, 
+	
 	workerCount int,
 	delay time.Duration,
 	timeout time.Duration,  
+	
 	matchCodes string, 
-	filterCodes string, 
+	filterCodes string,
+	 
 	onStatusUpdate func(string)) <-chan ScanResult {
 	
 	var wg sync.WaitGroup
@@ -71,7 +73,7 @@ func ConcurrentScan(
 		}
 	}
 
-	browserClient := CreateBrowserClient(timeout)
+	browserClient := CreateBrowserClient(opts.Timeout, opts)
 	baseHeaders := fmt.Sprintf(headerTemplate, host, host)
 	headers := GetOrderedHeaders(baseHeaders)
 	badContentLength := get404Length(browserClient, urlTemplate)

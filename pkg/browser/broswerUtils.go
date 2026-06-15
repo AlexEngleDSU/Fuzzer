@@ -73,3 +73,4 @@ func InjectCookies(jar tls_client.CookieJar, targetURL string, cookies []Cookie)
 	}
 	jar.SetCookies(u, fhttpCookies)
 }
+

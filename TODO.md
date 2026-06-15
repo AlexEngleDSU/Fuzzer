@@ -1,3 +1,22 @@
+Current Project Landscape
+	The "Stateless" Fuzzer
+		- The idea of a fuzzer is for checking if a folder/file exists. 
+		- The Weakness: you cannot test anything that lives behind a login, CAPTCHA wall, or multi-step form process
+		- To do this, statefull behavior as I have it now, is unnessecary and overkill
+	The "Statefull" Fuzzer
+		- This mimics a real web-browser. It maintains a CookieJar
+		- Potentially tracks session state.
+		- To reach certain parts of the application, you must participate in this state
+		- The Strength: It allows one to fuzz applications that rely on persistant sessions, CSRF tokens, or sequential logic
+		- The Weakness: Noise & Drift. The fuzzer collects "junk" (tracking pixels, analytics sessions, analytics IDs) that it doesn't need, which can pollute your scan results or trigger rate-limiting logic.
+	Solution
+		- Add configuration control to avoid the tracking cookie problem
+			- Cookie filtering: Add a cookie "Allow-list" to globalJar
+			- Request Level Isolsation: Add a toggle between statefull and stateless mode
+			- Automatic Cookie Purge: Add a feature that clears the jar every X seconds or Y requests. This clears out the "drift" of analytics cookies while keeping your main session token active.
+			
+
+
 
 Features: WAF Bypass
 	- Create auto-refresh logic to trigger new handshake on 403 status codes

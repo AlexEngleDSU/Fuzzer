@@ -1,8 +1,19 @@
 package engine
 import (
 	"sync"
+	"time"
 	fhttp "github.com/bogdanfinn/fhttp"
 )
+
+type ScanOptions struct {
+    // Session Management
+    Stateful        bool
+    ClearJarOnStart bool
+    CookieAllowList []string
+    // Performance
+    Timeout         time.Duration
+}
+
 
 type ScanState struct {
     Results []ScanResult
